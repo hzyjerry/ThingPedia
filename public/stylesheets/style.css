@@ -22,3 +22,9 @@ a {
 .categories {
   font-size: 24px;
 }
+
+.rule-name
+{
+  font-weight: bold;
+  color: red;
+}
