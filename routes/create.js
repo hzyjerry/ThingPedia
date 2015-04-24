@@ -61,7 +61,7 @@ router.get('/triggers', function(req, res, next) {
                 params: [
                     { id: 'comparator',
                       type: 'select',
-                      options: { 'gt': "Above", 'lt': "Below" },
+                      options: { 'gt': "above", 'lt': "below" },
                       defaultOption: 'gt',
                     },
                     { id: 'value',

@@ -82,7 +82,7 @@
                 var row = $('<div>', { 'class': 'row' });
 
                 var leftColumn = $('<div>', { 'class': 'col-md-6' });
-                var button = $('<button>', { 'class': 'btn form-control',
+                var button = $('<button>', { 'class': 'btn',
                                              'id': prefix + '-button',
                                            });
                 button.text(event.description);

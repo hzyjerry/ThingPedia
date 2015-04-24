@@ -41,11 +41,7 @@ window.Rulepedia = {
                                     currentValue);
             input.attr('class', 'form-control');
 
-            var container;
-            if (paramspec.hasOwnProperty('description'))
-                container = $('<div>', { 'class': 'form-group' });
-            else
-                container = $('<span>', { 'class': 'form-group' });
+            var container = $('<div>', { 'class': 'form-group' });
             var checkbox = undefined;
             if (paramspec.optional) {
                 checkbox = $('<input>', { 'type': 'checkbox',
@@ -80,7 +76,7 @@ window.Rulepedia = {
                          if (paramspec.optional && !checkbox.prop('checked'))
                              return '';
                          else
-                             return (paramspec.text + ' ' + input.val()).trim();
+                             return ((paramspec.text || '') + ' ' + input.val()).trim();
                      },
                      reset: function() {
                          impl.reset(paramspec, input);
@@ -184,7 +180,7 @@ window.Rulepedia = {
         'temperature': {
             create: function(paramspec, prefix, currentValue) {
                 if (currentValue === undefined)
-                    currentValue = '0.0 °C';
+                    currentValue = '0 °C';
 
                 return $('<input>', { 'type': 'text',
                                       'value': currentValue,
@@ -205,11 +201,11 @@ window.Rulepedia = {
                 if (paramspec.optional && !checkbox.prop('checked') && value.length == 0)
                     return true;
                 else
-                    value.match(/[-+]?([0-9]+)(\.[0-9]+)?\s*(°C,°F,C,F,K)/) != null;
+                    return value.match(/[-+]?([0-9]+)(\.[0-9]+)?\s*(°C|°F|C|F|K)/) != null;
             },
 
             reset: function(paramspec, input) {
-                input.val('');
+                input.val('0 °C');
             },
         },
 
@@ -218,10 +214,11 @@ window.Rulepedia = {
                 var element = $('<select>', { 'id': prefix + '-' + paramspec.id });
                 for (var optId in paramspec.options) {
                     var option = paramspec.options[optId];
-                    var optionElement = $('<option>', { 'id': prefix + '-' + paramspec.id + '-' + optId });
+                    var optionElement = $('<option>', { 'value': optId });
                     optionElement.text(option);
-                    element.append(option);
+                    element.append(optionElement);
                 }
+
                 if (currentValue !== undefined)
                     element.val(currentValue);
                 else
