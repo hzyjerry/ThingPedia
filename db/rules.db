@@ -5,8 +5,8 @@
        "trigger": "given-forecast",
        "params": [
            { "name": "forecast",
-             "value": "rain" },
-       ],
+             "value": "rain" }
+       ]
    },
    "actions": [
        { "object": ".facebook",
