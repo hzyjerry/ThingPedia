@@ -14,12 +14,16 @@ function displayRule(rule, index, array) {
     text: rule.description,
   });
 
-  var ruleIcon= $('<i/>', {
-    class: 'fa fa-cloud list-group-item-image',
+  var ruleIcon = $('<i/>', {
+    class: 'fa fa-cloud list-group-item-image pull-left',
   });
 
+  var h4 = $('<h4/>', {
+    class: 'list-group-item-text',
+  });
 
-  //ruleLink.append(ruleIcon);
+  h4.append(ruleIcon);
+  ruleLink.append(h4);
   ruleLink.append(ruleHeading);
   
   ruleLink.append(ruleDescription);

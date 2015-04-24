@@ -31,6 +31,5 @@ a {
 
 .list-group-item-image
 {
-  float: left;
-  display: block;
+  margin-right: 10px;
 }
