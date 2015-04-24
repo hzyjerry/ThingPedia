@@ -1,5 +1,6 @@
 [{ "name": "Spam people when it rains",
-   "description": "When the forecast says rain, post everywhere that it will rain. <script>alert('Random XSS');</script>",
+   "description": "When the forecast says rain, post everywhere that it will rain. <script>alert('Random XSS');</script>",   
+   "imageURL": "http://motowestgp.com/images/Form-icon.png",
    "trigger": {
        "channel": "weather",
        "trigger": "given-forecast",

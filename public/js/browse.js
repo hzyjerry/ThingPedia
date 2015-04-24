@@ -1,8 +1,4 @@
 function displayRule(rule, index, array) {
-  //var aElement = document.createElement("a");
-  //aElement.className = 'list-group-item';
-  //aElement.setAttribute('href', 'http://google.com');
-
   var ruleLink = $('<a/>', {
     class: 'list-group-item',
     href: 'http://google.com',
@@ -18,8 +14,14 @@ function displayRule(rule, index, array) {
     text: rule.description,
   });
 
+  var ruleIcon= $('<i/>', {
+    class: 'fa fa-cloud list-group-item-image',
+  });
 
+
+  //ruleLink.append(ruleIcon);
   ruleLink.append(ruleHeading);
+  
   ruleLink.append(ruleDescription);
 
   $('#rule-list').append(ruleLink);

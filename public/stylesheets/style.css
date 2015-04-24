@@ -28,3 +28,9 @@ a {
   font-weight: bold;
   color: red;
 }
+
+.list-group-item-image
+{
+  float: left;
+  display: block;
+}
