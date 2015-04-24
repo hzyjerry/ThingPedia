@@ -19,11 +19,13 @@ router.get('/triggers', function(req, res, next) {
                     { id: 'content-contains',
                       type: 'textarea',
                       optional: true,
-                      description: "containing this text" },
+                      description: "containing this text",
+                      text: "containing" },
                     { id: 'sender-matches',
                       type: 'facebook-contact',
                       optional: true,
-                      description: "from this person" }
+                      description: "from this person",
+                      text: "from" }
                 ]
               },
               { id: 'photo-tagged',
@@ -37,7 +39,8 @@ router.get('/triggers', function(req, res, next) {
                     { id: 'contact-matches',
                       type: 'facebook-contact',
                       optional: true,
-                      description: "and the friend is" }
+                      description: "and the friend is",
+                      text: "and the friend is" }
                 ] }
           ] },
         { id: 'weather', description: "Weather",
@@ -49,6 +52,7 @@ router.get('/triggers', function(req, res, next) {
                     { id: 'forecast',
                       type: 'select',
                       options: { 'rain': "Rain", 'sun': "Sunny" },
+                      defaultOption: 'rain',
                     }]
               },
               { id: 'given-temperature',
@@ -58,6 +62,7 @@ router.get('/triggers', function(req, res, next) {
                     { id: 'comparator',
                       type: 'select',
                       options: { 'gt': "Above", 'lt': "Below" },
+                      defaultOption: 'gt',
                     },
                     { id: 'value',
                       type: 'temperature',
