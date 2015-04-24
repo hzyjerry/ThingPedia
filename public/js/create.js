@@ -26,7 +26,7 @@
                 combinator: 'and',
                 operands: [computedTrigger, trigger],
             };
-            description = "And " + description; // FIXME!
+            description = "and " + description; // FIXME!
         }
 
         var li = $('<li>');
@@ -103,9 +103,13 @@
                         var parsed = params.map(function(p) {
                             return { name: p.paramspec.id,
                                      value: p.normalize() };
+                        }).filter(function(p) {
+                            return p.value !== undefined
                         });
 
-                        var text = (event.text + ' ' + params.map(function(p) { p.text(); }).join(' ')).trim();
+                        var paramtext = params.map(function(p) { return p.text(); }).join(' ');
+                        console.log(paramtext);
+                        var text = (event.text + ' ' + paramtext).trim();
 
                         appendTrigger(id, event.id, parsed, text);
                         modal.modal('hide');
@@ -113,6 +117,9 @@
                         console.log('validation failed');
                         // FIXME: notify the user
                     }
+                });
+                modal.on('hidden.bs.modal', function() {
+                    params.forEach(function(p) { p.reset(); });
                 });
 
                 row.append(leftColumn);
