@@ -29,6 +29,15 @@ app.use('/users', users);
 app.use('/create', create);
 app.use('/browse', browse);
 
+
+app.use('/db', express.static('db'));
+
+/*
+app.get('/db', function(req, res) {
+  res.send('DB!');
+});
+*/
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');

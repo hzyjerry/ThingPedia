@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET home page. */
+var ruleDBPath = '/model/rules.db'
+
 router.get('/', function(req, res, next) {
   res.render('browse', { title: 'Rulepedia - Browse rules' });
 });
