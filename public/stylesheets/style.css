@@ -47,3 +47,8 @@ a {
 {
   font-size: 30px;
 }
+
+.trigger-event-select-button {
+    margin-bottom: 1em;
+    width: 100%;
+}
