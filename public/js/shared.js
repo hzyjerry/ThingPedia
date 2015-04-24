@@ -41,7 +41,11 @@ window.Rulepedia = {
                                     currentValue);
             input.attr('class', 'form-control');
 
-            var container = $('<div>', { 'class': 'form-group' });
+            var container;
+            if (paramspec.hasOwnProperty('description'))
+                container = $('<div>', { 'class': 'form-group' });
+            else
+                container = $('<span>', { 'class': 'form-group' });
             var checkbox = undefined;
             if (paramspec.optional) {
                 checkbox = $('<input>', { 'type': 'checkbox',
@@ -73,8 +77,18 @@ window.Rulepedia = {
                          return impl.normalize(paramspec, input, checkbox);
                      },
                      text: function() {
-                         return (paramspec.description + ' ' + input.val()).trim();
-                     }
+                         if (paramspec.optional && !checkbox.prop('checked'))
+                             return '';
+                         else
+                             return (paramspec.text + ' ' + input.val()).trim();
+                     },
+                     reset: function() {
+                         impl.reset(paramspec, input);
+                         if (checkbox !== undefined) {
+                             checkbox.prop('checked', false);
+                             input.prop('disabled', true);
+                         }
+                     },
                    };
         }
     },
@@ -102,7 +116,11 @@ window.Rulepedia = {
                     return true;
                 else
                     return input.val().length > 0;
-            }
+            },
+
+            reset: function(paramspec, input) {
+                input.val('');
+            },
         },
 
         'textarea': {
@@ -127,7 +145,11 @@ window.Rulepedia = {
                     return true;
                 else
                     return input.val().length > 0;
-            }
+            },
+
+            reset: function(paramspec, input) {
+                input.val('');
+            },
         },
 
         'facebook-contact': {
@@ -142,15 +164,21 @@ window.Rulepedia = {
                                       'id': prefix + '-' + paramspec.id });
             },
 
-            normalize: function(paramspec, input) {
-                // FIXME
-                return input.val();
+            normalize: function(paramspec, input, checkbox) {
+                if (paramspec.optional && !checkbox.prop('checked'))
+                    return undefined;
+                else
+                    return input.val();
             },
 
-            validate: function(paramspec, input) {
+            validate: function(paramspec, input, checkbox) {
                 // FIXME
                 return true;
-            }
+            },
+
+            reset: function(paramspec, input) {
+                input.val('');
+            },
         },
 
         'temperature': {
@@ -178,7 +206,11 @@ window.Rulepedia = {
                     return true;
                 else
                     value.match(/[-+]?([0-9]+)(\.[0-9]+)?\s*(°C,°F,C,F,K)/) != null;
-            }
+            },
+
+            reset: function(paramspec, input) {
+                input.val('');
+            },
         },
 
         'select': {
@@ -192,6 +224,8 @@ window.Rulepedia = {
                 }
                 if (currentValue !== undefined)
                     element.val(currentValue);
+                else
+                    element.val(paramspec.defaultOption);
                 return element;
             },
 
@@ -204,7 +238,12 @@ window.Rulepedia = {
 
             validate: function(paramspec, input) {
                 return true;
-            }
+            },
+
+            reset: function(paramspec, input) {
+                input.val(paramspec.defaultOption);
+            },
+
         },
     }
 };
