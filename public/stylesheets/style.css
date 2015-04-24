@@ -36,3 +36,14 @@ a {
 {
   margin-right: 10px;
 }
+
+.td-align-middle
+{
+  text-align:center; 
+  vertical-align:middle;
+}
+
+.td-icon-size
+{
+  font-size: 30px;
+}

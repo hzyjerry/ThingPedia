@@ -15,18 +15,34 @@ function displayRule(rule, index, array) {
   });
 
   var ruleIcon = $('<i/>', {
-    class: 'fa fa-cloud list-group-item-image pull-left',
+    class: 'fa fa-cloud list-group-item-image',
   });
 
-  var h4 = $('<h4/>', {
+  var span = $('<span/>', {
     class: 'list-group-item-text',
   });
 
-  h4.append(ruleIcon);
-  ruleLink.append(h4);
-  ruleLink.append(ruleHeading);
-  
-  ruleLink.append(ruleDescription);
+  var table = $('<table/>');
+
+  var tr = $('<tr/>');
+
+  var tdIcon = $('<td/>', {
+    class: 'td-align-middle td-icon-size'
+  });
+
+  tdIcon.append(ruleIcon);
+
+  var tdContent = $('<td/>', {
+  });
+
+  tdContent.append(ruleHeading);
+  tdContent.append(ruleDescription);
+
+
+  table.append(tdIcon);
+  table.append(tdContent);
+  table.append(tr);
+  ruleLink.append(table);
 
   $('#rule-list').append(ruleLink);
 }
