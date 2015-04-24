@@ -1,0 +1,27 @@
+[{ "name": "Spam people when it rains",
+   "description": "When the forecast says rain, post everywhere that it will rain",
+   "trigger": {
+       "channel": "weather",
+       "trigger": "given-forecast",
+       "params": [
+           { "name": "forecast",
+             "value": "rain" },
+       ],
+   },
+   "actions": [
+       { "object": ".facebook",
+         "method": "post-own-status",
+         "params": [
+             { "name": "content",
+               "value": "Brace yourselves, rain is coming" }
+         ]
+       },
+       { "object": ".twitter",
+         "method": "post-own-status",
+         "params": [
+             { "name": "content",
+               "value": "Brace yourselves, rain is coming" }
+         ]
+       }
+   ]
+ }]
