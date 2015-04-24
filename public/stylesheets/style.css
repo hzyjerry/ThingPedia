@@ -7,12 +7,18 @@ a {
   color: #00B7FF;
 }
 
-.center
-{
+.center {
   text-align: center;
 }
 
-.main-nav-button
-{
+.main-nav-button {
   margin: 5px; 
+}
+
+.browse-rules-table {
+  width: 100%;
+}
+
+.categories {
+  font-size: 24px;
 }
