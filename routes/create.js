@@ -14,6 +14,7 @@ router.get('/triggers', function(req, res, next) {
           events: [
               { id: 'message-received',
                 description: "When I receive a message",
+                text: "I receive a Facebook message",
                 params: [
                     { id: 'content-contains',
                       type: 'textarea',
@@ -26,9 +27,12 @@ router.get('/triggers', function(req, res, next) {
                 ]
               },
               { id: 'photo-tagged',
-                description: "When I\'m tagged on a picture" },
+                description: "When I'm tagged on a picture",
+                text: "I'm tagged on a picture on Facebook",
+                params: [] },
               { id: 'starred-contact-notification',
                 description: "When a friend does something",
+                text: "a Facebook friend does something",
                 params: [
                     { id: 'contact-matches',
                       type: 'facebook-contact',
@@ -40,6 +44,7 @@ router.get('/triggers', function(req, res, next) {
           events: [
               { id: 'given-forecast',
                 description: "When the forecast says",
+                text: "the weather forecast says",
                 params: [
                     { id: 'forecast',
                       type: 'select',
@@ -48,6 +53,7 @@ router.get('/triggers', function(req, res, next) {
               },
               { id: 'given-temperature',
                 description: "When the temperature is",
+                text: "the weather forecast says the temperature is",
                 params: [
                     { id: 'comparator',
                       type: 'select',

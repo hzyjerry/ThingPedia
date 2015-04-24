@@ -6,20 +6,22 @@ block scripts
 block content
   h1.center Create a rule
 
-  div.container-fluid.well
-    div.row
-      div.col-md-1
-       label(for='name') Name
+  form
+    div.container-fluid.well
+      div.row.form-group
+        div.col-md-3
+         label(for='name') Name
 
-      div.col-md-1
-       input(type='text' id='name')
+        div.col-md-9
+         input.form-control(type='text' id='name')
 
-    div.row
-      div.col-md-1
-        label Triggers
+      div.row.form-group
+        div.col-md-3
+          label Triggers
 
-      div.col-md-1
-        a.add-new-trigger.placeholder(href='#', data-toggle='modal', data-target='#trigger-channel-select') Add new trigger
+        div.col-md-9
+          ul#triggers-container
+          button.btn.btn-default.add-new-trigger.placeholder(type='button', data-toggle='modal', data-target='#trigger-channel-select') Add new trigger
 
   div.modal.fade(aria-hidden='true', role='dialog', aria-labelled-by='trigger-channel-select-title')#trigger-channel-select
     div.modal-dialog
@@ -31,3 +33,5 @@ block content
 
         div.modal-body
           div.container-fluid#trigger-channel-select-container
+
+  div#triggers-placeholder
