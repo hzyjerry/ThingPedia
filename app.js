@@ -9,6 +9,7 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var create = require('./routes/create');
 var browse = require('./routes/browse');
+var about = require('./routes/about');
 
 var app = express();
 
@@ -28,6 +29,7 @@ app.use('/', routes);
 app.use('/users', users);
 app.use('/create', create);
 app.use('/browse', browse);
+app.use('/about', about);
 
 
 app.use('/db', express.static('db'));
