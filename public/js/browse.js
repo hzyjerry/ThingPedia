@@ -49,7 +49,7 @@ function displayRule(rule, index, array) {
 
 $.ajax({
   dataType: "text",
-  url: '/db/rules.db',
+  url: '/db/rules.json',
   data: null,
   success: function (data) {
     var rules = JSON.parse(data);
