@@ -36,33 +36,56 @@ window.Rulepedia = {
 
         makeParamInput: function(paramspec, prefix, currentValue) {
             var impl = Rulepedia.DataTypes[paramspec.type];
-            var input = impl.create(paramspec,
+            var input, element;
+            if (impl.create) {
+                input = impl.create(paramspec,
                                     prefix,
                                     currentValue);
-            input.attr('class', 'form-control');
+                input.addClass('form-control');
+                element = input;
+            } else if (impl.placeholder) {
+                element = $('<small>', {'class': 'block placeholder'});
+                element.text(impl.placeholder);
+            } else {
+                throw new TypeError("Cannot construct input of type " + paramspec.type);
+            }
 
-            var container = $('<div>', { 'class': 'form-group' });
+            var container = $('<div>', { 'class': 'form-group container-fluid' });
+            var row = $('<div>', { 'class': 'row' });
             var checkbox = undefined;
+            var column;
             if (paramspec.optional) {
+                var leftColumn = $('<div>', { 'class': 'col-xs-1' });
                 checkbox = $('<input>', { 'type': 'checkbox',
                                           'value': 'on',
                                           'id': prefix + '-' + paramspec.id
                                           + '-valid' });
                 if (currentValue !== undefined)
                     checkbox.prop('checked', true);
-                else
+                else if (input !== undefined)
                     input.prop('disabled', true);
+                else
+                    element.addClass('disabled');
                 checkbox.on('change', function() {
-                    input.prop('disabled', !checkbox.prop('checked'));
+                    if (input !== undefined)
+                        input.prop('disabled', !checkbox.prop('checked'));
+                    else
+                        element.toggleClass('disabled', !checkbox.prop('checked'));
                 });
 
-                container.append(checkbox);
+                leftColumn.append(checkbox);
+                row.append(leftColumn);
+                column = $('<div>', { 'class': 'col-xs-10' });
+            } else {
+                column = $('<div>', { 'class': 'col-xs-11' });
             }
 
             var label = $('<label>');
             label.text(paramspec.description);
-            label.append(input);
-            container.append(label);
+            label.append(element);
+            column.append(label);
+            row.append(column);
+            container.append(row);
 
             return { element: container,
                      paramspec: paramspec,
@@ -75,6 +98,8 @@ window.Rulepedia = {
                      text: function() {
                          if (paramspec.optional && !checkbox.prop('checked'))
                              return '';
+                         else if (impl.placeholder)
+                             return paramspec.text;
                          else
                              return ((paramspec.text || '') + ' ' + input.val()).trim();
                      },
@@ -82,7 +107,10 @@ window.Rulepedia = {
                          impl.reset(paramspec, input);
                          if (checkbox !== undefined) {
                              checkbox.prop('checked', false);
-                             input.prop('disabled', true);
+                             if (input !== undefined)
+                                input.prop('disabled', true);
+                             else
+                                element.addClass('disabled');
                          }
                      },
                    };
@@ -148,32 +176,22 @@ window.Rulepedia = {
             },
         },
 
-        'facebook-contact': {
-            create: function(paramspec, prefix, currentValue) {
-                if (currentValue === undefined)
-                    currentValue = '';
-
-                // FIXME should be a dropdown of some form, populated with
-                // FB contacts
-                return $('<input>', { 'type': 'text',
-                                      'value': currentValue,
-                                      'id': prefix + '-' + paramspec.id });
-            },
+        'contact': {
+            create: null,
+            placeholder: "You will be able to choose a contact when you install this rule",
 
             normalize: function(paramspec, input, checkbox) {
                 if (paramspec.optional && !checkbox.prop('checked'))
                     return undefined;
                 else
-                    return input.val();
+                    return 'rulepedia:placeholder/contact/' + paramspec.subType;
             },
 
             validate: function(paramspec, input, checkbox) {
-                // FIXME
                 return true;
             },
 
             reset: function(paramspec, input) {
-                input.val('');
             },
         },
 
