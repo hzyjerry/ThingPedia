@@ -17,12 +17,21 @@
       "optional": true,
       "description": "from a specific person",
       "text": "from a specific person"
+      }],
+    "generates": [{
+      "id": "incoming-message",
+      "type": "message",
+      "constraints": ["text-only"]
       }]
     },{
-    "id": "photo-tagged",
-    "description": "When I'm tagged on a picture",
-    "text": "I'm tagged on a picture on Facebook",
-    "params": []
+    "id": "picture-tagged",
+    "description": "When I'm tagged on a photo",
+    "text": "I'm tagged on a photo on Facebook",
+    "params": [],
+    "generates": [{
+      "id": "tagged-picture",
+      "type": "picture"
+      }]
     },{
     "id": "starred-contact-notification",
     "description": "When a friend does something",
@@ -31,7 +40,8 @@
       "id": "contact-matches",
       "type": "contact",
       "subType": "facebook"
-      }]
+      }],
+    "generates": []
     }]
   },{
   "id": "weather",
@@ -45,7 +55,8 @@
       "type": "select",
       "options": { "rain": "Rain", "sun": "Sunny" },
       "defaultOption": "rain"
-      }]
+      }],
+    "generates": []
     },{
     "id": "given-temperature",
     "description": "When the temperature is",
@@ -58,6 +69,7 @@
       },{
       "id": "value",
       "type": "temperature"
-      }]
+      }],
+    "generates": []
     }]
   }]

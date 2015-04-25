@@ -10,14 +10,14 @@
        ]
    },
    "actions": [
-       { "object": ".facebook",
+       { "object": "rulepedia:placeholder/object/facebook",
          "method": "post-own-status",
          "params": [
              { "name": "content",
                "value": "Brace yourselves, rain is coming" }
          ]
        },
-       { "object": ".twitter",
+       { "object": "rulepedia:placeholder/object/twitter",
          "method": "post-own-status",
          "params": [
              { "name": "content",

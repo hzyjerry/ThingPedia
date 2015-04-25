@@ -1,0 +1,89 @@
+[{ "id": "facebook",
+   "description": "Facebook",
+   "objectId": "rulepedia:placeholder/object/facebook",
+   "implements": ["messages", "statusUpdates", "pictures"],
+   "methods": []
+ },{
+   "id": "instagram",
+   "description": "Instagram",
+   "objectId": "rulepedia:placeholder/object/instagram",
+   "implements": ["photos"],
+   "methods": []
+ },{
+   "id": "twitter",
+   "description": "Twitter",
+   "objectId": "rulepedia:placeholder/object/twitter",
+   "implements": ["statusUpdates"],
+   "methods": [{
+   	"id": "retweet",
+   	"description": "Retweet to your followers",
+   	"params": [
+   		{ "id": "tweet",
+   		  "type": "trigger-value",
+   		  "subType": "message",
+   		  "constraints": ["max-size=140", "text-only"]
+   		}
+   	]
+   }]
+ },{
+   "id": "messages",
+   "description": "Messaging",
+   "objectId": "rulepedia:placeholder/object/any",
+   "implements": [],
+   "methods": [{
+   	"id": "send-message",
+   	"description": "Send a message",
+   	"text": "Send a message",
+   	"params": [
+   		{ "id": "content",
+   		  "type": "textarea",
+   		  "description": "containing the text",
+   		  "text": "containing the text"
+   		},
+   		{ "id": "destination",
+   		  "type": "message-destination"
+   		}
+   	]
+   }]
+ },{
+   "id": "statusUpdate",
+   "interface": true,
+   "implements": [],
+   "methods": [{
+   	"id": "post-own-status",
+   	"description": "Update your status",
+   	"text": "Post a status update",
+   	"params": [
+   		{ "id": "content",
+   		  "type": "textarea",
+   		  "description": "containing the text",
+   		  "text": "containing the text"
+   		}
+   	]
+   }]
+ },{
+   "id": "pictures",
+   "interface": true,
+   "implements": [],
+   "methods": [{
+   	"id": "upload-picture",
+   	"description": "Upload a photo",
+   	"text": "Upload a photo",
+   	"params": [
+   		{ "id": "picture",
+   		  "type": "picture"
+   		}
+   	]
+	},{
+	"id": "reshare-picture",
+	"description": "Share received photo to your followers",
+	"text": "Share the photo to your followers",
+	"params": [
+		{ "id": "picture",
+		  "type": "trigger-value",
+		  "subType": "picture",
+		  "constraints": []
+		}
+	]
+	}]
+ }]
