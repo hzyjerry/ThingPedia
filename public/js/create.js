@@ -1,47 +1,130 @@
 (function() {
-    var ready = false;
+    // { combinator: ..., trigger: ... }
+    // as visible in the UI
+    // triggers[0] has combinator == null
     var triggers = [];
+    // { combinator: ..., operands: ... }
+    // in AST form
+    // conversion from triggers to computedTrigger happens in
+    // recomputeTrigger
     var computedTrigger = null;
 
     $.get('/db/triggers.json', '', function(data, status, xhr) {
-        triggers = data;
-        updateTriggerChannels();
-        updateTriggerOptions();
+        updateTriggerChannels(data);
+        updateTriggerOptions(data);
     }, 'json');
 
-    $(function() {
-        // on ready
-    });
+    function recomputeTrigger() {
+        if (triggers.length == 0) {
+            computedTrigger = null;
+            return;
+        }
+
+        if (triggers.length == 1) {
+            computedTrigger = triggers[0].trigger;
+            return;
+        }
+
+        computedTrigger = {
+            combinator: triggers[1].combinator,
+            operands: [
+                triggers[0].trigger, triggers[1].trigger
+            ]
+        };
+        for (var i = 2; i < triggers.length; i++) {
+            if (triggers[i].combinator == computedTrigger.combinator) {
+                computedTrigger.operands.push(triggers[i].trigger);
+            } else {
+                computedTrigger = {
+                    combinator: triggers[i].combinator,
+                    operands: [
+                        computedTrigger,
+                        triggers[i].trigger
+                    ]
+                };
+            }
+        }
+
+        console.log(JSON.stringify(computedTrigger));
+    }
+
+    function changeTrigger(trigger, combinator) {
+        for(var i = 0; i < triggers.length; i++) {
+            if (triggers[i].trigger == trigger) {
+                if (triggers[i].combinator != combinator) {
+                    triggers[i].combinator = combinator;
+                    recomputeTrigger();
+                }
+                break;
+            }
+        }
+    }
+
+    function removeTrigger(trigger) {
+        for(var i = 0; i < triggers.length; i++) {
+            if (triggers[i].trigger == trigger) {
+                triggers[i].row.remove();
+                triggers.splice(i, 1);
+                if (triggers.length > 0) {
+                    triggers[0].combinator = undefined;
+                    if (triggers[0].select)
+                        triggers[0].select.remove();
+                }
+                recomputeTrigger();
+                break;
+            }
+        }
+    }
 
     function appendTrigger(channelId, eventId, parsed, description) {
         var trigger = { channel: channelId, trigger: eventId, params: parsed };
         console.log('appendTrigger ' + JSON.stringify(trigger));
 
-        if (computedTrigger == null)
-            computedTrigger = trigger;
-        else if (computedTrigger.hasOwnProperty('combinator'))
-            computedTrigger.operands.append(trigger);
-        else {
-            computedTrigger = {
-                combinator: 'and',
-                operands: [computedTrigger, trigger],
-            };
-            description = "and " + description; // FIXME!
-        }
+        var first = triggers.length == 0;
+        var obj = { combinator: (first ? undefined : 'and'), trigger: trigger };
+        triggers.push(obj);
+        recomputeTrigger();
 
-        var li = $('<li>');
-        li.text(description);
-        console.log(description);
-        $('#triggers-container').append(li);
+        var row = $('<li>', { 'class': 'trigger-item row' });
+        var combinatorColumn = $('<span>', { 'class': 'col-sm-2' });
+        if (!first) {
+            var select = $('<select class="form-control center"><option value="and">and</option>' +
+                           '<option value="or">or</option></select>');
+            select.val('and');
+            select.on('change', function() {
+                changeTrigger(trigger, select.val());
+            });
+            obj.select = select;
+            combinatorColumn.append(select);
+        } else {
+            combinatorColumn.text('');
+        }
+        row.append(combinatorColumn);
+
+        var textColumn = $('<span>', { 'class': 'col-sm-4 trigger-item-text' });
+        textColumn.text(description);
+        row.append(textColumn);
+
+        var removeColumn = $('<span>', { 'class': 'col-sm-4' });
+        var remove = $('<button>', { 'class': 'btn btn-default' });
+        remove.click(function() {
+            removeTrigger(trigger);
+        });
+        remove.text('Remove');
+        removeColumn.append(remove);
+        row.append(removeColumn);
+        obj.row = row;
+
+        $('#triggers-container').append(row);
     }
 
-    function updateTriggerChannels() {
+    function updateTriggerChannels(triggerMetaData) {
         var container = $('#trigger-channel-select-container');
         container.empty();
 
         var count = 0;
         var row = null;
-        triggers.forEach(function(trigger) {
+        triggerMetaData.forEach(function(trigger) {
             if (row == null || count >= 4) {
                 row = $('<div>', { 'class': 'row' });
                 container.append(row);
@@ -63,11 +146,11 @@
         });
     }
 
-    function updateTriggerOptions() {
+    function updateTriggerOptions(triggerMetaData) {
         var placeholder = $('#triggers-placeholder');
         placeholder.empty();
 
-        triggers.forEach(function(trigger) {
+        triggerMetaData.forEach(function(trigger) {
             var id = trigger.id;
 
             var prefix = 'trigger-' + id + '-event-select';
@@ -108,7 +191,6 @@
                         });
 
                         var paramtext = params.map(function(p) { return p.text(); }).join(' ');
-                        console.log(paramtext);
                         var text = (event.text + ' ' + paramtext).trim();
 
                         appendTrigger(id, event.id, parsed, text);

@@ -56,3 +56,17 @@ a {
     margin-bottom: 1em;
     width: 100%;
 }
+
+#triggers-container {
+    padding-left: 0px;
+}
+
+.trigger-item {
+    display:block;
+}
+
+.trigger-item-text {
+    display: block;
+    min-height: 34px;
+    padding: 6px 12px;
+}
