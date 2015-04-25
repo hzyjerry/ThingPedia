@@ -3,7 +3,7 @@
     var triggers = [];
     var computedTrigger = null;
 
-    $.get('/create/triggers', '', function(data, status, xhr) {
+    $.get('/db/triggers.json', '', function(data, status, xhr) {
         triggers = data;
         updateTriggerChannels();
         updateTriggerOptions();
