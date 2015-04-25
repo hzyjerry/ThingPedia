@@ -6,22 +6,21 @@ block scripts
 block content
   h1.center Create a rule
 
-  form
-    div.container-fluid.well
-      div.row.form-group
-        div.col-md-3
-         label(for='name') Name
+  form.form-horizontal.container-fluid.well
+    div.form-group
+      div.col-md-3
+        label(for='name') Name
 
-        div.col-md-9
-         input.form-control(type='text' id='name')
+      div.col-md-9
+        input.form-control(type='text' id='name')
 
-      div.row.form-group
-        div.col-md-3
-          label When?
+    div.form-group
+      div.col-md-3
+        label When?
 
-        div.col-md-9
-          ul#triggers-container.container-fluid
-          button.btn.btn-default.add-new-trigger.placeholder(type='button', data-toggle='modal', data-target='#trigger-channel-select') Add new condition
+      div.col-md-9
+        ul#triggers-container.container-fluid
+        button.btn.btn-default.add-new-trigger.placeholder(type='button', data-toggle='modal', data-target='#trigger-channel-select') Add new condition
 
   div.modal.fade(aria-hidden='true', role='dialog', aria-labelled-by='trigger-channel-select-title')#trigger-channel-select
     div.modal-dialog
