@@ -6,6 +6,21 @@ block scripts
 block content
   h1.center Create a rule
 
+  p In Rulepedia, you can define simple actions that your phone will execute when specific events occur.
+    | This model is called WTDT - <i>When this, do that</i>.
+    // lol
+  p To start, click on
+    i  Add new condition
+    |  to choose when your rule will be activated. You can use multiple conditions if you need it.
+    | Then, click on
+    i  Add new action
+    |  to choose what your phone will do when the condition happens.
+    | When you're done, click on
+    i  Install
+    |  to show the QR code. Scan this code with your phone to install the rule.
+  p You can also choose a name that will be shown in the app for you to rememeber, and for your friends
+    | to find in our collection of rules!
+
   form.form-horizontal.container-fluid.well
     div.form-group
       div.col-md-3
@@ -20,7 +35,15 @@ block content
 
       div.col-md-9
         ul#triggers-container.container-fluid
-        button.btn.btn-default.add-new-trigger.placeholder(type='button', data-toggle='modal', data-target='#trigger-channel-select') Add new condition
+        button.btn.btn-default.placeholder#add-new-trigger(type='button', data-toggle='modal', data-target='#trigger-channel-select') Add new condition
+
+    div.form-group
+      div.col-md-3
+        label What?
+
+      div.col-md-9
+        ul#actions-container.container-fluid
+        button.btn.btn-default.placeholder#add-new-action(type='button', data-toggle='modal', data-target='#action-channel-select') Add new action
 
   div.modal.fade(aria-hidden='true', role='dialog', aria-labelled-by='trigger-channel-select-title')#trigger-channel-select
     div.modal-dialog
