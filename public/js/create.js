@@ -172,7 +172,8 @@
          $('#actions-container').append(row);
     }
 
-    function buildChannelOption(subitem, kind, subKind, id, prefix, modal, container, callback) {
+    // FIXME: way too many parameters here
+    function buildChannelOption(subitem, kind, subKind, channelMeta, isImplements, id, prefix, modal, container, callback) {
         var row = $('<div>', { 'class': 'row' });
 
         var leftColumn = $('<div>', { 'class': 'col-md-6' });
@@ -202,7 +203,12 @@
                 });
 
                 var paramtext = params.map(function(p) { return p.text(); }).join(' ');
-                var text = (subitem.text + ' ' + paramtext).trim();
+
+                // if this subitem comes from an implements, we disambiguate
+                // the action text with the name of the channel
+                var subitemtext = isImplements ? (subitem.text + " on " + channelMeta.description) :
+                    subitem.text;
+                var text = (subitemtext + ' ' + paramtext).trim();
 
                 callback(id, subitem.id, parsed, text);
                 modal.modal('hide');
@@ -245,13 +251,13 @@
             var container = $('<div>', { 'class': 'container-fluid' });
 
             item[subKind].forEach(function(subitem) {
-                buildChannelOption(subitem, kind, subKind, id, prefix, modal, container, callback);
+                buildChannelOption(subitem, kind, subKind, item, false, id, prefix, modal, container, callback);
             });
 
             if ('implements' in item) {
                 item.implements.forEach(function(interface) {
                     findInterfaceMeta(metadata, interface)[subKind].forEach(function(subitem) {
-                        buildChannelOption(subitem, kind, subKind, id, prefix, modal, container, callback);
+                        buildChannelOption(subitem, kind, subKind, item, true, id, prefix, modal, container, callback);
                     });
                 });
             }

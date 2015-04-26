@@ -70,7 +70,7 @@
    "methods": [{
    	"id": "upload-picture",
    	"description": "Upload a photo",
-   	"text": "Upload a photo",
+        "text": "Upload a photo of my choice",
    	"params": [
    		{ "id": "picture",
    		  "type": "picture"
