@@ -7,7 +7,7 @@
    "id": "instagram",
    "description": "Instagram",
    "objectId": "rulepedia:placeholder/object/instagram",
-   "implements": ["photos"],
+   "implements": ["pictures"],
    "methods": []
  },{
    "id": "twitter",
@@ -17,6 +17,7 @@
    "methods": [{
    	"id": "retweet",
    	"description": "Retweet to your followers",
+   	"text": "Retweet to your followers on Twitter",
    	"params": [
    		{ "id": "tweet",
    		  "type": "trigger-value",
@@ -41,12 +42,13 @@
    		  "text": "containing the text"
    		},
    		{ "id": "destination",
-   		  "type": "message-destination"
+   		  "type": "message-destination",
+   		  "text": "to a contact of my choice"
    		}
    	]
    }]
  },{
-   "id": "statusUpdate",
+   "id": "statusUpdates",
    "interface": true,
    "implements": [],
    "methods": [{

@@ -36,6 +36,8 @@ window.Rulepedia = {
 
         makeParamInput: function(paramspec, prefix, currentValue) {
             var impl = Rulepedia.DataTypes[paramspec.type];
+            if (impl === undefined)
+                throw new TypeError("Invalid param type " + paramspec.type);
             var input, element;
             if (impl.create) {
                 input = impl.create(paramspec,
@@ -176,6 +178,25 @@ window.Rulepedia = {
             },
         },
 
+        'picture': {
+            create: null,
+            placeholder: "You will be able to choose a picture when you install this rule",
+
+            normalize: function(paramspec, input, checkbox) {
+                if (paramspec.optional && !checkbox.prop('checked'))
+                    return undefined;
+                else
+                    return 'rulepedia:placeholder/picture/' + paramspec.subType;
+            },
+
+            validate: function(paramspec, input, checkbox) {
+                return true;
+            },
+
+            reset: function(paramspec, input) {
+            },
+        },
+
         'contact': {
             create: null,
             placeholder: "You will be able to choose a contact when you install this rule",
@@ -184,7 +205,45 @@ window.Rulepedia = {
                 if (paramspec.optional && !checkbox.prop('checked'))
                     return undefined;
                 else
-                    return 'rulepedia:placeholder/contact/' + paramspec.subType;
+                    return 'rulepedia:placeholder/object/contact/' + paramspec.subType;
+            },
+
+            validate: function(paramspec, input, checkbox) {
+                return true;
+            },
+
+            reset: function(paramspec, input) {
+            },
+        },
+
+        'message-destination': {
+            create: null,
+            placeholder: "You will be able to choose a contact or group when you install this rule",
+
+            normalize: function(paramspec, input, checkbox) {
+                if (paramspec.optional && !checkbox.prop('checked'))
+                    return undefined;
+                else
+                    return 'rulepedia:placeholder/object/message-destination/' + paramspec.subType;
+            },
+
+            validate: function(paramspec, input, checkbox) {
+                return true;
+            },
+
+            reset: function(paramspec, input) {
+            },
+        },
+
+        'trigger-value': {
+            create: null,
+            placeholder: "The value will be chosen based on the condition of this rule",
+
+            normalize: function(paramspec, input, checkbox) {
+                if (paramspec.optional && !checkbox.prop('checked'))
+                    return undefined;
+                else
+                    return 'rulepedia:placeholder/trigger-value/' + paramspec.subType;
             },
 
             validate: function(paramspec, input, checkbox) {

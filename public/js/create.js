@@ -9,9 +9,17 @@
     // recomputeTrigger
     var computedTrigger = null;
 
+    var actionMetaData = null;
+    var actions = [];
+
     $.get('/db/triggers.json', '', function(data, status, xhr) {
         updateTriggerChannels(data);
         updateTriggerOptions(data);
+    }, 'json');
+    $.get('/db/actions.json', '', function(data, status, xhr) {
+        actionMetaData = data;
+        updateActionChannels(data);
+        updateActionOptions(data);
     }, 'json');
 
     function recomputeTrigger() {
@@ -86,7 +94,7 @@
         recomputeTrigger();
 
         var row = $('<li>', { 'class': 'trigger-item row' });
-        var combinatorColumn = $('<span>', { 'class': 'col-sm-2' });
+        var combinatorColumn = $('<span>', { 'class': 'col-sm-1' });
         if (!first) {
             var select = $('<select class="form-control center"><option value="and">and</option>' +
                            '<option value="or">or</option></select>');
@@ -101,11 +109,11 @@
         }
         row.append(combinatorColumn);
 
-        var textColumn = $('<span>', { 'class': 'col-sm-4 trigger-item-text' });
-        textColumn.text(description);
+        var textColumn = $('<span>', { 'class': 'col-sm-6 trigger-item-text' });
+        textColumn.append(description);
         row.append(textColumn);
 
-        var removeColumn = $('<span>', { 'class': 'col-sm-4' });
+        var removeColumn = $('<span>', { 'class': 'col-sm-3' });
         var remove = $('<button>', { 'class': 'btn btn-default' });
         remove.click(function() {
             removeTrigger(trigger);
@@ -118,99 +126,185 @@
         $('#triggers-container').append(row);
     }
 
-    function updateTriggerChannels(triggerMetaData) {
-        var container = $('#trigger-channel-select-container');
+    function removeAction(action) {
+        for(var i = 0; i < actions.length; i++) {
+            if (actions[i].action == action) {
+                actions[i].row.remove();
+                actions.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    function appendAction(channelId, methodId, parsed, description) {
+        var objectId;
+        for (var i = 0; i < actionMetaData.length; i++) {
+            if (actionMetaData[i].id == channelId) {
+                if (actionMetaData[i].interface || !('objectId' in actionMetaData[i]))
+                    throw new TypeError('Invalid channel');
+
+                objectId = actionMetaData[i].objectId;
+            }
+        }
+
+        var action = { object: objectId, method: methodId, params: parsed };
+        var obj = { action: action };
+        actions.push(obj);
+
+        var row = $('<li>', { 'class': 'action-item row' });
+        var emptyColumn = $('<span>', { 'class': 'col-sm-1' });
+        row.append(emptyColumn);
+
+        var textColumn = $('<span>', { 'class': 'col-sm-6 action-item-text' });
+        textColumn.append(description);
+        row.append(textColumn);
+
+        var removeColumn = $('<span>', { 'class': 'col-sm-3' });
+        var remove = $('<button>', { 'class': 'btn btn-default' });
+        remove.click(function() {
+            removeAction(action);
+        });
+        remove.text('Remove');
+        removeColumn.append(remove);
+        row.append(removeColumn);
+        obj.row = row;
+
+         $('#actions-container').append(row);
+    }
+
+    function buildChannelOption(subitem, kind, subKind, id, prefix, modal, container, callback) {
+        var row = $('<div>', { 'class': 'row' });
+
+        var leftColumn = $('<div>', { 'class': 'col-md-6' });
+        var button = $('<button>', { 'class': 'btn ' + kind + '-' + subKind + '-select-button',
+                                     'id': prefix + '-button',
+                                   });
+        button.text(subitem.description);
+        leftColumn.append(button);
+
+        var rightColumn = $('<div>', { 'class': 'col-md-6' });
+        var params = [];
+        subitem.params.forEach(function(paramspec) {
+            var impl = Rulepedia.Util.makeParamInput(paramspec,
+                                                     prefix,
+                                                     undefined);
+            rightColumn.append(impl.element);
+            params.push(impl);
+        });
+
+        button.click(function() {
+            if (params.every(function(p) { return p.validate(); })) {
+                var parsed = params.map(function(p) {
+                    return { name: p.paramspec.id,
+                             value: p.normalize() };
+                }).filter(function(p) {
+                    return p.value !== undefined
+                });
+
+                var paramtext = params.map(function(p) { return p.text(); }).join(' ');
+                var text = (subitem.text + ' ' + paramtext).trim();
+
+                callback(id, subitem.id, parsed, text);
+                modal.modal('hide');
+            } else {
+                console.log('validation failed');
+                // FIXME: notify the user
+            }
+        });
+        modal.on('hidden.bs.modal', function() {
+            params.forEach(function(p) { p.reset(); });
+        });
+
+        row.append(leftColumn);
+        row.append(rightColumn);
+        container.append(row);
+    }
+
+    function findInterfaceMeta(metadata, name) {
+        for (var i = 0; i < metadata.length; i++) {
+            if (metadata[i].id == name)
+                return metadata[i];
+        }
+
+        throw new Error("Failed to find interface " + name);
+    }
+
+    function updateChannelOptions(metadata, kind, subKind, dialogTitle, callback) {
+        var placeholder = $('#' + kind + '-placeholder');
+        placeholder.empty();
+
+        metadata.forEach(function(item) {
+            var id = item.id;
+
+            var prefix = kind + '-' + id + '-' + subKind + '-select';
+            var created = Rulepedia.Util.makeModalDialog(prefix,
+                                                         dialogTitle);
+            var modal = created.modal;
+            var body = created.body;
+
+            var container = $('<div>', { 'class': 'container-fluid' });
+
+            item[subKind].forEach(function(subitem) {
+                buildChannelOption(subitem, kind, subKind, id, prefix, modal, container, callback);
+            });
+
+            if ('implements' in item) {
+                item.implements.forEach(function(interface) {
+                    findInterfaceMeta(metadata, interface)[subKind].forEach(function(subitem) {
+                        buildChannelOption(subitem, kind, subKind, id, prefix, modal, container, callback);
+                    });
+                });
+            }
+
+            body.append(container);
+            placeholder.append(modal);
+        });
+    }
+
+    function updateTriggerOptions(triggerMetaData) {
+        updateChannelOptions(triggerMetaData, 'trigger', 'events', "Select an event", appendTrigger);
+    }
+
+    function updateActionOptions(actionMetaData) {
+        updateChannelOptions(actionMetaData, 'action', 'methods', "Select an action", appendAction);
+    }
+
+    function updateChannelSelector(metadata, kind, subKind) {
+        var container = $('#' + kind + '-channel-select-container');
         container.empty();
 
         var count = 0;
         var row = null;
-        triggerMetaData.forEach(function(trigger) {
+        metadata.forEach(function(item) {
             if (row == null || count >= 4) {
                 row = $('<div>', { 'class': 'row' });
                 container.append(row);
                 count = 0;
             }
 
+            if (item.interface)
+                return;
+
             var column = $('<div>', { 'class': 'col-md-3' });
             var button = $('<button>', { 'class': 'btn',
-                                         'id': 'trigger-button-channel-' + trigger.id,
+                                         'id': kind + '-button-channel-' + item.id,
                                        });
             button.click(function() {
-                $('#trigger-channel-select').modal('hide');
-                $('#trigger-' + trigger.id + '-event-select').modal();
+                $('#' + kind + '-channel-select').modal('hide');
+                $('#' + kind + '-' + item.id + '-' + subKind + '-select').modal();
             });
-            button.text(trigger.description);
+            button.text(item.description);
             column.append(button);
             row.append(column);
             count ++;
         });
     }
 
-    function updateTriggerOptions(triggerMetaData) {
-        var placeholder = $('#triggers-placeholder');
-        placeholder.empty();
+    function updateTriggerChannels(triggerMetaData) {
+        updateChannelSelector(triggerMetaData, 'trigger', 'events');
+    }
 
-        triggerMetaData.forEach(function(trigger) {
-            var id = trigger.id;
-
-            var prefix = 'trigger-' + id + '-event-select';
-            var created = Rulepedia.Util.makeModalDialog(prefix,
-                                                         "Select an event");
-            var modal = created.modal;
-            var body = created.body;
-
-            var container = $('<div>', { 'class': 'container-fluid' });
-
-            trigger.events.forEach(function(event) {
-                var row = $('<div>', { 'class': 'row' });
-
-                var leftColumn = $('<div>', { 'class': 'col-md-6' });
-                var button = $('<button>', { 'class': 'btn trigger-event-select-button',
-                                             'id': prefix + '-button',
-                                           });
-                button.text(event.description);
-                leftColumn.append(button);
-
-                var rightColumn = $('<div>', { 'class': 'col-md-6' });
-                var params = [];
-                event.params.forEach(function(paramspec) {
-                    var impl = Rulepedia.Util.makeParamInput(paramspec,
-                                                             prefix,
-                                                             undefined);
-                    rightColumn.append(impl.element);
-                    params.push(impl);
-                });
-
-                button.click(function() {
-                    if (params.every(function(p) { return p.validate(); })) {
-                        var parsed = params.map(function(p) {
-                            return { name: p.paramspec.id,
-                                     value: p.normalize() };
-                        }).filter(function(p) {
-                            return p.value !== undefined
-                        });
-
-                        var paramtext = params.map(function(p) { return p.text(); }).join(' ');
-                        var text = (event.text + ' ' + paramtext).trim();
-
-                        appendTrigger(id, event.id, parsed, text);
-                        modal.modal('hide');
-                    } else {
-                        console.log('validation failed');
-                        // FIXME: notify the user
-                    }
-                });
-                modal.on('hidden.bs.modal', function() {
-                    params.forEach(function(p) { p.reset(); });
-                });
-
-                row.append(leftColumn);
-                row.append(rightColumn);
-                container.append(row);
-            });
-
-            body.append(container);
-            placeholder.append(modal);
-        });
+    function updateActionChannels(actionMetaData) {
+        updateChannelSelector(actionMetaData, 'action', 'methods');
     }
 })();

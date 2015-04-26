@@ -56,4 +56,18 @@ block content
         div.modal-body
           div.container-fluid#trigger-channel-select-container
 
-  div#triggers-placeholder
+  div#trigger-placeholder
+
+  div.modal.fade(aria-hidden='true', role='dialog', aria-labelled-by='action-channel-select-title')#action-channel-select
+    div.modal-dialog
+      div.modal-content
+        div.modal-header
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') ×
+          h4.modal-title#action-channel-select-title Select a channel
+
+        div.modal-body
+          div.container-fluid#action-channel-select-container
+
+  div#action-placeholder
+  
