@@ -11,16 +11,40 @@
 
     var actionMetaData = null;
     var actions = [];
+    var computedActions = [];
 
-    $.get('/db/triggers.json', '', function(data, status, xhr) {
-        updateTriggerChannels(data);
-        updateTriggerOptions(data);
-    }, 'json');
-    $.get('/db/actions.json', '', function(data, status, xhr) {
-        actionMetaData = data;
-        updateActionChannels(data);
-        updateActionOptions(data);
-    }, 'json');
+    $(function() {
+        $.get('/db/triggers.json', '', function(data, status, xhr) {
+            updateTriggerChannels(data);
+            updateTriggerOptions(data);
+        }, 'json');
+        $.get('/db/actions.json', '', function(data, status, xhr) {
+            actionMetaData = data;
+            updateActionChannels(data);
+            updateActionOptions(data);
+        }, 'json');
+
+        $('#install-rule').click(function() {
+            recomputeTrigger();
+            recomputeAction();
+            if (computedTrigger == null || computedActions.length == 0) {
+                console.log("rule validation failed");
+                // FIXME
+                return;
+            }
+
+            var url = Rulepedia.Util.computeRuleURI({
+                trigger: computedTrigger,
+                actions: computedActions
+            });
+            $('#install-rule-url').text(url).attr('href', url);
+            $('#install-rule-dialog').modal();
+        })
+    });
+
+    function recomputeRule() {
+
+    }
 
     function recomputeTrigger() {
         if (triggers.length == 0) {
@@ -56,13 +80,18 @@
         console.log(JSON.stringify(computedTrigger));
     }
 
+    function recomputeAction() {
+        computedActions = [];
+        for (var i = 0; i < actions.length; i++) {
+            computedActions.push(actions[i].action);
+        }
+    }
+
     function changeTrigger(trigger, combinator) {
         for(var i = 0; i < triggers.length; i++) {
             if (triggers[i].trigger == trigger) {
-                if (triggers[i].combinator != combinator) {
+                if (triggers[i].combinator != combinator)
                     triggers[i].combinator = combinator;
-                    recomputeTrigger();
-                }
                 break;
             }
         }
@@ -78,7 +107,6 @@
                     if (triggers[0].select)
                         triggers[0].select.remove();
                 }
-                recomputeTrigger();
                 break;
             }
         }
@@ -91,7 +119,6 @@
         var first = triggers.length == 0;
         var obj = { combinator: (first ? undefined : 'and'), trigger: trigger };
         triggers.push(obj);
-        recomputeTrigger();
 
         var row = $('<li>', { 'class': 'trigger-item row' });
         var combinatorColumn = $('<span>', { 'class': 'col-sm-1' });

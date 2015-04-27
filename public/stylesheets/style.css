@@ -71,6 +71,10 @@ a {
     padding: 6px 12px;
 }
 
+#install-rule {
+    margin-right: 12px;
+}
+
 .main-carousel
 {
   display: block;
