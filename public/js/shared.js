@@ -1,7 +1,13 @@
 /* scripts shared between all pages */
 
 window.Rulepedia = {
+    URL_PREFIX: 'https://rulepedia.stanford.edu/rule/',
+
     Util: {
+        computeRuleURI: function(rule) {
+            return Rulepedia.URL_PREFIX + encodeURIComponent(JSON.stringify(rule));
+        },
+
         makeModalDialog: function(id, title) {
             var modal = $('<div>', { 'class': 'modal fade',
                                      'aria-hidden': 'true',

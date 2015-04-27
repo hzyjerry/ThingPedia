@@ -45,6 +45,10 @@ block content
         ul#actions-container.container-fluid
         button.btn.btn-default.placeholder#add-new-action(type='button', data-toggle='modal', data-target='#action-channel-select') Add new action
 
+    div.form-group.center
+      button.btn.btn-primary.btn-lg#install-rule(type='button') Install
+      button.btn.btn-default.btn-lg#share-rule Share
+
   div.modal.fade(aria-hidden='true', role='dialog', aria-labelled-by='trigger-channel-select-title')#trigger-channel-select
     div.modal-dialog
       div.modal-content
@@ -70,4 +74,20 @@ block content
           div.container-fluid#action-channel-select-container
 
   div#action-placeholder
+  
+  div.modal.fade(aria-hidden='true', role='dialog', aria-labelled-by='install-rule-dialog-title')#install-rule-dialog
+    div.modal-dialog
+      div.modal-content
+        div.modal-header
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') ×
+          h4.modal-title#install-rule-dialog-title Install rule
+
+        div.modal-body
+          p To install the rule, copy paste this URL to your mobile device and open it.
+          p FIXME: recognize if this is a mobile browser and just navigate there
+          p FIXME: otherwise show a QR code
+
+          p.well
+            a#install-rule-url
   
