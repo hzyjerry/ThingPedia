@@ -1,14 +1,42 @@
 extends layout
 
 block content
-  div.jumbotron.center
-    h1 Welcome to Rulepedia!
-    br
-    img(src='/braincat.jpg')
-    br
-    br
-    br
-    a(class='btn btn-primary btn-lg', href='/about') Learn More
+
+
+  div(id='carousel-example-generic', class='main-carousel carousel slide', data-ride='carousel', style='width: 80%')
+    ol(class='carousel-indicators')
+        li(data-target='#carousel-example-generic', data-slide-to='0', class='active')
+        li(data-target='#carousel-example-generic', data-slide-to='1')
+        li(data-target='#carousel-example-generic', data-slide-to='2')
+   
+    div(class='carousel-inner', role='listbox')
+        div(class='item active')
+            img(class='img-responsive center-block', src='/images/world3.jpg', width='100%')
+            div(class='carousel-caption', style='color: #FFFFFF')
+                h1 Welcome to Rulepedia!
+        div(class='item')
+            img(class='img-responsive center-block', src='/images/world.jpg', width='100%')
+            div(class='carousel-caption', style='color: #000000')
+                h1 How now brown cow
+        div(class='item')
+            img(class='img-responsive center-block', src='/images/world2.jpg', width='100%')
+            div(class='carousel-caption', style='color: #FF0066')
+                h1 Bob is your uncle   
+
+
+    a(class='left carousel-control', href='#carousel-example-generic', role='button', data-slide='prev')
+        span(class='glyphicon glyphicon-chevron-left', aria-hidden='true')
+        span(class='sr-only')
+            | Previous
+
+    a(class='right carousel-control', href='#carousel-example-generic', role='button', data-slide='next')
+        span(class='glyphicon glyphicon-chevron-right', aria-hidden='true')
+        span(class='sr-only')
+            | Next
+
+
+  br
+  br
 
   div.center
     a(class='btn btn-primary main-nav-button', href='/browse') Browse rules
