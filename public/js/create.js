@@ -39,11 +39,13 @@
             if (rule == null)
                 return;
 
+            console.log(JSON.stringify(rule));
             $.ajax('/create', { contentType: 'application/json',
                                 data: JSON.stringify(rule),
                                 processData: false,
                                 dataType: 'text',
                                 method: 'POST' }).done(function(data) {
+                console.log('Redirect to ' + Rulepedia.URL_PREFIX + data);
                 document.location.href = Rulepedia.URL_PREFIX + data;
             }).error(function(xhr, status) {
                 showErrorDialog("Sorry, failed to share the rule: " + status);
