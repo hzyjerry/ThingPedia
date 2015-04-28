@@ -34,11 +34,6 @@ app.use('/about', about);
 
 app.use('/db', express.static('db'));
 
-/*
-app.get('/db', function(req, res) {
-  res.send('DB!');
-});
-*/
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
