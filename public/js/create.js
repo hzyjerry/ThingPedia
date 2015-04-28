@@ -25,31 +25,35 @@
         }, 'json');
 
         $('#install-rule').click(function() {
-            var rule = computeRule();
-            if (rule == null)
-                return;
+            try {
+                var rule = computeRule();
 
-            var url = Rulepedia.Util.computeRuleURI(rule);
-            $('#install-rule-url').text(url).attr('href', url);
-            $('#install-rule-dialog').modal();
+                var url = Rulepedia.Util.computeRuleURI(rule);
+                $('#install-rule-url').text(url).attr('href', url);
+                $('#install-rule-dialog').modal();
+            } catch(e) {
+                showErrorDialog(e.message);
+            }
         });
 
         $('#share-rule').click(function() {
-            var rule = computeRule();
-            if (rule == null)
-                return;
+            try {
+                var rule = computeRule();
 
-            console.log(JSON.stringify(rule));
-            $.ajax('/create', { contentType: 'application/json',
-                                data: JSON.stringify(rule),
-                                processData: false,
-                                dataType: 'text',
-                                method: 'POST' }).done(function(data) {
-                console.log('Redirect to ' + Rulepedia.URL_PREFIX + data);
-                document.location.href = Rulepedia.URL_PREFIX + data;
-            }).error(function(xhr, status) {
-                showErrorDialog("Sorry, failed to share the rule: " + status);
-            });
+                console.log(JSON.stringify(rule));
+                $.ajax('/create', { contentType: 'application/json',
+                                    data: JSON.stringify(rule),
+                                    processData: false,
+                                    dataType: 'text',
+                                    method: 'POST' }).done(function(data) {
+                    console.log('Redirect to ' + Rulepedia.URL_PREFIX + data);
+                    document.location.href = Rulepedia.URL_PREFIX + data;
+                }).error(function(xhr, status) {
+                    showErrorDialog("Sorry, failed to share the rule: " + status);
+                });
+            } catch(e) {
+                showErrorDialog(e.message);
+            }
         })
     });
 
@@ -61,18 +65,21 @@
     function computeRule() {
         recomputeTrigger();
         recomputeAction();
-        if (computedTrigger == null) {
-            showErrorDialog("You must choose at least one condition");
-            return null;
-        } else if (computedActions.length == 0) {
-            showErrorDialog("You must choose at least one action");
-            return null;
-        } else {
-            return {
-                trigger: computedTrigger,
-                actions: computedActions
-            };
-        }
+
+        var name = $('#rule-name').val();
+        if (name.length == 0)
+            throw new Error("You must choose a name for your rule");
+        if (computedTrigger == null)
+            throw new Error("You must choose at least one condition");
+        if (computedActions.length == 0)
+            throw new Error("You must choose at least one action");
+
+        return {
+            name: name,
+            description: "FIXME",
+            trigger: computedTrigger,
+            actions: computedActions
+        };
     }
 
     function recomputeTrigger() {
