@@ -90,4 +90,16 @@ block content
 
           p.well
             a#install-rule-url
+
+  div.modal.fade(aria-hidden='true', role='dialog', aria-labelled-by='generic-error-title')#generic-error
+    div.modal-dialog
+      div.modal-content
+        div.modal-header
+          h4.modal-title#generic-error-title Error
+
+        div.modal-body
+          p#generic-error-text
+
+        div.modal-footer
+          button.btn.btn-primary(type='button', data-dismiss='modal') Ok
   

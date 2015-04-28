@@ -1,7 +1,7 @@
 /* scripts shared between all pages */
 
 window.Rulepedia = {
-    URL_PREFIX: 'https://rulepedia.stanford.edu/rule/',
+    URL_PREFIX: 'http://localhost:3000/rule/',
 
     Util: {
         computeRuleURI: function(rule) {

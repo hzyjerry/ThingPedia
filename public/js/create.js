@@ -25,25 +25,52 @@
         }, 'json');
 
         $('#install-rule').click(function() {
-            recomputeTrigger();
-            recomputeAction();
-            if (computedTrigger == null || computedActions.length == 0) {
-                console.log("rule validation failed");
-                // FIXME
+            var rule = computeRule();
+            if (rule == null)
                 return;
-            }
 
-            var url = Rulepedia.Util.computeRuleURI({
-                trigger: computedTrigger,
-                actions: computedActions
-            });
+            var url = Rulepedia.Util.computeRuleURI(rule);
             $('#install-rule-url').text(url).attr('href', url);
             $('#install-rule-dialog').modal();
+        });
+
+        $('#share-rule').click(function() {
+            var rule = computeRule();
+            if (rule == null)
+                return;
+
+            $.ajax('/create', { contentType: 'application/json',
+                                data: JSON.stringify(rule),
+                                processData: false,
+                                dataType: 'text',
+                                method: 'POST' }).done(function(data) {
+                document.location.href = Rulepedia.URL_PREFIX + data;
+            }).error(function(xhr, status) {
+                showErrorDialog("Sorry, failed to share the rule: " + status);
+            });
         })
     });
 
-    function recomputeRule() {
+    function showErrorDialog(msg) {
+        $('#generic-error-text').text(msg);
+        $('#generic-error').modal();
+    }
 
+    function computeRule() {
+        recomputeTrigger();
+        recomputeAction();
+        if (computedTrigger == null) {
+            showErrorDialog("You must choose at least one condition");
+            return null;
+        } else if (computedActions.length == 0) {
+            showErrorDialog("You must choose at least one action");
+            return null;
+        } else {
+            return {
+                trigger: computedTrigger,
+                actions: computedActions
+            };
+        }
     }
 
     function recomputeTrigger() {
