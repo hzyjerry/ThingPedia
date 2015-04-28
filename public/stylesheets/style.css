@@ -75,6 +75,12 @@ a {
     margin-right: 12px;
 }
 
+#install-rule-url {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-all;
+}
+
 .main-carousel
 {
   display: block;

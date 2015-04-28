@@ -5,7 +5,7 @@ window.Rulepedia = {
 
     Util: {
         computeRuleURI: function(rule) {
-            return Rulepedia.URL_PREFIX + encodeURIComponent(JSON.stringify(rule));
+            return Rulepedia.URL_PREFIX + Base64.encodeURI(RawDeflate.deflate(JSON.stringify(rule)));
         },
 
         makeModalDialog: function(id, title) {
