@@ -239,7 +239,7 @@
         var row = $('<div>', { 'class': 'row' });
 
         var leftColumn = $('<div>', { 'class': 'col-md-6' });
-        var button = $('<button>', { 'class': 'btn ' + kind + '-' + subKind + '-select-button',
+        var button = $('<button>', { 'class': 'btn btn-default btn-block ' + kind + '-' + subKind + '-select-button',
                                      'id': prefix + '-button',
                                    });
         button.text(subitem.description);
@@ -354,7 +354,7 @@
                 return;
 
             var column = $('<div>', { 'class': 'col-md-3' });
-            var button = $('<button>', { 'class': 'btn',
+            var button = $('<button>', { 'class': 'btn btn-default btn-block',
                                          'id': kind + '-button-channel-' + item.id,
                                        });
             button.click(function() {
