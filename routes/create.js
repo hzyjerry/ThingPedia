@@ -23,14 +23,15 @@ router.post('/', function(req, res) {
     var rule = req.body;
     var rules = loadRulesFromDB();
     console.log('rules' + rules);
-    rules.push(rule);
-    saveRulesToDB(rules);
 
     sha1sum = crypto.createHash('sha1');
     sha1sum.update(JSON.stringify(rule));
+    rule.id = sha1sum.digest('hex');
+    rules.push(rule);
+    saveRulesToDB(rules); 
 
     res.status(200);
-    res.end(sha1sum.digest('hex'));
+    res.end(rule.id);
   } catch (e) {
     console.log('ASDASDASDASDASDASDASDASD');
     res.status(500);

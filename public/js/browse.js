@@ -1,7 +1,7 @@
 function displayRule(rule, index, array) {
   var ruleLink = $('<a/>', {
     class: 'list-group-item',
-    href: 'http://google.com',
+    href: '/rule/' + rule.id,
   });
 
   var ruleHeading = $('<h4/>', {
