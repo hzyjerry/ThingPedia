@@ -1,4 +1,5 @@
 [{"id":"facebook",
+  "objectId":"rulepedia:placeholder/object/facebook",
   "description":"Facebook",
   "events": [{
     "id": "message-received",
@@ -45,6 +46,7 @@
     }]
   },{
   "id": "weather",
+  "objectId":"rulepedia:predefined/object/weather",
   "description": "Weather",
   "events": [{
     "id": "given-forecast",

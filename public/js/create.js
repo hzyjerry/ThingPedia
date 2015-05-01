@@ -1,4 +1,5 @@
 (function() {
+    var triggerMetaData = null;
     // { combinator: ..., trigger: ... }
     // as visible in the UI
     // triggers[0] has combinator == null
@@ -15,6 +16,7 @@
 
     $(function() {
         $.get('/db/triggers.json', '', function(data, status, xhr) {
+            triggerMetaData = data;
             updateTriggerChannels(data);
             updateTriggerOptions(data);
         }, 'json');
@@ -148,7 +150,16 @@
     }
 
     function appendTrigger(channelId, eventId, parsed, description) {
-        var trigger = { channel: channelId, trigger: eventId, params: parsed };
+        var objectId;
+        for (var i = 0; i < triggerMetaData.length; i++) {
+            if (triggerMetaData[i].id == channelId) {
+                if (!('objectId' in triggerMetaData[i]))
+                    throw new TypeError('Invalid channel');
+
+                objectId = triggerMetaData[i].objectId;
+            }
+        }
+        var trigger = { object: objectId, trigger: eventId, params: parsed };
         console.log('appendTrigger ' + JSON.stringify(trigger));
 
         var first = triggers.length == 0;
