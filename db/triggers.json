@@ -1,4 +1,14 @@
-[{"id":"facebook",
+[{"id":"omdb",
+  "objectId":"rulepedia:placeholder/object/omdb",
+  "description":"Movies",
+  "events": [{
+    "id": "movie-released",
+    "description": "When a movie is released",
+    "text": "A specific movie is released",
+    "params": []
+    }]
+ },{
+  "id":"facebook",
   "objectId":"rulepedia:placeholder/object/facebook",
   "description":"Facebook",
   "events": [{
