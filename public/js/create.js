@@ -68,8 +68,8 @@
     }
 
     function computeRule() {
-        recomputeTrigger();
-        recomputeAction();
+        var triggerText = recomputeTrigger();
+        var actionText = recomputeAction();
 
         var name = $('#rule-name').val();
         if (name.length == 0)
@@ -78,11 +78,10 @@
             throw new Error("You must choose at least one condition");
         if (computedActions.length == 0)
             throw new Error("You must choose at least one action");
-        // FIXME validate trigger values
 
         return {
             name: name,
-            description: "FIXME",
+            description: "When " + triggerText + ", " + actionText,
             trigger: computedTrigger,
             actions: computedActions
         };
@@ -91,12 +90,12 @@
     function recomputeTrigger() {
         if (triggers.length == 0) {
             computedTrigger = null;
-            return;
+            return '';
         }
 
         if (triggers.length == 1) {
             computedTrigger = triggers[0].trigger;
-            return;
+            return triggers[0].text;
         }
 
         computedTrigger = {
@@ -105,6 +104,8 @@
                 triggers[0].trigger, triggers[1].trigger
             ]
         };
+        var triggerText = triggers[0].text + ' ' +
+            triggers[1].combinator + ' ' + triggers[1].text;
         for (var i = 2; i < triggers.length; i++) {
             if (triggers[i].combinator == computedTrigger.combinator) {
                 computedTrigger.operands.push(triggers[i].trigger);
@@ -116,17 +117,24 @@
                         triggers[i].trigger
                     ]
                 };
+                triggerText += ' ' + triggers[i].combinator + ' ' +
+                    triggers[i].text;
             }
         }
 
-        console.log(JSON.stringify(computedTrigger));
+        return triggerText;
     }
 
     function recomputeAction() {
         computedActions = [];
+        var actionText = '';
         for (var i = 0; i < actions.length; i++) {
             computedActions.push(actions[i].action);
+            if (i > 0)
+                actionText += ', ';
+            actionText += actions[i].text;
         }
+        return actionText;
     }
 
     function recomputeTriggerValue() {
@@ -187,7 +195,7 @@
 
         var first = triggers.length == 0;
         var obj = { combinator: (first ? undefined : 'and'), trigger: trigger,
-                    channelMeta: channelMeta, eventMeta: eventMeta };
+                    channelMeta: channelMeta, eventMeta: eventMeta, text: description };
         triggers.push(obj);
 
         var row = $('<li>', { 'class': 'trigger-item row' });
@@ -242,7 +250,7 @@
         var methodId = methodMeta.id;
 
         var action = { object: objectId, method: methodId, params: parsed };
-        var obj = { action: action };
+        var obj = { action: action, text: description };
         actions.push(obj);
 
         var row = $('<li>', { 'class': 'action-item row' });

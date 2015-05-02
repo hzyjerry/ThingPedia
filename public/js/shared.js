@@ -125,24 +125,18 @@ window.Rulepedia = {
             }
 
             function updateTriggerValueSelectors(producedTriggerValues) {
-                console.log('updateTriggerValueSelectors for ' + JSON.stringify(paramspec));
-                console.log('allProducedValues ' + JSON.stringify(producedTriggerValues));
                 var normalizedType = paramspec.type == 'textarea' ? 'text' : paramspec.type;
                 var producedValues = producedTriggerValues[normalizedType] || [];
-                console.log('producedValues ' + JSON.stringify(producedValues));
 
                 if (producedValues.length == 0) {
-                    console.log('no produced values');
                     triggerLabel.hide();
                     triggerSelector = undefined;
                 } else if (producedValues.length == 1) {
-                    console.log('one produced value ' + producedValues[0].description);
                     triggerLabel.show();
                     triggerSelector = undefined;
                     triggerPlaceholder.text(producedValues[0].description);
                     selectedTriggerMeta = producedValues[0];
                 } else {
-                    console.log('several produced values');
                     triggerLabel.show();
                     triggerSelector = $('<select>');
                     for (var i = 0; i < producedValues.length; i++) {
