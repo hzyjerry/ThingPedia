@@ -65,7 +65,7 @@ window.Rulepedia = {
             var isTriggerValue = false;
             var column;
             if (paramspec.optional) {
-                isEnabled = true;
+                isEnabled = false;
                 var leftColumn = $('<div>', { 'class': 'col-xs-1' });
                 checkbox = $('<input>', { 'type': 'checkbox',
                                           'value': 'on',

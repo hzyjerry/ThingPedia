@@ -14,6 +14,40 @@
       }]
     }]
  },{
+  "id": "sms",
+  "objectId":"rulepeida:predefined/object/sms",
+  "description": "Text messages",
+  "events": [{
+    "id": "message-received",
+    "description": "When I receive a text",
+    "text": "I receive a text",
+    "params": [{
+      "id": "content-contains",
+      "type": "textarea",
+      "optional": true,
+      "description": "containing this text",
+      "text":"containing"
+      },{
+      "id": "sender-matches",
+      "type": "contact",
+      "subType": "facebook",
+      "optional": true,
+      "description": "from",
+      "text": "from"
+      }],
+    "generates": [{
+      "id": "message",
+      "type": "text",
+      "text": "the received message",
+      "description": "the received message"
+      },{
+      "id": "sender",
+      "type": "contact",
+      "text": "the sender of the message",
+      "description": "the sender of the message"
+      }]
+  }]
+ },{
   "id":"facebook",
   "objectId":"rulepedia:placeholder/object/facebook",
   "description":"Facebook",
@@ -32,8 +66,8 @@
       "type": "contact",
       "subType": "facebook",
       "optional": true,
-      "description": "from a specific person",
-      "text": "from a specific person"
+      "description": "from",
+      "text": "from"
       }],
     "generates": [{
       "id": "message",
