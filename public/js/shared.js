@@ -61,8 +61,11 @@ window.Rulepedia = {
             var container = $('<div>', { 'class': 'form-group container-fluid' });
             var row = $('<div>', { 'class': 'row' });
             var checkbox = undefined;
+            var isEnabled = true;
+            var isTriggerValue = false;
             var column;
             if (paramspec.optional) {
+                isEnabled = true;
                 var leftColumn = $('<div>', { 'class': 'col-xs-1' });
                 checkbox = $('<input>', { 'type': 'checkbox',
                                           'value': 'on',
@@ -75,10 +78,8 @@ window.Rulepedia = {
                 else
                     element.addClass('disabled');
                 checkbox.on('change', function() {
-                    if (input !== undefined)
-                        input.prop('disabled', !checkbox.prop('checked'));
-                    else
-                        element.toggleClass('disabled', !checkbox.prop('checked'));
+                    isEnabled = checkbox.prop('checked');
+                    syncSensitivity();
                 });
 
                 leftColumn.append(checkbox);
@@ -92,22 +93,103 @@ window.Rulepedia = {
             label.text(paramspec.description);
             label.append(element);
             column.append(label);
+
+            var triggerSelector = undefined;
+            var triggerPlaceholder = $('<span>');
+            var selectedTriggerMeta = undefined;
+            var triggerLabel = $('<label>');
+            var triggerCheckbox = $('<input>', { 'type': 'checkbox' });
+            triggerCheckbox.on('change', function() {
+                isTriggerValue = triggerCheckbox.prop('checked');
+                syncSensitivity();
+            })
+            triggerLabel.append(triggerCheckbox);
+            triggerLabel.append("or use ");
+            triggerLabel.append(triggerPlaceholder);
+            triggerLabel.append(" from the condition of the rule");
+            triggerLabel.hide();
+            column.append(triggerLabel);
+
             row.append(column);
             container.append(row);
+
+            function syncSensitivity() {
+                if (input !== undefined)
+                    input.prop('disabled', !(isEnabled && !isTriggerValue));
+                else
+                    element.toggleClass('disabled', !(isEnabled && !isTriggerValue));
+
+                triggerCheckbox.prop('disabled', !isEnabled);
+                if (triggerSelector !== undefined)
+                    triggerSelector.prop('disabled', !isEnabled);
+            }
+
+            function updateTriggerValueSelectors(producedTriggerValues) {
+                console.log('updateTriggerValueSelectors for ' + JSON.stringify(paramspec));
+                console.log('allProducedValues ' + JSON.stringify(producedTriggerValues));
+                var normalizedType = paramspec.type == 'textarea' ? 'text' : paramspec.type;
+                var producedValues = producedTriggerValues[normalizedType] || [];
+                console.log('producedValues ' + JSON.stringify(producedValues));
+
+                if (producedValues.length == 0) {
+                    console.log('no produced values');
+                    triggerLabel.hide();
+                    triggerSelector = undefined;
+                } else if (producedValues.length == 1) {
+                    console.log('one produced value ' + producedValues[0].description);
+                    triggerLabel.show();
+                    triggerSelector = undefined;
+                    triggerPlaceholder.text(producedValues[0].description);
+                    selectedTriggerMeta = producedValues[0];
+                } else {
+                    console.log('several produced values');
+                    triggerLabel.show();
+                    triggerSelector = $('<select>');
+                    for (var i = 0; i < producedValues.length; i++) {
+                        var option = $('<option>', { 'value': producedValues[i].id });
+                        triggerSelector.append(option);
+                    }
+                    triggerSelector.on('change', function() {
+                        var chosen = triggerSelector.val();
+                        for (var i = 0; i < producedValues.length; i++) {
+                            if (producedValues[i].id == chosen) {
+                                selectedTriggerMeta = producedValues[i];
+                                return;
+                            }
+                        }
+                        selectedTriggerMeta = undefined;
+                    });
+                    triggerPlaceholder.empty();
+                    triggerPlaceholder.append(triggerSelector);
+                }
+            }
 
             return { element: container,
                      paramspec: paramspec,
                      validate: function() {
-                         return impl.validate(paramspec, input, checkbox);
+                         if (paramspec.optional && !isEnabled)
+                            return true;
+                         if (isTriggerValue)
+                            return true;
+                         return impl.validate(paramspec, input);
                      },
                      normalize: function() {
-                         return impl.normalize(paramspec, input, checkbox);
+                         if (!isEnabled)
+                            return undefined;
+                         if (isTriggerValue)
+                            return { name: paramspec.id,
+                                     'trigger-value': selectedTriggerMeta.id };
+                         else
+                            return { name: paramspec.id,
+                                     value: impl.normalize(paramspec, input) };
                      },
                      text: function() {
-                         if (paramspec.optional && !checkbox.prop('checked'))
+                         if (paramspec.optional && !isEnabled)
                              return '';
+                         else if (isTriggerValue)
+                             return ((paramspec.text || '') + ' ' + selectedTriggerMeta.text).trim();
                          else if (impl.placeholder)
-                             return paramspec.text;
+                             return ((paramspec.text || '') + ' ' + impl.text).trim();
                          else
                              return ((paramspec.text || '') + ' ' + input.val()).trim();
                      },
@@ -115,12 +197,13 @@ window.Rulepedia = {
                          impl.reset(paramspec, input);
                          if (checkbox !== undefined) {
                              checkbox.prop('checked', false);
-                             if (input !== undefined)
-                                input.prop('disabled', true);
-                             else
-                                element.addClass('disabled');
+                             isEnabled = false;
                          }
+                         triggerCheckbox.prop('checked', false);
+                         isTriggerValue = false;
+                         syncSensitivity();
                      },
+                     updateTriggerValueSelectors: updateTriggerValueSelectors
                    };
         }
     },
@@ -136,18 +219,12 @@ window.Rulepedia = {
                                       'id': prefix + '-' + paramspec.id });
             },
 
-            normalize: function(paramspec, input, checkbox) {
-                if (paramspec.optional && !checkbox.prop('checked'))
-                    return undefined;
-                else
-                    return input.val();
+            normalize: function(paramspec, input) {
+                return input.val();
             },
 
-            validate: function(paramspec, input, checkbox) {
-                if (paramspec.optional && !checkbox.prop('checked'))
-                    return true;
-                else
-                    return input.val().length > 0;
+            validate: function(paramspec, input) {
+                return input.val().length > 0;
             },
 
             reset: function(paramspec, input) {
@@ -165,18 +242,12 @@ window.Rulepedia = {
                 return element;
             },
 
-            normalize: function(paramspec, input, checkbox) {
-                if (paramspec.optional && !checkbox.prop('checked'))
-                    return undefined;
-                else
-                    return input.val();
+            normalize: function(paramspec, input) {
+                return input.val();
             },
 
-            validate: function(paramspec, input, checkbox) {
-                if (paramspec.optional && !checkbox.prop('checked'))
-                    return true;
-                else
-                    return input.val().length > 0;
+            validate: function(paramspec, input) {
+                return input.val().length > 0;
             },
 
             reset: function(paramspec, input) {
@@ -187,15 +258,13 @@ window.Rulepedia = {
         'picture': {
             create: null,
             placeholder: "You will be able to choose a picture when you install this rule",
+            text: "a picture of my choice",
 
-            normalize: function(paramspec, input, checkbox) {
-                if (paramspec.optional && !checkbox.prop('checked'))
-                    return undefined;
-                else
-                    return 'rulepedia:placeholder/picture/' + paramspec.subType;
+            normalize: function(paramspec, input) {
+                return 'rulepedia:placeholder/picture/' + paramspec.subType;
             },
 
-            validate: function(paramspec, input, checkbox) {
+            validate: function(paramspec, input) {
                 return true;
             },
 
@@ -206,15 +275,13 @@ window.Rulepedia = {
         'contact': {
             create: null,
             placeholder: "You will be able to choose a contact when you install this rule",
+            text: "a contact of my choice",
 
-            normalize: function(paramspec, input, checkbox) {
-                if (paramspec.optional && !checkbox.prop('checked'))
-                    return undefined;
-                else
-                    return 'rulepedia:placeholder/object/contact/' + paramspec.subType;
+            normalize: function(paramspec, input) {
+                return 'rulepedia:placeholder/object/contact/' + paramspec.subType;
             },
 
-            validate: function(paramspec, input, checkbox) {
+            validate: function(paramspec, input) {
                 return true;
             },
 
@@ -225,34 +292,13 @@ window.Rulepedia = {
         'message-destination': {
             create: null,
             placeholder: "You will be able to choose a contact or group when you install this rule",
+            text: "a contact or group of my choice",
 
-            normalize: function(paramspec, input, checkbox) {
-                if (paramspec.optional && !checkbox.prop('checked'))
-                    return undefined;
-                else
-                    return 'rulepedia:placeholder/object/message-destination/' + paramspec.subType;
+            normalize: function(paramspec, input) {
+                return 'rulepedia:placeholder/object/message-destination/' + paramspec.subType;
             },
 
-            validate: function(paramspec, input, checkbox) {
-                return true;
-            },
-
-            reset: function(paramspec, input) {
-            },
-        },
-
-        'trigger-value': {
-            create: null,
-            placeholder: "The value will be chosen based on the condition of this rule",
-
-            normalize: function(paramspec, input, checkbox) {
-                if (paramspec.optional && !checkbox.prop('checked'))
-                    return undefined;
-                else
-                    return 'rulepedia:placeholder/trigger-value/' + paramspec.subType;
-            },
-
-            validate: function(paramspec, input, checkbox) {
+            validate: function(paramspec, input) {
                 return true;
             },
 
@@ -270,21 +316,14 @@ window.Rulepedia = {
                                       'id': prefix + '-' + paramspec.id });
             },
 
-            normalize: function(paramspec, input, checkbox) {
-                if (paramspec.optional && !checkbox.prop('checked'))
-                    return undefined;
-                else {
-                    // FIXME: convert everything to C
-                    return input.val();
-                }
+            normalize: function(paramspec, input) {
+                // FIXME: convert everything to C
+                return input.val();
             },
 
             validate: function(paramspec, input) {
                 var value = input.val();
-                if (paramspec.optional && !checkbox.prop('checked') && value.length == 0)
-                    return true;
-                else
-                    return value.match(/[-+]?([0-9]+)(\.[0-9]+)?\s*(°C|°F|C|F|K)/) != null;
+                return value.match(/[-+]?([0-9]+)(\.[0-9]+)?\s*(°C|°F|C|F|K)/) != null;
             },
 
             reset: function(paramspec, input) {
@@ -309,11 +348,8 @@ window.Rulepedia = {
                 return element;
             },
 
-            normalize: function(paramspec, input, checkbox) {
-                if (paramspec.optional && !checkbox.prop('checked'))
-                    return undefined;
-                else
-                    return input.val();
+            normalize: function(paramspec, input) {
+                return input.val();
             },
 
             validate: function(paramspec, input) {

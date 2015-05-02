@@ -9,8 +9,12 @@
     // conversion from triggers to computedTrigger happens in
     // recomputeTrigger
     var computedTrigger = null;
+    // map value name -> value meta
+    // for the values produced by the current trigger
+    var producedTriggerValues = {};
 
     var actionMetaData = null;
+    var actionInputs = [];
     var actions = [];
     var computedActions = [];
 
@@ -74,6 +78,7 @@
             throw new Error("You must choose at least one condition");
         if (computedActions.length == 0)
             throw new Error("You must choose at least one action");
+        // FIXME validate trigger values
 
         return {
             name: name,
@@ -124,6 +129,28 @@
         }
     }
 
+    function recomputeTriggerValue() {
+        producedTriggerValues = {};
+        for(var i = 0; i < triggers.length; i++) {
+            var eventMeta = triggers[i].eventMeta;
+            for (var j = 0; j < eventMeta.generates.length; j++) {
+                var generateMeta = eventMeta.generates[i];
+
+                if (!(generateMeta.type in producedTriggerValues))
+                    producedTriggerValues[generateMeta.type] = []
+                producedTriggerValues[generateMeta.type].push(generateMeta);
+            }
+        }
+
+        updateActionTriggerValueSelectors();
+    }
+
+    function updateActionTriggerValueSelectors() {
+        for(var i = 0; i < actionInputs.length; i++) {
+            actionInputs[i].updateTriggerValueSelectors(producedTriggerValues);
+        }
+    }
+
     function changeTrigger(trigger, combinator) {
         for(var i = 0; i < triggers.length; i++) {
             if (triggers[i].trigger == trigger) {
@@ -147,23 +174,20 @@
                 break;
             }
         }
+
+        recomputeTriggerValue();
     }
 
-    function appendTrigger(channelId, eventId, parsed, description) {
-        var objectId;
-        for (var i = 0; i < triggerMetaData.length; i++) {
-            if (triggerMetaData[i].id == channelId) {
-                if (!('objectId' in triggerMetaData[i]))
-                    throw new TypeError('Invalid channel');
+    function appendTrigger(channelMeta, eventMeta, parsed, description) {
+        var objectId = channelMeta.objectId;
+        var eventId = eventMeta.id;
 
-                objectId = triggerMetaData[i].objectId;
-            }
-        }
         var trigger = { object: objectId, trigger: eventId, params: parsed };
         console.log('appendTrigger ' + JSON.stringify(trigger));
 
         var first = triggers.length == 0;
-        var obj = { combinator: (first ? undefined : 'and'), trigger: trigger };
+        var obj = { combinator: (first ? undefined : 'and'), trigger: trigger,
+                    channelMeta: channelMeta, eventMeta: eventMeta };
         triggers.push(obj);
 
         var row = $('<li>', { 'class': 'trigger-item row' });
@@ -197,6 +221,7 @@
         obj.row = row;
 
         $('#triggers-container').append(row);
+        recomputeTriggerValue();
     }
 
     function removeAction(action) {
@@ -209,16 +234,12 @@
         }
     }
 
-    function appendAction(channelId, methodId, parsed, description) {
+    function appendAction(channelMeta, methodMeta, parsed, description) {
         var objectId;
-        for (var i = 0; i < actionMetaData.length; i++) {
-            if (actionMetaData[i].id == channelId) {
-                if (actionMetaData[i].interface || !('objectId' in actionMetaData[i]))
-                    throw new TypeError('Invalid channel');
-
-                objectId = actionMetaData[i].objectId;
-            }
-        }
+        if (channelMeta.interface || !('objectId' in channelMeta))
+            throw new TypeError('Invalid channel');
+        objectId = channelMeta.objectId;
+        var methodId = methodMeta.id;
 
         var action = { object: objectId, method: methodId, params: parsed };
         var obj = { action: action };
@@ -246,44 +267,46 @@
     }
 
     // FIXME: way too many parameters here
-    function buildChannelOption(subitem, kind, subKind, channelMeta, isImplements, id, prefix, modal, container, callback) {
+    function buildChannelOption(subMeta, kind, subKind, channelMeta, isImplements, id, prefix, modal, container, callback) {
         var row = $('<div>', { 'class': 'row' });
 
         var leftColumn = $('<div>', { 'class': 'col-md-6' });
         var button = $('<button>', { 'class': 'btn btn-default btn-block ' + kind + '-' + subKind + '-select-button',
                                      'id': prefix + '-button',
                                    });
-        button.text(subitem.description);
+        button.text(subMeta.description);
         leftColumn.append(button);
 
         var rightColumn = $('<div>', { 'class': 'col-md-6' });
         var params = [];
-        subitem.params.forEach(function(paramspec) {
+        subMeta.params.forEach(function(paramspec) {
             var impl = Rulepedia.Util.makeParamInput(paramspec,
                                                      prefix,
                                                      undefined);
             rightColumn.append(impl.element);
             params.push(impl);
+
+            if (kind == 'action') // FIXME layering violation
+                actionInputs.push(impl);
         });
 
         button.click(function() {
             if (params.every(function(p) { return p.validate(); })) {
                 var parsed = params.map(function(p) {
-                    return { name: p.paramspec.id,
-                             value: p.normalize() };
+                    return p.normalize();
                 }).filter(function(p) {
-                    return p.value !== undefined
+                    return p !== undefined
                 });
 
                 var paramtext = params.map(function(p) { return p.text(); }).join(' ');
 
                 // if this subitem comes from an implements, we disambiguate
                 // the action text with the name of the channel
-                var subitemtext = isImplements ? (subitem.text + " on " + channelMeta.description) :
-                    subitem.text;
+                var subitemtext = isImplements ? (subMeta.text + " on " + channelMeta.description) :
+                    subMeta.text;
                 var text = (subitemtext + ' ' + paramtext).trim();
 
-                callback(id, subitem.id, parsed, text);
+                callback(channelMeta, subMeta, parsed, text);
                 modal.modal('hide');
             } else {
                 console.log('validation failed');

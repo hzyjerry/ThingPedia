@@ -5,7 +5,13 @@
     "id": "movie-released",
     "description": "When a movie is released",
     "text": "A specific movie is released",
-    "params": []
+    "params": [],
+    "generates": [{
+      "id": "title",
+      "type": "text",
+      "text": "the movie title",
+      "description": "the movie title"
+      }]
     }]
  },{
   "id":"facebook",
@@ -21,7 +27,7 @@
       "optional": true,
       "description": "containing this text",
       "text":"containing"
-      }, {
+      },{
       "id": "sender-matches",
       "type": "contact",
       "subType": "facebook",
@@ -30,9 +36,15 @@
       "text": "from a specific person"
       }],
     "generates": [{
-      "id": "incoming-message",
-      "type": "message",
-      "constraints": ["text-only"]
+      "id": "message",
+      "type": "text",
+      "text": "the received message",
+      "description": "the received message"
+      },{
+      "id": "sender",
+      "type": "contact",
+      "text": "the sender of the message",
+      "description": "the sender of the message"
       }]
     },{
     "id": "picture-tagged",
@@ -41,7 +53,9 @@
     "params": [],
     "generates": [{
       "id": "tagged-picture",
-      "type": "picture"
+      "type": "picture",
+      "text": "the photo",
+      "description": "the photo I was tagged in"
       }]
     },{
     "id": "starred-contact-notification",
