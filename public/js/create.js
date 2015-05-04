@@ -37,6 +37,11 @@
                 var url = Rulepedia.Util.computeRuleURI(rule);
                 $('#install-rule-url').attr('href', url).text(url);
                 $('#install-rule-dialog').modal();
+                
+                if (typeof Android !== 'undefined') {
+                    Android.installRule(JSON.stringify(rule));
+                }
+
             } catch(e) {
                 showErrorDialog(e.message);
             }
