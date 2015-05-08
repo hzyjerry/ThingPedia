@@ -40,8 +40,10 @@
                 
                 if (typeof Android !== 'undefined') {
                     Android.installRule(JSON.stringify(rule));
+                } else {
+                    var qrcode = new QRCode("qr-code");
+                    qrcode.makeCode(url);
                 }
-
             } catch(e) {
                 showErrorDialog(e.message);
             }

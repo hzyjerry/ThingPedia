@@ -1,6 +1,7 @@
 extends layout
 
 block scripts
+  script(src='/js/qrcode.js')
   script(src='/js/create.js')
 
 block content
@@ -87,6 +88,8 @@ block content
           p To install the rule, copy paste this URL to your mobile device and open it.
           p FIXME: recognize if this is a mobile browser and just navigate there
           p FIXME: otherwise show a QR code
+
+          div#qr-code
 
           p.well
             a#install-rule-url
