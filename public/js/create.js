@@ -26,7 +26,7 @@
             updateActionOptions(data);
         }, 'json');
 
-        $('#install-rule').click(function() {
+        $('#create-rule').click(function() {
             try {
                 var rule = computeRule();
 
@@ -34,6 +34,14 @@
                 $('#install-rule-url').attr('href', url).text(url);
                 $('#install-rule-dialog').modal();
                 
+                $.ajax('/create', { contentType: 'application/json',
+                                    data: JSON.stringify(rule),
+                                    processData: false,
+                                    dataType: 'text',
+                                    method: 'POST' }).error(function(xhr, status) {
+                    showErrorDialog("Sorry, failed to share the rule: " + status);
+                });
+
                 if (typeof Android !== 'undefined') {
                     Android.installRule(JSON.stringify(rule));
                 } else {
@@ -45,25 +53,6 @@
                 showErrorDialog(e.message);
             }
         });
-
-        $('#share-rule').click(function() {
-            try {
-                var rule = computeRule();
-
-                console.log(JSON.stringify(rule));
-                $.ajax('/create', { contentType: 'application/json',
-                                    data: JSON.stringify(rule),
-                                    processData: false,
-                                    dataType: 'text',
-                                    method: 'POST' }).done(function(data) {
-                    document.location.href = '/browse#rules';
-                }).error(function(xhr, status) {
-                    showErrorDialog("Sorry, failed to share the rule: " + status);
-                });
-            } catch(e) {
-                showErrorDialog(e.message);
-            }
-        })
     });
 
     function showErrorDialog(msg) {
