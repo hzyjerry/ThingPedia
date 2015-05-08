@@ -37,6 +37,7 @@
                 if (typeof Android !== 'undefined') {
                     Android.installRule(JSON.stringify(rule));
                 } else {
+                    $("#qr-code").empty();
                     var qrcode = new QRCode("qr-code");
                     qrcode.makeCode(url);
                 }

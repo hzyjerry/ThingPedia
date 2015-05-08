@@ -1,0 +1,69 @@
+[{ "id": "facebook",
+   "description": "Facebook",
+   "objectId": "rulepedia:placeholder/object/facebook",
+   "implements": ["messages", "statusUpdates", "pictures"],
+   "methods": []
+ },{
+   "id": "instagram",
+   "description": "Instagram",
+   "objectId": "rulepedia:placeholder/object/instagram",
+   "implements": ["pictures"],
+   "methods": []
+ },{
+   "id": "twitter",
+   "description": "Twitter",
+   "objectId": "rulepedia:placeholder/object/twitter",
+   "implements": ["statusUpdates"],
+   "methods": []
+ },{
+   "id": "messages",
+   "description": "Messaging",
+   "objectId": "rulepedia:placeholder/object/any",
+   "implements": [],
+   "methods": [{
+   	"id": "send-message",
+   	"description": "Send a message",
+   	"text": "Send a message",
+   	"params": [
+   		{ "id": "content",
+   		  "type": "textarea",
+   		  "description": "containing the text",
+   		  "text": "containing"
+   		},
+   		{ "id": "destination",
+   		  "type": "message-destination",
+   		  "text": "to"
+   		}
+   	]
+   }]
+ },{
+   "id": "statusUpdates",
+   "interface": true,
+   "implements": [],
+   "methods": [{
+   	"id": "post-own-status",
+   	"description": "Update your status",
+   	"text": "Post a status update",
+   	"params": [
+   		{ "id": "content",
+   		  "type": "textarea",
+   		  "description": "with the text",
+   		  "text": "with"
+   		}
+   	]
+   }]
+ },{
+   "id": "pictures",
+   "interface": true,
+   "implements": [],
+   "methods": [{
+   	"id": "upload-picture",
+   	"description": "Upload a photo",
+        "text": "Upload",
+   	"params": [
+   		{ "id": "picture",
+   		  "type": "picture"
+   		}
+   	]
+	}]
+ }]
