@@ -57,7 +57,7 @@
                                     processData: false,
                                     dataType: 'text',
                                     method: 'POST' }).done(function(data) {
-                    document.location.href = '/rule/' + data;
+                    document.location.href = '/browse#rules';
                 }).error(function(xhr, status) {
                     showErrorDialog("Sorry, failed to share the rule: " + status);
                 });
