@@ -1,5 +1,5 @@
 (function() {
-    var triggerMetaData = null;
+    var channelMetaData = null;
     // { combinator: ..., trigger: ... }
     // as visible in the UI
     // triggers[0] has combinator == null
@@ -13,19 +13,15 @@
     // for the values produced by the current trigger
     var producedTriggerValues = {};
 
-    var actionMetaData = null;
     var actionInputs = [];
     var actions = [];
     var computedActions = [];
 
     $(function() {
-        $.get('/db/triggers.json', '', function(data, status, xhr) {
-            triggerMetaData = data;
+        $.get('/db/channels.json', '', function(data, status, xhr) {
+            channelMetaData = data;
             updateTriggerChannels(data);
             updateTriggerOptions(data);
-        }, 'json');
-        $.get('/db/actions.json', '', function(data, status, xhr) {
-            actionMetaData = data;
             updateActionChannels(data);
             updateActionOptions(data);
         }, 'json');
@@ -364,8 +360,8 @@
             });
 
             if ('implements' in item) {
-                item.implements.forEach(function(interface) {
-                    findInterfaceMeta(metadata, interface)[subKind].forEach(function(subitem) {
+                item.implements.forEach(function(iface) {
+                    findInterfaceMeta(metadata, iface)[subKind].forEach(function(subitem) {
                         buildChannelOption(subitem, kind, subKind, item, true, id, prefix, modal, container, callback);
                     });
                 });
@@ -376,12 +372,12 @@
         });
     }
 
-    function updateTriggerOptions(triggerMetaData) {
-        updateChannelOptions(triggerMetaData, 'trigger', 'events', "Select an event", appendTrigger);
+    function updateTriggerOptions(channelMetaData) {
+        updateChannelOptions(channelMetaData, 'trigger', 'events', "Select an event", appendTrigger);
     }
 
-    function updateActionOptions(actionMetaData) {
-        updateChannelOptions(actionMetaData, 'action', 'methods', "Select an action", appendAction);
+    function updateActionOptions(channelMetaData) {
+        updateChannelOptions(channelMetaData, 'action', 'methods', "Select an action", appendAction);
     }
 
     function updateChannelSelector(metadata, kind, subKind) {
@@ -400,6 +396,15 @@
             if (item.interface)
                 return;
 
+            var length = item[subKind].length;
+            if ('implements' in item) {
+                item.implements.forEach(function(iface) {
+                    length += findInterfaceMeta(metadata, iface)[subKind].length;
+                });
+            }
+            if (length == 0)
+                return;
+
             var column = $('<div>', { 'class': 'col-md-3' });
             var button = $('<button>', { 'class': 'btn btn-default btn-block',
                                          'id': kind + '-button-channel-' + item.id,
@@ -415,11 +420,11 @@
         });
     }
 
-    function updateTriggerChannels(triggerMetaData) {
-        updateChannelSelector(triggerMetaData, 'trigger', 'events');
+    function updateTriggerChannels(channelMetaData) {
+        updateChannelSelector(channelMetaData, 'trigger', 'events');
     }
 
-    function updateActionChannels(actionMetaData) {
-        updateChannelSelector(actionMetaData, 'action', 'methods');
+    function updateActionChannels(channelMetaData) {
+        updateChannelSelector(channelMetaData, 'action', 'methods');
     }
 })();
