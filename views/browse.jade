@@ -1,48 +1,62 @@
 extends layout
 
 block scripts
-    script(src='/js/browse.js')
-
+  script(src='/js/browse.js')
+  script(src='http://builds.handlebarsjs.com.s3.amazonaws.com/handlebars.runtime-v3.0.3.js')
+    
 block content
-  div.jumbotron.center
-    h2.center Browse rules
+    div(class='panel panel-success')
+      div.panel-heading
+        | Weather
+      div.panel-body
+        button(type='button', class='btn btn-default rule-button')
+          i(class='fa fa-umbrella')
+          | 
+          i(class='fa fa-twitter')
+          |    Tweet a picture if it rains
 
-  div.center
-    table.browse-rules-table
-      tr
-        td
-          img(src='/images/braincat.jpg') 
-        td
-          img(src='/images/braincat.jpg')
-        td
-          img(src='/images/braincat.jpg')
-        td 
-          img(src='/images/braincat.jpg')
-      tr
-        td
-          br
-      tr
-        td
-          img(src='/images/braincat.jpg') 
-        td
-          img(src='/images/braincat.jpg')
-        td
-          img(src='/images/braincat.jpg')
-        td 
-          img(src='/images/braincat.jpg')
+        button(type='button', class='btn btn-default rule-button')
+          i(class='fa fa-moon-o')
+          | 
+          i(class='fa fa-lightbulb-o')
+          |    Turn on lights at dusk
 
-  br
-  br
-  div.jumbotron.center
-    h2.center Categories
+        button(type='button', class='btn btn-default rule-button')
+          i(class='fa fa-bolt')
+          | 
+          i(class='fa fa-taxi')
+          |    Get a ride if a storm is coming
 
-  div.categories
-    a(class='thumbnail' href="#") This    
-    a(class='thumbnail' href="#") That
-    a(class='thumbnail' href="#") Or maybe those
+    
+    div(class='panel panel-info')
+      div.panel-heading
+        | Finance
+      div.panel-body
+        button(type='button', class='btn btn-default rule-button')
+          i(class='fa fa-bank')
+          | 
+          i(class='fa fa-comment-o')
+          |    Send notification if bank account is low
 
-  br
-  div.jumbotron.center
+        button(type='button', class='btn btn-default rule-button')
+          i(class='fa fa-credit-card')
+          | 
+          i(class='fa fa-comment-o')
+          |    Send notification when credit card is charged
+
+    div(class='panel panel-warning')
+      div.panel-heading
+        | Weather
+      div.panel-body
+        | moo
+
+    div(class='panel panel-danger')
+      div.panel-heading
+        | Weather
+      div.panel-body
+        | moo
+
+  div
     h2 Rules
     a(name='rules')
-  #rule-list.list-group
+    #rule-list.list-group

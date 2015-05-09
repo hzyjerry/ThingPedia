@@ -52,9 +52,13 @@ $.ajax({
   url: '/db/rules.json',
   data: null,
   success: function (data) {
-    var rules = JSON.parse(data);
-    
-    rules.forEach(displayRule);
+    try{
+      var rules = JSON.parse(data);
+      rules.forEach(displayRule);
+    } catch (e)
+    {
+      console.log(e);
+    }
   }
 });
 
