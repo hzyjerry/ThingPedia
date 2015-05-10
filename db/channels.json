@@ -1,8 +1,17 @@
 [{"id":"omdb",
-  "objectId":"rulepedia:placeholder/object/omdb",
+  "objectId":"https://rulepedia.stanford.edu/oid/placeholder/object/omdb",
+  "urlPrefix": "http://www.omdbapi.com/?r=json&v=1&i=",
+  "urlRegex": "http://www.omdbapi.com/\\?r=json&v=1&i=[a-z0-9]+$",
+  "implementation": "web",
+  "auth": "none",
   "description":"Movies",
   "implements": [],
   "methods": [],
+  "event-sources": [{
+      "id": "global-poll",
+      "type": "polling",
+      "polling-interval": 86400
+  }],
   "events": [{
       "id": "movie-released",
       "description": "When a movie is released",
@@ -13,11 +22,15 @@
           "type": "text",
           "text": "the movie title",
           "description": "the movie title"
-      }]
+      }],
+      "event-sources": ["global-poll"],
+      "implementation": "refresh-poll",
+      "script": "function(response) { var object = JSON.parse(response); var releaseDate = new Date(event.Released); var released = releaseDate.getTime() >= (new Date).getTime(); if (released) { return { title: object.Title }; } else return null; }"
   }]
  },{
      "id": "sms",
-     "objectId":"rulepeida:predefined/object/sms",
+     "objectId":"https://rulepedia.stanford.edu/oid/predefined/object/sms",
+     "implementation": "predefined",
      "description": "Text messages",
      "implements": ["messages"],
      "methods": [],
@@ -53,7 +66,7 @@
      }]
  },{ "id": "facebook",
      "description": "Facebook",
-     "objectId": "rulepedia:placeholder/object/facebook",
+     "objectId": "https://rulepedia.stanford.edu/oid/placeholder/object/facebook",
      "implements": ["messages", "statusUpdates", "pictures"],
      "events": [{
          "id": "message-received",
@@ -110,20 +123,20 @@
    },{
        "id": "instagram",
        "description": "Instagram",
-       "objectId": "rulepedia:placeholder/object/instagram",
+       "objectId": "https://rulepedia.stanford.edu/oid/placeholder/object/instagram",
        "implements": ["pictures"],
        "events": [],
        "methods": []
    },{
        "id": "twitter",
        "description": "Twitter",
-       "objectId": "rulepedia:placeholder/object/twitter",
+       "objectId": "https://rulepedia.stanford.edu/oid/placeholder/object/twitter",
        "implements": ["statusUpdates"],
        "events": [],
        "methods": []
    },{
        "id": "weather",
-       "objectId":"rulepedia:predefined/object/weather",
+       "objectId":"https://rulepedia.stanford.edu/oid/predefined/object/weather",
        "description": "Weather",
        "implements": [],
        "methods": [],

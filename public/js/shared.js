@@ -255,7 +255,7 @@ window.Rulepedia = {
             text: "a picture of my choice",
 
             normalize: function(paramspec, input) {
-                return 'rulepedia:placeholder/picture/' + paramspec.subType;
+                return 'https://rulepedia.stanford.edu/oid/placeholder/picture/' + (paramspec.subType || 'any');
             },
 
             validate: function(paramspec, input) {
@@ -272,7 +272,7 @@ window.Rulepedia = {
             text: "a contact of my choice",
 
             normalize: function(paramspec, input) {
-                return 'rulepedia:placeholder/object/contact/' + paramspec.subType;
+                return 'https://rulepedia.stanford.edu/placeholder/object/contact/' + (paramspec.subType || 'any');
             },
 
             validate: function(paramspec, input) {
@@ -289,7 +289,7 @@ window.Rulepedia = {
             text: "a contact or group of my choice",
 
             normalize: function(paramspec, input) {
-                return 'rulepedia:placeholder/object/message-destination/' + paramspec.subType;
+                return 'https://rulepedia.stanford.edu/placeholder/object/message-destination/' + (paramspec.subType || 'any');
             },
 
             validate: function(paramspec, input) {
