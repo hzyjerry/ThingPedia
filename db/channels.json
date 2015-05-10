@@ -1,4 +1,22 @@
-[{"id":"omdb",
+[{"id":"timer",
+  "objectId":"https://rulepedia.stanford.edu/oid/predefined/object/timer",
+  "implementation":"predefined",
+  "description":"Timer",
+  "implements":[],
+  "methods":[],
+  "events": [{
+      "id":"elapsed",
+      "description":"Periodically",
+      "text": "Every",
+      "params": [{
+          "id": "interval",
+          "type": "time",
+          "description": "Every",
+          "text":""
+      }],
+      "generates":[]
+  }]
+  },{"id":"omdb",
   "objectId":"https://rulepedia.stanford.edu/oid/placeholder/object/omdb",
   "urlPrefix": "http://www.omdbapi.com/?r=json&v=1&i=",
   "urlRegex": "http://www.omdbapi.com/\\?r=json&v=1&i=[a-z0-9]+$",

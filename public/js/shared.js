@@ -226,6 +226,42 @@ window.Rulepedia = {
             },
         },
 
+        'time': {
+            create: function(paramspec, prefix, currentValue) {
+                if (currentValue === undefined)
+                    currentValue = '';
+
+                return $('<input>', { 'type': 'text',
+                                      'value': (currentValue != '' ? currentValue + " ms" : ''),
+                                      'id': prefix + '-' + paramspec.id });
+            },
+
+            normalize: function(paramspec, input) {
+                // FIXME do something better
+                var value = input.val();
+                if (value.endsWith('ms'))
+                    return parseInt(value).toString();
+                else if (value.endsWith('s'))
+                    return (1000 * parseInt(value)).toString();
+                else if (value.endsWith('m'))
+                    return (60000 * parseInt(value)).toString();
+                else if (value.endsWith('h'))
+                    return (3600000 * parseInt(value)).toString();
+                else
+                    throw new TypeError('invalid time specification');
+            },
+
+            validate: function(paramspec, input) {
+                var value = input.val();
+                return value.endsWith('ms') || value.endsWith('s') ||
+                    value.endsWith('m') || value.endsWith('h');
+            },
+
+            reset: function(paramspec, input) {
+                input.val('');
+            },
+        },
+
         'textarea': {
             create: function(paramspec, prefix, currentValue) {
                 if (currentValue === undefined)
