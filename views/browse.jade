@@ -5,6 +5,8 @@ block scripts
   script(src='http://builds.handlebarsjs.com.s3.amazonaws.com/handlebars.runtime-v3.0.3.js')
     
 block content
+  div
+    h2 Best new rules
     div(class='panel panel-success')
       div.panel-heading
         | Weather
@@ -28,7 +30,7 @@ block content
           |    Get a ride if a storm is coming
 
     
-    div(class='panel panel-info')
+    div(class='panel panel-warning')
       div.panel-heading
         | Finance
       div.panel-body
@@ -44,19 +46,41 @@ block content
           i(class='fa fa-comment-o')
           |    Send notification when credit card is charged
 
-    div(class='panel panel-warning')
+    div(class='panel panel-info')
       div.panel-heading
-        | Weather
+        | Health
       div.panel-body
-        | moo
+          button(type='button', class='btn btn-default rule-button')
+            i(class='fa fa-heartbeat')
+            | 
+            i(class='fa fa-exclamation-triangle')
+            |    Send a warning when heartbeat is irregular 
+
+          button(type='button', class='btn btn-default rule-button')
+            i(class='fa fa-paw')
+            | 
+            i(class='fa fa-phone')
+            |    Call if Fido is lost 
 
     div(class='panel panel-danger')
       div.panel-heading
-        | Weather
+        | Device
       div.panel-body
-        | moo
+          button(type='button', class='btn btn-default rule-button')
+            i(class='fa fa-cubes')
+            | 
+            i(class='fa fa-user')
+            |    Greet me when I am near
+
+          button(type='button', class='btn btn-default rule-button')
+            i(class='fa fa-cubes')
+            | 
+            i(class='fa fa-camera-retro')
+            |    Take pictures along patrol route
+
+  hr
 
   div
-    h2 Rules
+    h2 Rule collection
     a(name='rules')
     #rule-list.list-group
