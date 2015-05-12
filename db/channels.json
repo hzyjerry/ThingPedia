@@ -1,5 +1,5 @@
 [{"id":"timer",
-  "objectId":"https://rulepedia.stanford.edu/oid/predefined/object/timer",
+  "objectId":"https://rulepedia.stanford.edu/oid/predefined/channel/timer",
   "implementation":"predefined",
   "description":"Timer",
   "implements":[],
@@ -14,10 +14,37 @@
           "description": "Every",
           "text":""
       }],
-      "generates":[]
+      "generates":[{
+          "id": "current-time",
+          "type": "text",
+          "description": "the current time",
+          "text": "the current time"
+      }]
   }]
-  },{"id":"omdb",
-  "objectId":"https://rulepedia.stanford.edu/oid/placeholder/object/omdb",
+ },{"id":"notifications",
+    "objectId":"https://rulepedia.stanford.edu/oid/predefined/channel/notifications",
+    "implementation":"predefined",
+    "description":"System notifications",
+    "implements":[],
+    "events":[],
+    "methods": [{
+        "id":"post-notification",
+        "description": "Show a notification",
+        "text": "Show a notification",
+        "params": [{
+            "id": "title",
+            "type": "text",
+            "description": "with the title",
+            "text": "with title"
+        },{
+            "id": "text",
+            "type": "textarea",
+            "description": "with the text",
+            "text": "and saying"
+        }]
+    }]
+ },{"id":"omdb",
+  "objectId":"https://rulepedia.stanford.edu/oid/placeholder/channel/omdb",
   "urlPrefix": "http://www.omdbapi.com/?r=json&v=1&i=",
   "urlRegex": "http://www.omdbapi.com/\\?r=json&v=1&i=[a-z0-9]+$",
   "implementation": "web",
@@ -47,7 +74,7 @@
   }]
  },{
      "id": "sms",
-     "objectId":"https://rulepedia.stanford.edu/oid/predefined/object/sms",
+     "objectId":"https://rulepedia.stanford.edu/oid/predefined/channel/sms",
      "implementation": "predefined",
      "description": "Text messages",
      "implements": ["messages"],
@@ -84,7 +111,7 @@
      }]
  },{ "id": "facebook",
      "description": "Facebook",
-     "objectId": "https://rulepedia.stanford.edu/oid/placeholder/object/facebook",
+     "objectId": "https://rulepedia.stanford.edu/oid/placeholder/channel/facebook",
      "implements": ["messages", "statusUpdates", "pictures"],
      "events": [{
          "id": "message-received",
@@ -148,13 +175,13 @@
    },{
        "id": "twitter",
        "description": "Twitter",
-       "objectId": "https://rulepedia.stanford.edu/oid/placeholder/object/twitter",
+       "objectId": "https://rulepedia.stanford.edu/oid/placeholder/channel/twitter",
        "implements": ["statusUpdates"],
        "events": [],
        "methods": []
    },{
        "id": "weather",
-       "objectId":"https://rulepedia.stanford.edu/oid/predefined/object/weather",
+       "objectId":"https://rulepedia.stanford.edu/oid/predefined/channel/weather",
        "description": "Weather",
        "implements": [],
        "methods": [],

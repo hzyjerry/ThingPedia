@@ -1,5 +1,17 @@
 /* scripts shared between all pages */
 
+if (!String.prototype.endsWith) {
+  String.prototype.endsWith = function(searchString, position) {
+      var subjectString = this.toString();
+      if (position === undefined || position > subjectString.length) {
+        position = subjectString.length;
+      }
+      position -= searchString.length;
+      var lastIndex = subjectString.indexOf(searchString, position);
+      return lastIndex !== -1 && lastIndex === position;
+  };
+}
+
 window.Rulepedia = {
     URL_PREFIX: 'http://localhost:3000/rule/',
 
@@ -126,7 +138,17 @@ window.Rulepedia = {
 
             function updateTriggerValueSelectors(producedTriggerValues) {
                 var normalizedType = paramspec.type == 'textarea' ? 'text' : paramspec.type;
-                var producedValues = producedTriggerValues[normalizedType] || [];
+                var producedValues;
+
+                // anything goes into text!
+                if (normalizedType == 'text') {
+                    producedValues = [];
+                    for (var type in producedTriggerValues) {
+                        producedValues.concat(producedTriggerValues[type]);
+                    }
+                } else {
+                    producedValues = producedTriggerValues[normalizedType] || [];
+                }
 
                 if (producedValues.length == 0) {
                     triggerLabel.hide();
@@ -308,7 +330,7 @@ window.Rulepedia = {
             text: "a contact of my choice",
 
             normalize: function(paramspec, input) {
-                return 'https://rulepedia.stanford.edu/placeholder/object/contact/' + (paramspec.subType || 'any');
+                return 'https://rulepedia.stanford.edu/placeholder/contact/' + (paramspec.subType || 'any');
             },
 
             validate: function(paramspec, input) {
@@ -325,7 +347,7 @@ window.Rulepedia = {
             text: "a contact or group of my choice",
 
             normalize: function(paramspec, input) {
-                return 'https://rulepedia.stanford.edu/placeholder/object/message-destination/' + (paramspec.subType || 'any');
+                return 'https://rulepedia.stanford.edu/placeholder/message-destination/' + (paramspec.subType || 'any');
             },
 
             validate: function(paramspec, input) {
