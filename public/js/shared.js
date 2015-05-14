@@ -106,79 +106,170 @@ window.Rulepedia = {
             label.append(element);
             column.append(label);
 
-            var triggerSelector = undefined;
-            var triggerPlaceholder = $('<span>');
-            var selectedTriggerMeta = undefined;
-            var triggerLabel = $('<label>');
-            var triggerCheckbox = $('<input>', { 'type': 'checkbox' });
-            triggerCheckbox.on('change', function() {
-                isTriggerValue = triggerCheckbox.prop('checked');
-                syncSensitivity();
-            })
-            triggerLabel.append(triggerCheckbox);
-            triggerLabel.append("or use ");
-            triggerLabel.append(triggerPlaceholder);
-            triggerLabel.append(" from the condition of the rule");
-            triggerLabel.hide();
-            column.append(triggerLabel);
+            var syncSensitivity, updateTriggerValueSelectors;
+
+            if (paramspec.canTrigger === false) {
+                syncSensitivity = function() {
+                    if (input !== undefined)
+                        input.prop('disabled', !(isEnabled && !isTriggerValue));
+                    else
+                        element.toggleClass('disabled', !(isEnabled && !isTriggerValue));
+                };
+
+                updateTriggerValueSelectors = function() { };
+            } else if (paramspec.type != 'textarea') {
+                var triggerSelector = undefined;
+                var triggerPlaceholder = $('<span>');
+                var selectedTriggerMeta = undefined;
+                var triggerLabel = $('<label>');
+                var triggerCheckbox = $('<input>', { 'type': 'checkbox' });
+                triggerCheckbox.on('change', function() {
+                    isTriggerValue = triggerCheckbox.prop('checked');
+                    syncSensitivity();
+                })
+                triggerLabel.append(triggerCheckbox);
+                triggerLabel.append("or use ");
+                triggerLabel.append(triggerPlaceholder);
+                triggerLabel.append(" from the condition of the rule");
+                triggerLabel.hide();
+                column.append(triggerLabel);
+
+                syncSensitivity = function() {
+                    if (input !== undefined)
+                        input.prop('disabled', !(isEnabled && !isTriggerValue));
+                    else
+                        element.toggleClass('disabled', !(isEnabled && !isTriggerValue));
+
+                    triggerCheckbox.prop('disabled', !isEnabled);
+                    if (triggerSelector !== undefined)
+                        triggerSelector.prop('disabled', !isEnabled);
+                };
+
+                updateTriggerValueSelectors = function(producedTriggerValues) {
+                    var normalizedType = paramspec.type;
+                    var producedValues;
+
+                    // anything goes into text!
+                    if (normalizedType == 'text') {
+                        producedValues = [];
+                        for (var type in producedTriggerValues) {
+                            producedValues = producedValues.concat(producedTriggerValues[type]);
+                        }
+                    } else {
+                        producedValues = producedTriggerValues[normalizedType] || [];
+                    }
+
+                    if (producedValues.length == 0) {
+                        triggerLabel.hide();
+                        triggerSelector = undefined;
+                    } else if (producedValues.length == 1) {
+                        triggerLabel.show();
+                        triggerSelector = undefined;
+                        triggerPlaceholder.text(producedValues[0].description);
+                        selectedTriggerMeta = producedValues[0];
+                    } else {
+                        triggerLabel.show();
+                        triggerSelector = $('<select>');
+                        for (var i = 0; i < producedValues.length; i++) {
+                            var option = $('<option>', { 'value': producedValues[i].id });
+                            option.text(producedValues[i].description);
+                            triggerSelector.append(option);
+                        }
+                        triggerSelector.on('change', function() {
+                            var chosen = triggerSelector.val();
+                            for (var i = 0; i < producedValues.length; i++) {
+                                if (producedValues[i].id == chosen) {
+                                    selectedTriggerMeta = producedValues[i];
+                                    return;
+                                }
+                            }
+                            selectedTriggerMeta = undefined;
+                        });
+                        selectedTriggerMeta = producedValues[0];
+                        triggerPlaceholder.empty();
+                        triggerPlaceholder.append(triggerSelector);
+                    }
+                };
+            } else {
+                var triggerSelector = undefined;
+                var triggerContainer = $('<span>');
+                var selectedTriggerMeta = undefined;
+                triggerContainer.hide();
+                function clickTriggerLink() {
+                    if (selectedTriggerMeta == undefined)
+                        return;
+                    input.val(input.val() + '{{' + selectedTriggerMeta.id + '}}');
+                }
+                column.append(triggerContainer);
+
+                syncSensitivity = function() {
+                    if (input !== undefined)
+                        input.prop('disabled', !isEnabled);
+                    else
+                        element.toggleClass('disabled', !isEnabled);
+
+                    triggerContainer.toggleClass('disabled', !isEnabled);
+                    if (triggerSelector !== undefined)
+                        triggerSelector.prop('disabled', !isEnabled);
+                };
+
+                updateTriggerValueSelectors = function(producedTriggerValues) {
+                    var normalizedType = 'text';
+                    var producedValues = [];
+                    for (var type in producedTriggerValues) {
+                        producedValues = producedValues.concat(producedTriggerValues[type]);
+                    }
+
+                    if (producedValues.length == 0) {
+                        triggerContainer.hide();
+                        triggerSelector = undefined;
+                    } else if (producedValues.length == 1) {
+                        triggerContainer.show();
+                        triggerSelector = undefined;
+                        var triggerLink = $('<a>');
+                        triggerLink.prop('href', '#');
+                        triggerLink.on('click', clickTriggerLink);
+                        triggerLink.text("Add " + producedValues[0].description + " from the condition of the rule");
+                        triggerContainer.empty();
+                        triggerContainer.append(triggerLink);
+                        selectedTriggerMeta = producedValues[0];
+                    } else {
+                        triggerContainer.show();
+                        var triggerLeft = $('<a>');
+                        triggerLeft.prop('href', '#');
+                        triggerLeft.on('click', clickTriggerLink);
+                        triggerLeft.text("Add ");
+                        triggerSelector = $('<select>');
+                        for (var i = 0; i < producedValues.length; i++) {
+                            var option = $('<option>', { 'value': producedValues[i].id });
+                            option.text(producedValues[i].description);
+                            triggerSelector.append(option);
+                        }
+                        triggerSelector.on('change', function() {
+                            var chosen = triggerSelector.val();
+                            for (var i = 0; i < producedValues.length; i++) {
+                                if (producedValues[i].id == chosen) {
+                                    selectedTriggerMeta = producedValues[i];
+                                    return;
+                                }
+                            }
+                            selectedTriggerMeta = undefined;
+                        });
+                        selectedTriggerMeta = producedValues[0];
+                        var triggerRight = $('<a>');
+                        triggerRight.prop('href', '#');
+                        triggerRight.on('click', clickTriggerLink);
+                        triggerRight.text(" from the condition of the rule");
+                        triggerContainer.empty();
+                        triggerContainer.append(triggerLeft);
+                        triggerContainer.append(triggerSelector);
+                        triggerContainer.append(triggerRight);
+                    }
+                };
+            }
 
             row.append(column);
             container.append(row);
-
-            function syncSensitivity() {
-                if (input !== undefined)
-                    input.prop('disabled', !(isEnabled && !isTriggerValue));
-                else
-                    element.toggleClass('disabled', !(isEnabled && !isTriggerValue));
-
-                triggerCheckbox.prop('disabled', !isEnabled);
-                if (triggerSelector !== undefined)
-                    triggerSelector.prop('disabled', !isEnabled);
-            }
-
-            function updateTriggerValueSelectors(producedTriggerValues) {
-                var normalizedType = paramspec.type == 'textarea' ? 'text' : paramspec.type;
-                var producedValues;
-
-                // anything goes into text!
-                if (normalizedType == 'text') {
-                    producedValues = [];
-                    for (var type in producedTriggerValues) {
-                        producedValues.concat(producedTriggerValues[type]);
-                    }
-                } else {
-                    producedValues = producedTriggerValues[normalizedType] || [];
-                }
-
-                if (producedValues.length == 0) {
-                    triggerLabel.hide();
-                    triggerSelector = undefined;
-                } else if (producedValues.length == 1) {
-                    triggerLabel.show();
-                    triggerSelector = undefined;
-                    triggerPlaceholder.text(producedValues[0].description);
-                    selectedTriggerMeta = producedValues[0];
-                } else {
-                    triggerLabel.show();
-                    triggerSelector = $('<select>');
-                    for (var i = 0; i < producedValues.length; i++) {
-                        var option = $('<option>', { 'value': producedValues[i].id });
-                        triggerSelector.append(option);
-                    }
-                    triggerSelector.on('change', function() {
-                        var chosen = triggerSelector.val();
-                        for (var i = 0; i < producedValues.length; i++) {
-                            if (producedValues[i].id == chosen) {
-                                selectedTriggerMeta = producedValues[i];
-                                return;
-                            }
-                        }
-                        selectedTriggerMeta = undefined;
-                    });
-                    triggerPlaceholder.empty();
-                    triggerPlaceholder.append(triggerSelector);
-                }
-            }
 
             return { element: container,
                      paramspec: paramspec,
@@ -215,7 +306,8 @@ window.Rulepedia = {
                              checkbox.prop('checked', false);
                              isEnabled = false;
                          }
-                         triggerCheckbox.prop('checked', false);
+                         if (triggerCheckbox !== undefined)
+                            triggerCheckbox.prop('checked', false);
                          isTriggerValue = false;
                          syncSensitivity();
                      },
@@ -269,6 +361,8 @@ window.Rulepedia = {
                     return (60000 * parseInt(value)).toString();
                 else if (value.endsWith('h'))
                     return (3600000 * parseInt(value)).toString();
+                else if (value.endsWith('d'))
+                    return (24 * 3600 * 1000 * parseInt(value)).toString();
                 else
                     throw new TypeError('invalid time specification');
             },
@@ -276,7 +370,7 @@ window.Rulepedia = {
             validate: function(paramspec, input) {
                 var value = input.val();
                 return value.endsWith('ms') || value.endsWith('s') ||
-                    value.endsWith('m') || value.endsWith('h');
+                    value.endsWith('m') || value.endsWith('h') || value.endsWith('d');
             },
 
             reset: function(paramspec, input) {

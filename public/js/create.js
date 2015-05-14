@@ -130,17 +130,39 @@
         return actionText;
     }
 
+    function computeOneTriggerValue(generateMeta, params) {
+        if (!(generateMeta.type in producedTriggerValues))
+            producedTriggerValues[generateMeta.type] = [];
+
+        var copiedMeta = { id: generateMeta.id,
+                           type: generateMeta.type,
+                           description: generateMeta.description,
+                           text: generateMeta.text };
+        ['id', 'type', 'description'].forEach(function(key) {
+            if (copiedMeta[key].indexOf('{{') > 0) {
+                for (k = 0; k < params.length; k++) {
+                    var param = params[k];
+                    copiedMeta[key] = copiedMeta[key].replace('{{' + param.name + '}}', param.value);
+                }
+            }
+       });
+
+        producedTriggerValues[copiedMeta.type].push(copiedMeta);
+    }
+
     function recomputeTriggerValue() {
         producedTriggerValues = {};
-        for(var i = 0; i < triggers.length; i++) {
-            var eventMeta = triggers[i].eventMeta;
-            for (var j = 0; j < eventMeta.generates.length; j++) {
-                var generateMeta = eventMeta.generates[i];
 
-                if (!(generateMeta.type in producedTriggerValues))
-                    producedTriggerValues[generateMeta.type] = []
-                producedTriggerValues[generateMeta.type].push(generateMeta);
-            }
+        var i, j, k;
+        for(i = 0; i < triggers.length; i++) {
+            var eventMeta = triggers[i].eventMeta;
+            for (j = 0; j < eventMeta.generates.length; j++)
+                computeOneTriggerValue(eventMeta.generates[j], triggers[i].trigger.params);
+        }
+        for(i = 0; i < actions.length; i++) {
+            var methodMeta = actions[i].methodMeta;
+            for (j = 0; j < methodMeta.generates.length; j++)
+                computeOneTriggerValue(methodMeta.generates[j], actions[i].action.params);
         }
 
         updateActionTriggerValueSelectors();
@@ -243,8 +265,9 @@
         var methodId = methodMeta.id;
 
         var action = { object: objectId, method: methodId, params: parsed };
-        var obj = { action: action, text: description };
+        var obj = { action: action, channelMeta: channelMeta, methodMeta: methodMeta, text: description };
         actions.push(obj);
+        console.log('appendAction ' + JSON.stringify(action));
 
         var row = $('<li>', { 'class': 'action-item row' });
         var emptyColumn = $('<span>', { 'class': 'col-sm-1' });
@@ -265,6 +288,7 @@
         obj.row = row;
 
          $('#actions-container').append(row);
+         recomputeTriggerValue();
     }
 
     // FIXME: way too many parameters here

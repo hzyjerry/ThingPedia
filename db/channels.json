@@ -21,6 +21,90 @@
           "text": "the current time"
       }]
   }]
+ },{
+  "id":"google-fit",
+  "objectId":"https://rulepedia.stanford.edu/oid/predefined/channel/google-fit",
+  "implementation":"predefined",
+  "description":"Fitness",
+  "implements":[],
+  "events":[{
+        "id": "end-activity",
+        "description": "When I finish an activity",
+        "text": "I finish a fitness activity",
+        "generates": [{
+            "id": "activity-description",
+            "type": "text",
+            "description": "the description of the activity",
+            "text": "the description of the activity"
+        },{"id": "activity-duration",
+           "type": "time",
+           "description": "the duration of the activity",
+           "text": "the duration of the activity"
+        },{"id": "activity-end-time",
+           "type": "text",
+           "description": "the end time of the activity",
+           "text": "the end time of the activity"}],
+        "params": []
+      }],
+  "methods":[{
+      "id": "fetch-history-data",
+      "description": "Compute my statistics",
+      "text": "Compute the aggregate statistics of",
+      "generates": [{
+         "id": "fitness-statistics-{{data-type}}",
+         "type": "number",
+         "description": "the computed {{data-type}}",
+         "text": "the computed {{data-type}}"
+      }],
+      "params": [{
+         "id": "data-type",
+         "type": "select",
+         "canTrigger": false,
+         "options": {"calories-expended": "Calories consumed",
+                     "distance-delta": "Distance travelled",
+                     "avg-heart-rate": "Average heart rate",
+                     "max-heart-rate": "Maximum heart rate",
+                     "avg-power": "Average power output",
+                     "max-power": "Maximum power output",
+                     "avg-speed": "Average speed",
+                     "max-speed": "Maximum speed",
+                     "step-count": "Number of steps"},
+         "description": "aggregating this data",
+         "text":""
+      },{
+        "id": "aggregate-period",
+        "type": "time",
+        "description": "over this period",
+        "text": "over the last"
+      },{
+        "id": "activity-filter",
+        "type": "text",
+        "optional": true,
+        "description": "for a specific activity",
+        "text": "when I was doing"
+      }]
+  },{
+      "id": "fetch-current-value",
+      "description": "Compute my current values",
+      "text": "Read my biometric value of",
+      "generates": [{
+         "id": "fitness-current-value-{{data-type}}",
+         "type": "number",
+         "description": "the current biometric value",
+         "text": "the current value"
+      }],
+      "params": [{
+         "id": "data-type",
+         "type": "select",
+         "canTrigger": false,
+         "options": {"weight": "Weight",
+                     "height": "Height",
+                     "basal-metabolic-rate": "Basal metabolic rate",
+                     "body-fat-percentage": "Body fat percentage"},
+         "description": "measuring this data",
+         "text":""
+      }]
+  }]
  },{"id":"notifications",
     "objectId":"https://rulepedia.stanford.edu/oid/predefined/channel/notifications",
     "implementation":"predefined",
@@ -31,6 +115,7 @@
         "id":"post-notification",
         "description": "Show a notification",
         "text": "Show a notification",
+        "generates": [],
         "params": [{
             "id": "title",
             "type": "text",
@@ -221,6 +306,11 @@
    	   "id": "send-message",
    	   "description": "Send a message",
    	   "text": "Send a message",
+   	   "generates": [
+   	       { "id": "message-content",
+   	         "type": "text",
+   	         "description": "the message text",
+   	         "text": "the message" }],
    	   "params": [
    	       { "id": "content",
    		 "type": "textarea",
@@ -242,6 +332,11 @@
    	   "id": "post-own-status",
    	   "description": "Update your status",
    	   "text": "Post a status update",
+   	   "generates": [
+   	       { "id": "status-update-content",
+   	         "type": "text",
+   	         "description": "the status update text",
+   	         "text": "the status update" }],
    	   "params": [
    	       { "id": "content",
    		 "type": "textarea",
@@ -259,6 +354,7 @@
    	   "id": "upload-picture",
    	   "description": "Upload a photo",
            "text": "Upload",
+           "generates":[],
    	   "params": [
    	       { "id": "picture",
    		  "type": "picture"
