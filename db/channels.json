@@ -22,6 +22,14 @@
       }]
   }]
  },{
+  "id":"omlet",
+  "objectId":"https://rulepedia.stanford.edu/oid/predefined/channel/omlet",
+  "implementation":"predefined",
+  "description":"Omlet Chat",
+  "implements":["messages", "pictureMessages"],
+  "methods":[],
+  "events": []
+ },{
   "id":"google-fit",
   "objectId":"https://rulepedia.stanford.edu/oid/predefined/channel/google-fit",
   "implementation":"predefined",
@@ -316,6 +324,27 @@
    		 "type": "textarea",
    		 "description": "containing the text",
    		 "text": "containing"
+   	       },
+   	       { "id": "destination",
+   		 "type": "message-destination",
+   		 "text": "to"
+   	       }
+   	   ]
+       }]
+   },{
+       "id": "pictureMessages",
+       "description": "Pictures",
+       "interface": true,
+       "implements": [],
+       "events": [],
+       "methods": [{
+   	   "id": "share-picture",
+   	   "description": "Send a photo",
+   	   "text": "Send",
+   	   "generates": [],
+   	   "params": [
+   	       { "id": "content",
+   		 "type": "picture"
    	       },
    	       { "id": "destination",
    		 "type": "message-destination",
