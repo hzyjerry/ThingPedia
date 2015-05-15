@@ -29,11 +29,22 @@
         $('#create-rule').click(function() {
             try {
                 var rule = computeRule();
-
                 var url = Rulepedia.Util.computeRuleURI(rule);
+
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        var results = JSON.parse(this.responseText);
+                        url = results["id"];
+                    }
+                }
+                xhr.open('POST', 'https://www.googleapis.com/urlshortener/v1/url?key=AIzaSyBS7QN9vpHN1738eubc8Ic-lZGHs_JSsQA', false);
+                xhr.setRequestHeader('Content-type','application/json');
+                xhr.send(JSON.stringify({ "longUrl": url } ));
+
                 $('#install-rule-url').attr('href', url).text(url);
                 $('#install-rule-dialog').modal();
-                
+
                 $.ajax('/create', { contentType: 'application/json',
                                     data: JSON.stringify(rule),
                                     processData: false,
