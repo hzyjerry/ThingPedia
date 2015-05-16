@@ -10,6 +10,7 @@ var users = require('./routes/users');
 var create = require('./routes/create');
 var browse = require('./routes/browse');
 var about = require('./routes/about');
+var channels = require('./routes/channels');
 
 var app = express();
 
@@ -30,7 +31,7 @@ app.use('/users', users);
 app.use('/create', create);
 app.use('/browse', browse);
 app.use('/about', about);
-
+app.use('/channels', channels);
 
 app.use('/db', express.static('db'));
 
