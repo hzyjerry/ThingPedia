@@ -29,29 +29,30 @@
         $('#create-rule').click(function() {
             try {
                 var rule = computeRule();
-                var url = Rulepedia.Util.computeRuleURI(rule);
-                url = Rulepedia.Util.getShortenedURL(url);
 
-                setTimeout(function() {
-                    $('#install-rule-url').attr('href', url).text(url);
-                    $('#install-rule-dialog').modal();
+                if (typeof Android !== 'undefined') {
+                    Android.installRule(JSON.stringify(rule));
+                } else {
+                    var url = Rulepedia.Util.computeRuleURI(rule);
+                    url = Rulepedia.Util.getShortenedURL(url);
 
-                    $.ajax('/create', { contentType: 'application/json',
-                                        data: JSON.stringify(rule),
-                                        processData: false,
-                                        dataType: 'text',
-                                        method: 'POST' }).error(function(xhr, status) {
-                        showErrorDialog("Sorry, failed to share the rule: " + status);
-                    });
+                    setTimeout(function() {
+                        $('#install-rule-url').attr('href', url).text(url);
+                        $('#install-rule-dialog').modal();
 
-                    if (typeof Android !== 'undefined') {
-                        Android.installRule(JSON.stringify(rule));
-                    } else {
+                        $.ajax('/create', { contentType: 'application/json',
+                                            data: JSON.stringify(rule),
+                                            processData: false,
+                                            dataType: 'text',
+                                            method: 'POST' }).error(function(xhr, status) {
+                            showErrorDialog("Sorry, failed to share the rule: " + status);
+                        });
+
                         $("#qr-code").empty();
                         var qrcode = new QRCode("qr-code");
                         qrcode.makeCode(url);
-                    }
-                }, 300);
+                    }, 300);
+                }
             } catch(e) {
                 showErrorDialog(e.message);
             }
