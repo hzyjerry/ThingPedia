@@ -16,8 +16,27 @@ window.Rulepedia = {
     URL_PREFIX: 'http://localhost:3000/rule/',
 
     Util: {
+        getShortenedURL: function(url) {
+          var xhr = new XMLHttpRequest();
+          xhr.onreadystatechange = function() {
+              if (this.readyState == 4 && this.status == 200) {
+                  var results = JSON.parse(this.responseText);
+                  result = results["id"];
+              }
+          }
+          xhr.open('POST', 'https://www.googleapis.com/urlshortener/v1/url?key=AIzaSyBS7QN9vpHN1738eubc8Ic-lZGHs_JSsQA', false);
+          xhr.setRequestHeader('Content-type','application/json');
+          xhr.send(JSON.stringify({ "longUrl": url } ));
+          return result;
+        },
+
         computeRuleURI: function(rule) {
             return Rulepedia.URL_PREFIX + Base64.encodeURI(RawDeflate.deflate(JSON.stringify(rule)));
+        },
+
+        getBackRule: function(url) {
+          url = url.substring(url.lastIndexOf("/") + 1);
+          return JSON.parse(RawInflate.inflate(Base64.decodeURI(url)));
         },
 
         makeModalDialog: function(id, title) {

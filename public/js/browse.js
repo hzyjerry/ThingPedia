@@ -1,7 +1,7 @@
 function displayRule(rule, index, array) {
   var ruleLink = $('<a/>', {
     class: 'list-group-item',
-    href: '/rule/' + rule.id,
+    href: Rulepedia.Util.computeRuleURI(rule),
   });
 
   var ruleHeading = $('<h4/>', {
@@ -55,8 +55,7 @@ $.ajax({
     try{
       var rules = JSON.parse(data);
       rules.forEach(displayRule);
-    } catch (e)
-    {
+    } catch (e) {
       console.log(e);
     }
   }

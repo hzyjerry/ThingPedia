@@ -1,0 +1,15 @@
+extends layout
+
+block scripts
+  script(src='/js/qrcode.js')
+  script(src='/js/rule.js')
+
+block content
+  h1.center Rule Installation
+  br
+  p To install the rule, scan the QR code or copy-paste the URL to your Android device and open it.
+  div(id='qr-code')
+  div(id='newURL')
+
+  script(type='text/javascript').
+    install();
