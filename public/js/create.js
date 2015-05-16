@@ -262,7 +262,7 @@
 
     function appendAction(channelMeta, methodMeta, parsed, description) {
         var objectId;
-        if (channelMeta.interface || !('objectId' in channelMeta))
+        if (!('objectId' in channelMeta))
             throw new TypeError('Invalid channel');
         objectId = channelMeta.objectId;
         var methodId = methodMeta.id;
@@ -295,7 +295,7 @@
     }
 
     // FIXME: way too many parameters here
-    function buildChannelOption(subMeta, kind, subKind, channelMeta, isImplements, id, prefix, modal, container, callback) {
+    function buildChannelOption(subMeta, kind, subKind, channelMeta, id, prefix, modal, container, callback) {
         var row = $('<div>', { 'class': 'row' });
 
         var leftColumn = $('<div>', { 'class': 'col-md-6' });
@@ -328,11 +328,7 @@
 
                 var paramtext = params.map(function(p) { return p.text(); }).join(' ');
 
-                // if this subitem comes from an implements, we disambiguate
-                // the action text with the name of the channel
-                var subitemtext = isImplements ? (subMeta.text + " on " + channelMeta.description) :
-                    subMeta.text;
-                var text = (subitemtext + ' ' + paramtext).trim();
+                var text = (subMeta.text + ' ' + paramtext).trim();
 
                 callback(channelMeta, subMeta, parsed, text);
                 modal.modal('hide');
@@ -348,15 +344,6 @@
         row.append(leftColumn);
         row.append(rightColumn);
         container.append(row);
-    }
-
-    function findInterfaceMeta(metadata, name) {
-        for (var i = 0; i < metadata.length; i++) {
-            if (metadata[i].id == name)
-                return metadata[i];
-        }
-
-        throw new Error("Failed to find interface " + name);
     }
 
     function updateChannelOptions(metadata, kind, subKind, dialogTitle, callback) {
@@ -375,16 +362,8 @@
             var container = $('<div>', { 'class': 'container-fluid' });
 
             item[subKind].forEach(function(subitem) {
-                buildChannelOption(subitem, kind, subKind, item, false, id, prefix, modal, container, callback);
+                buildChannelOption(subitem, kind, subKind, item, id, prefix, modal, container, callback);
             });
-
-            if ('implements' in item) {
-                item.implements.forEach(function(iface) {
-                    findInterfaceMeta(metadata, iface)[subKind].forEach(function(subitem) {
-                        buildChannelOption(subitem, kind, subKind, item, true, id, prefix, modal, container, callback);
-                    });
-                });
-            }
 
             body.append(container);
             placeholder.append(modal);
@@ -412,15 +391,7 @@
                 count = 0;
             }
 
-            if (item.interface)
-                return;
-
             var length = item[subKind].length;
-            if ('implements' in item) {
-                item.implements.forEach(function(iface) {
-                    length += findInterfaceMeta(metadata, iface)[subKind].length;
-                });
-            }
             if (length == 0)
                 return;
 

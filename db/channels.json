@@ -1,7 +1,6 @@
 [{"id":"timer",
   "objectId":"https://rulepedia.stanford.edu/oid/predefined/channel/timer",
   "description":"Timer",
-  "implements":[],
   "methods":[],
   "event-sources": [],
   "events": [{
@@ -31,14 +30,46 @@
   "id":"omlet",
   "objectId":"https://rulepedia.stanford.edu/oid/predefined/channel/omlet",
   "description":"Omlet Chat",
-  "implements":["messages", "pictureMessages"],
-  "methods":[],
+  "methods":[{
+   	   "id": "send-message",
+   	   "description": "Send a message",
+   	   "text": "Send a message",
+   	   "generates": [
+   	       { "id": "message-content",
+   	         "type": "text",
+   	         "description": "the message text",
+   	         "text": "the message" }],
+   	   "params": [
+   	       { "id": "content",
+   		 "type": "textarea",
+   		 "description": "containing the text",
+   		 "text": "containing"
+   	       },
+   	       { "id": "destination",
+   		 "type": "message-destination",
+   		 "text": "to"
+   	       }
+   	   ]
+       },{
+   	   "id": "share-picture",
+   	   "description": "Send a photo",
+   	   "text": "Send",
+   	   "generates": [],
+   	   "params": [
+   	       { "id": "content",
+   		 "type": "picture"
+   	       },
+   	       { "id": "destination",
+   		 "type": "message-destination",
+   		 "text": "to"
+   	       }
+   	   ]
+       }],
   "events": []
  },{
   "id":"google-fit",
   "objectId":"https://rulepedia.stanford.edu/oid/predefined/channel/google-fit",
   "description":"Fitness",
-  "implements":[],
   "events":[{
         "id": "end-activity",
         "description": "When I finish an activity",
@@ -120,7 +151,6 @@
  },{"id":"notifications",
     "objectId":"https://rulepedia.stanford.edu/oid/predefined/channel/notifications",
     "description":"System notifications",
-    "implements":[],
     "events":[],
     "methods": [{
         "id":"post-notification",
@@ -145,7 +175,6 @@
   "urlRegex": "http://www.omdbapi.com/\\?r=json&v=1&i=[a-z0-9]+$",
   "auth": "none",
   "description":"Movies",
-  "implements": [],
   "methods": [],
   "event-sources": [{
       "id": "poll",
@@ -170,8 +199,27 @@
      "id": "sms",
      "objectId":"https://rulepedia.stanford.edu/oid/predefined/channel/sms",
      "description": "Text messages",
-     "implements": ["messages"],
-     "methods": [],
+     "methods": [{
+   	   "id": "send-message",
+   	   "description": "Send a message",
+   	   "text": "Send a message",
+   	   "generates": [
+   	       { "id": "message-content",
+   	         "type": "text",
+   	         "description": "the message text",
+   	         "text": "the message" }],
+   	   "params": [
+   	       { "id": "content",
+   		 "type": "textarea",
+   		 "description": "containing the text",
+   		 "text": "containing"
+   	       },
+   	       { "id": "destination",
+   		 "type": "message-destination",
+   		 "text": "to"
+   	       }
+   	   ]
+       }],
      "events": [{
          "id": "message-received",
          "description": "When I receive a text",
@@ -205,7 +253,6 @@
  },{ "id": "facebook",
      "description": "Facebook",
      "objectId": "https://rulepedia.stanford.edu/oid/placeholder/channel/facebook",
-     "implements": ["messages", "statusUpdates", "pictures"],
      "events": [{
          "id": "message-received",
          "description": "When I receive a message",
@@ -257,26 +304,95 @@
          }],
          "generates": []
      }],
-     "methods": []
+     "methods": [{
+   	   "id": "send-message",
+   	   "description": "Send a message",
+   	   "text": "Send a message",
+   	   "generates": [
+   	       { "id": "message-content",
+   	         "type": "text",
+   	         "description": "the message text",
+   	         "text": "the message" }],
+   	   "params": [
+   	       { "id": "content",
+   		 "type": "textarea",
+   		 "description": "containing the text",
+   		 "text": "containing"
+   	       },
+   	       { "id": "destination",
+   		 "type": "message-destination",
+   		 "text": "to"
+   	       }
+   	   ]
+       },{
+   	   "id": "post-own-status",
+   	   "description": "Update your status",
+   	   "text": "Post a status update",
+   	   "generates": [
+   	       { "id": "status-update-content",
+   	         "type": "text",
+   	         "description": "the status update text",
+   	         "text": "the status update" }],
+   	   "params": [
+   	       { "id": "content",
+   		 "type": "textarea",
+   		 "description": "with the text",
+   		 "text": "with"
+   	       }
+   	   ]
+       },{
+   	   "id": "upload-picture",
+   	   "description": "Upload a photo",
+           "text": "Upload",
+           "generates":[],
+   	   "params": [
+   	       { "id": "picture",
+   		  "type": "picture"
+   	       }
+   	   ]
+       }]
    },{
        "id": "instagram",
        "description": "Instagram",
        "objectId": "https://rulepedia.stanford.edu/oid/placeholder/object/instagram",
-       "implements": ["pictures"],
        "events": [],
-       "methods": []
+       "methods": [{
+   	   "id": "upload-picture",
+   	   "description": "Upload a photo",
+           "text": "Upload",
+           "generates":[],
+   	   "params": [
+   	       { "id": "picture",
+   		  "type": "picture"
+   	       }
+   	   ]
+       }]
    },{
        "id": "twitter",
        "description": "Twitter",
        "objectId": "https://rulepedia.stanford.edu/oid/placeholder/channel/twitter",
-       "implements": ["statusUpdates"],
        "events": [],
-       "methods": []
+       "methods": [{
+   	   "id": "post-own-status",
+   	   "description": "Update your status",
+   	   "text": "Post a status update",
+   	   "generates": [
+   	       { "id": "status-update-content",
+   	         "type": "text",
+   	         "description": "the status update text",
+   	         "text": "the status update" }],
+   	   "params": [
+   	       { "id": "content",
+   		 "type": "textarea",
+   		 "description": "with the text",
+   		 "text": "with"
+   	       }
+   	   ]
+       }]
    },{
        "id": "weather",
        "objectId":"https://rulepedia.stanford.edu/oid/predefined/channel/weather",
        "description": "Weather",
-       "implements": [],
        "methods": [],
        "events": [{
            "id": "given-forecast",
@@ -304,90 +420,4 @@
            }],
            "generates": []
        }]
-   },{
-       "id": "messages",
-       "description": "Messaging",
-       "interface": true,
-       "implements": [],
-       "events": [],
-       "methods": [{
-   	   "id": "send-message",
-   	   "description": "Send a message",
-   	   "text": "Send a message",
-   	   "generates": [
-   	       { "id": "message-content",
-   	         "type": "text",
-   	         "description": "the message text",
-   	         "text": "the message" }],
-   	   "params": [
-   	       { "id": "content",
-   		 "type": "textarea",
-   		 "description": "containing the text",
-   		 "text": "containing"
-   	       },
-   	       { "id": "destination",
-   		 "type": "message-destination",
-   		 "text": "to"
-   	       }
-   	   ]
-       }]
-   },{
-       "id": "pictureMessages",
-       "description": "Pictures",
-       "interface": true,
-       "implements": [],
-       "events": [],
-       "methods": [{
-   	   "id": "share-picture",
-   	   "description": "Send a photo",
-   	   "text": "Send",
-   	   "generates": [],
-   	   "params": [
-   	       { "id": "content",
-   		 "type": "picture"
-   	       },
-   	       { "id": "destination",
-   		 "type": "message-destination",
-   		 "text": "to"
-   	       }
-   	   ]
-       }]
-   },{
-       "id": "statusUpdates",
-       "interface": true,
-       "implements": [],
-       "events": [],
-       "methods": [{
-   	   "id": "post-own-status",
-   	   "description": "Update your status",
-   	   "text": "Post a status update",
-   	   "generates": [
-   	       { "id": "status-update-content",
-   	         "type": "text",
-   	         "description": "the status update text",
-   	         "text": "the status update" }],
-   	   "params": [
-   	       { "id": "content",
-   		 "type": "textarea",
-   		 "description": "with the text",
-   		 "text": "with"
-   	       }
-   	   ]
-       }]
-   },{
-       "id": "pictures",
-       "interface": true,
-       "implements": [],
-       "events": [],
-       "methods": [{
-   	   "id": "upload-picture",
-   	   "description": "Upload a photo",
-           "text": "Upload",
-           "generates":[],
-   	   "params": [
-   	       { "id": "picture",
-   		  "type": "picture"
-   	       }
-   	   ]
-       }]
- }]
+   }]

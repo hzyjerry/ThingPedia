@@ -1,0 +1,70 @@
+extends layout
+
+block scripts
+  script(src='/js/new-channel.js')
+
+block content
+  h1.center Create a new channel
+
+  form.form-horizontal.container-fluid.well
+    div.form-group
+      div.col-md-3
+        label(for='channel-name') Channel id
+
+      div.col-md-9
+        input.form-control(type='text')#channel-id
+
+    div.form-group
+      div.col-md-3
+        label(for='channel-name') Channel name
+
+      div.col-md-9
+        input.form-control(type='text')#channel-name
+
+    div.form-group
+      div.col-md-3
+        label(for='channel-name') Channel URL
+
+      div.col-md-9
+        input.form-control(type='text')#channel-objectId
+
+    div.form-group
+      div.col-md-3
+        label(for='channel-name') Channel URL prefix
+
+      div.col-md-9
+        input.form-control(type='text')#channel-urlPrefix
+
+    div.form-group
+      div.col-md-3
+        label(for='channel-name') Channel URL regex
+
+      div.col-md-9
+        input.form-control(type='text')#channel-urlRegex
+
+    div.form-group
+      div.col-md-3
+        label Shared event sources
+
+      div.col-md-9
+        div#placeholder-shared-event-sources
+        button.btn.btn-default.placeholder#add-new-shared-event-source(type='button') Add new shared event source
+
+    div.form-group
+      div.col-md-3
+        label Triggers
+
+      div.col-md-9
+        div#placeholder-triggers
+        button.btn.btn-default.placeholder#add-new-trigger(type='button') Add new trigger
+
+    div.form-group
+      div.col-md-3
+        label Actions
+
+      div.col-md-9
+        div#placeholder-actions
+        button.btn.btn-default.placeholder#add-new-action(type='button') Add new action
+
+    div.form-group.center
+      button.btn.btn-primary.btn-lg#create-channel(type='button') Create

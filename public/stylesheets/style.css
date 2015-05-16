@@ -104,6 +104,12 @@ a {
 
 .rule-button
 {
-  width: 300 !important;
+  width: 300px !important;
   margin: 10px;
+}
+
+.code-input
+{
+  min-height: 500px;
+  font-family: monospace;
 }
