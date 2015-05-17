@@ -1,0 +1,24 @@
+[
+    {
+        "name": "Test",
+        "description": "When I receive a Facebook message, Upload a picture of my choice",
+        "trigger": {
+            "object": "https://rulepedia.stanford.edu/oid/placeholder/channel/facebook",
+            "trigger": "message-received",
+            "params": []
+        },
+        "actions": [
+            {
+                "object": "https://rulepedia.stanford.edu/oid/placeholder/object/instagram",
+                "method": "upload-picture",
+                "params": [
+                    {
+                        "name": "picture",
+                        "value": "https://rulepedia.stanford.edu/oid/placeholder/picture/any"
+                    }
+                ]
+            }
+        ],
+        "id": "9ae52c6c3c7bdf393f243a7b87f47436ee926ee7"
+    }
+]
