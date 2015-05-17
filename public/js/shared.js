@@ -12,6 +12,10 @@ if (!String.prototype.endsWith) {
   };
 }
 
+if (typeof Android !== 'undefined') {
+  $('.navbar').remove();
+}
+
 window.Rulepedia = {
     URL_PREFIX: 'http://localhost:3000/rule/',
 
