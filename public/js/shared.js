@@ -36,7 +36,7 @@ window.Rulepedia = {
 
         getBackRule: function(url) {
           url = url.substring(url.lastIndexOf("/") + 1);
-          return JSON.parse(RawDeflate.inflate(Base64.decodeURI(url)));
+          return JSON.parse(RawDeflate.inflate(Base64.decode(url)));
         },
 
         makeModalDialog: function(id, title) {
