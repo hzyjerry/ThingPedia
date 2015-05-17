@@ -2,7 +2,7 @@ function displayRule(rule, index, array) {
   var url = Rulepedia.Util.computeRuleURI(rule);
   var ruleLink = $('<a/>', {
     class: 'list-group-item',
-    href: url.substring(url.indexOf("/rule"));
+    href: url.substring(url.indexOf("/rule")),
   });
 
   var ruleHeading = $('<h4/>', {
