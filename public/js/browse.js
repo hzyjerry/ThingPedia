@@ -73,7 +73,8 @@ function installFromBrowse() {
       rule.onclick = function() {
         $('#install-rule-url').text("Click here");
         $('#install-rule-url').onclick = function() {
-          Android.installRule(JSON.stringify(Rulepedia.Util.getBackRule(url)));
+          Android.installRule("Hello world");
+          // Android.installRule(JSON.stringify(Rulepedia.Util.getBackRule(url)));
         }
         $('#install-rule-dialog').modal();
       };
