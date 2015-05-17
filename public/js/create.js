@@ -51,7 +51,7 @@
                         $("#qr-code").empty();
                         var qrcode = new QRCode("qr-code");
                         qrcode.makeCode(url);
-                    }, 300);
+                    }, 200);
                 }
             } catch(e) {
                 showErrorDialog(e.message);
