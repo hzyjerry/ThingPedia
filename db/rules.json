@@ -42,5 +42,31 @@
             }
         ],
         "id": "66acd5dec2a5e15bf7c2a830a78c1ca03a6040f8"
+    },
+    {
+        "name": "Real Test",
+        "description": "When I finish a fitness activity, Show a notification with title the description of the activity and saying {{activity-description}}",
+        "trigger": {
+            "object": "https://rulepedia.stanford.edu/oid/predefined/channel/google-fit",
+            "trigger": "end-activity",
+            "params": []
+        },
+        "actions": [
+            {
+                "object": "https://rulepedia.stanford.edu/oid/predefined/channel/notifications",
+                "method": "post-notification",
+                "params": [
+                    {
+                        "name": "title",
+                        "trigger-value": "activity-description"
+                    },
+                    {
+                        "name": "text",
+                        "value": "{{activity-description}}"
+                    }
+                ]
+            }
+        ],
+        "id": "036b8efe26a089fa0f24858baf39265e4f4c955f"
     }
 ]
