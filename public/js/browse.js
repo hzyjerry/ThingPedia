@@ -56,6 +56,7 @@ $.ajax({
     try{
       var rules = JSON.parse(data);
       rules.forEach(displayRule);
+      installFromBrowse();
     } catch (e) {
       console.log(e);
     }
