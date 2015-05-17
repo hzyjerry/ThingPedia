@@ -61,4 +61,20 @@ $.ajax({
   }
 });
 
-
+function installFromBrowse() {
+  var rules = document.getElementsByClassName("list-group-item");
+  for (var i = 0; i < rules.length; i++) {
+    var rule = rules[i];
+    if (typeof Android !== 'undefined') {
+      url = rule.href;
+      rule.removeAttribute("href");
+      rule.onclick = function() {
+        $('#install-rule-url').text("Click here");
+        $('#install-rule-url').onclick = function() {
+          Android.installRule(JSON.stringify(Rulepedia.Util.getBackRule(url)));
+        }
+        $('#install-rule-dialog').modal();
+      };
+    }
+  }
+};

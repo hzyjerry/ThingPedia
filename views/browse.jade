@@ -84,3 +84,18 @@ block content
     h2 Rule collection
     a(name='rules')
     #rule-list.list-group
+
+  div.modal.fade(aria-hidden='true', role='dialog', aria-labelled-by='install-rule-dialog-title')#install-rule-dialog
+    div.modal-dialog
+      div.modal-content
+        div.modal-header
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') ×
+          h4.modal-title#install-rule-dialog-title Install rule
+
+        div.modal-body
+          p.well
+            a#install-rule-url
+
+  script(type='text/javascript').
+    installFromBrowse();
