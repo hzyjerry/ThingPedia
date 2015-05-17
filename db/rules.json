@@ -20,5 +20,27 @@
             }
         ],
         "id": "9ae52c6c3c7bdf393f243a7b87f47436ee926ee7"
+    },
+    {
+        "name": "Test",
+        "description": "When I'm tagged on a photo on Facebook, Read my biometric value of weight",
+        "trigger": {
+            "object": "https://rulepedia.stanford.edu/oid/placeholder/channel/facebook",
+            "trigger": "picture-tagged",
+            "params": []
+        },
+        "actions": [
+            {
+                "object": "https://rulepedia.stanford.edu/oid/predefined/channel/google-fit",
+                "method": "fetch-current-value",
+                "params": [
+                    {
+                        "name": "data-type",
+                        "value": "weight"
+                    }
+                ]
+            }
+        ],
+        "id": "66acd5dec2a5e15bf7c2a830a78c1ca03a6040f8"
     }
 ]
