@@ -113,3 +113,30 @@ a {
   min-height: 500px;
   font-family: monospace;
 }
+
+.form-inline .form-control.code-input {
+  width: 100%;
+  display: block;
+}
+
+.form-inline .form-group {
+  margin-left: 0px;
+  margin-right: 6px;
+}
+
+.form-inline .form-control {
+  margin-left: 6px;
+  margin-right: 6px;
+}
+
+.form-inline .form-control.code-input {
+  margin-left: 0px;
+}
+
+.form-block {
+  margin-bottom: 15px;
+}
+
+.param.well, .generates.well, .event-source.well {
+  line-height: 2.75em;
+}

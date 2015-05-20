@@ -68,3 +68,18 @@ block content
 
     div.form-group.center
       button.btn.btn-primary.btn-lg#create-channel(type='button') Create
+
+  div.modal.fade(aria-hidden='true', role='dialog', aria-labelled-by='channel-created-dialog-title')#channel-created-dialog
+    div.modal-dialog
+      div.modal-content
+        div.modal-header
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') ×
+          h4.modal-title#channel-created-dialog-title Install rule
+
+        div.modal-body
+          p This is the JSON representation of the channel. Add to the DB to enable.
+          p FIXME: this is a debugging feature, ideally the channel is added to the DB right now and nothing else
+            | is needed. But for now it is nice to tweak the JSON here and there.
+
+          p#channel-json

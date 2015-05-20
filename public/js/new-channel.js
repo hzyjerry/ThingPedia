@@ -3,32 +3,55 @@
 
     var EventSource = {
         'polling':
-            { 'polling-interval': { 'description': "Polling interval", 'type': 'number' } },
+            { 'polling-interval': { description: "Polling interval (ms)", type: 'number', default: '30000' } },
         'polling-http':
-            { 'polling-interval': { 'description': "Polling interval", 'type': 'number' } },
-        'sse': {},
+            { 'polling-interval': { description: "Polling interval (ms)", 'type': 'number', default: '30000' },
+              'url': { description: "URL", type: 'text', default: '{{url}}' } },
+        'sse': { 'url': { description: "URL", type: 'text', default: '{{url}}' } },
         'broadcast-receiver':
-            { 'intent-action': { 'description': "Action", 'type': 'text' },
-              'intent-category': { 'description': "Category", 'type': 'text' } }
-    }
+            { 'intent-action': { description: "Action", type: 'text', default: '' },
+              'intent-category': { description: "Category", type: 'text', default: '', optional: true } },
+        'omlet': { 'chat-token': { description: "Chat token", type: 'text', default: '' } }
+    };
+
+    var ParamTypes = {
+        'text': "Text",
+        'textarea': "Text area",
+        'time': "Time interval",
+        'picture': "Picture (base64 data: URI)",
+        'contact': "Contact URI",
+        'message-destination': "Message destination (contact or group)",
+        'temperature': "Temperature",
+        'select': "Multiple choice option",
+    };
+
+    var GeneratesType = {
+        'text': "Free text",
+        'time': "Time interval (milliseconds)",
+        'number': "Numeric value (int or double)",
+        'picture': "Picture (base64 data: URI)",
+        'contact': "Contact URI",
+        'message-destination': "Message destination (contact or group)",
+    };
 
     function addEventSource(trigger) {
-        var container = $('<div>', { 'class': 'event-source well' });
+        var container = $('<div>', { 'class': 'event-source well form-inline' });
         var row;
 
         counter++;
         row = $('<div>', { 'class': 'form-group' });
-        row.append($('<label>', { 'for': 'event-source-id-' + counter }).text("Id"));
+        row.append($('<label>', { 'for': 'event-source-id-' + counter }).text("Id "));
         row.append($('<input>', { 'type': 'text', 'class': 'form-control event-source-id', 'id': 'event-source-id-' + counter }));
         container.append(row);
 
         row = $('<div>', { 'class': 'form-group' });
-        row.append($('<label>', { 'for': 'event-source-type-' + counter }).text("Type"));
+        row.append($('<label>', { 'for': 'event-source-type-' + counter }).text("Type "));
         var select = $('<select class="form-control event-source-type" id="event-source-type="' + counter +'">' +
             '<option value="polling" selected="selected">Periodic poll</option>' +
             '<option value="polling-http">Periodic HTTP GET</option>' +
             '<option value="sse">Server Sent Events</option>' +
-            '<option value="broadcast-receiver">Android Intent BroadcastReceiver</option></select>');
+            '<option value="broadcast-receiver">Android Intent BroadcastReceiver</option>' +
+            '<option value="omlet">Omlet messages</option></select>');
         select.on('change', function() {
             updateParams(select.val());
         })
@@ -42,10 +65,10 @@
             for (var name in EventSource[selected]) {
                 var param = EventSource[selected][name];
                 var row = $('<div>', { 'class': 'form-group event-source-param' });
-                row.append($('<label>', { 'for': 'event-source-param-' + name + '-' + counter }).text(param.description));
+                row.append($('<label>', { 'for': 'event-source-param-' + name + '-' + counter }).text(param.description + " "));
                 row.append($('<input>', { 'type': 'text', 'class': 'form-control event-source-param-' + name,
                                           'id': 'event-source-param-' + name + '-' + counter,
-                                          'data-param-name': name }));
+                                          'data-param-name': name }).val(param.default));
                 paramsContainer.append(row);
             }
         }
@@ -65,29 +88,143 @@
             trigger.append(container);
     }
 
-    function addTrigger() {
-        var container = $('<div>', { 'class': 'trigger well' });
+    function addParam(outer) {
+        var container = $('<div>', { 'class': 'param well' });
         var row;
 
         counter++;
         row = $('<div>', { 'class': 'form-group' });
+        row.append($('<label>', { 'for': 'param-id-' + counter }).text("Id"));
+        row.append($('<input>', { 'type': 'text', 'class': 'form-control param-id', 'id': 'param-id-' + counter }));
+        container.append(row);
+
+        row = $('<div>', { 'class': 'form-group' });
+        row.append($('<label>', { 'for': 'param-description-' + counter }).text("Description"));
+        row.append($('<input>', { 'type': 'text', 'class': 'form-control param-description', 'id': 'param-description-' + counter }));
+        container.append(row);
+
+        row = $('<div>', { 'class': 'form-group' });
+        row.append($('<label>', { 'for': 'param-text-' + counter }).text("Text"));
+        row.append($('<input>', { 'type': 'text', 'class': 'form-control param-text', 'id': 'param-text-' + counter }));
+        container.append(row);
+
+        row = $('<div>', { 'class': 'form-group' });
+        row.append($('<label>', { 'for': 'param-type-' + counter }).text("Type"));
+        var select = $('<select>', { 'class': 'form-control param-type', 'id': 'param-type-' + counter });
+        for (var type in ParamTypes) {
+            var description = ParamTypes[type];
+            select.append($('<option>', { 'value': type }).text(description));
+        }
+        row.append(select);
+        container.append(row);
+
+        row = $('<div>', { 'class': 'form-group' });
+        row.append($('<input>', { 'type': 'checkbox', 'class': 'form-control param-optional', 'id': 'param-optional-' + counter }));
+        row.append($('<label>', { 'for': 'param-optional-' + counter }).text("Optional"));
+        container.append(row);
+
+        row = $('<div>', { 'class': 'form-group' });
+        var button = $('<button>', { 'class': 'btn btn-default' }).text("Remove").on('click', function() {
+            container.remove();
+        });
+        row.append(button);
+        container.append(row);
+
+        outer.append(container);
+    }
+
+    function addGenerates(outer) {
+        var container = $('<div>', { 'class': 'generates well' });
+        var row;
+
+        counter++;
+        row = $('<div>', { 'class': 'form-group' });
+        row.append($('<label>', { 'for': 'generates-id-' + counter }).text("Id"));
+        row.append($('<input>', { 'type': 'text', 'class': 'form-control param-id', 'id': 'generates-id-' + counter }));
+        container.append(row);
+
+        row = $('<div>', { 'class': 'form-group' });
+        row.append($('<label>', { 'for': 'generates-description-' + counter }).text("Description"));
+        row.append($('<input>', { 'type': 'text', 'class': 'form-control param-description', 'id': 'generates-description-' + counter }));
+        container.append(row);
+
+        row = $('<div>', { 'class': 'form-group' });
+        row.append($('<label>', { 'for': 'generates-text-' + counter }).text("Text"));
+        row.append($('<input>', { 'type': 'text', 'class': 'form-control param-text', 'id': 'generates-text-' + counter }));
+        container.append(row);
+
+        row = $('<div>', { 'class': 'form-group' });
+        row.append($('<label>', { 'for': 'generates-type-' + counter }).text("Type"));
+        var select = $('<select>', { 'class': 'form-control param-type', 'id': 'generates-type-' + counter });
+        for (var type in GeneratesType) {
+            var description = GeneratesType[type];
+            select.append($('<option>', { 'value': type }).text(description));
+        }
+        row.append(select);
+        container.append(row);
+
+        row = $('<div>', { 'class': 'form-group' });
+        var button = $('<button>', { 'class': 'btn btn-default' }).text("Remove").on('click', function() {
+            container.remove();
+        });
+        row.append(button);
+        container.append(row);
+
+        outer.append(container);
+    }
+
+    function addTrigger() {
+        var container = $('<div>', { 'class': 'trigger well form-inline' });
+        var row, block;
+
+        counter++;
+        block = $('<div>', { 'class': 'form-block' });
+        row = $('<div>', { 'class': 'form-group' });
         row.append($('<label>', { 'for': 'trigger-id-' + counter }).text("Id"));
         row.append($('<input>', { 'type': 'text', 'class': 'form-control trigger-id', 'id': 'trigger-id-' + counter }));
-        container.append(row);
+        block.append(row);
 
         row = $('<div>', { 'class': 'form-group' });
         row.append($('<label>', { 'for': 'trigger-description-' + counter }).text("Description"));
         row.append($('<input>', { 'type': 'text', 'class': 'form-control trigger-description', 'id': 'trigger-description-' + counter }));
-        container.append(row);
+        block.append(row);
 
         row = $('<div>', { 'class': 'form-group' });
         row.append($('<label>', { 'for': 'trigger-text-' + counter }).text("Text"));
         row.append($('<input>', { 'type': 'text', 'class': 'form-control trigger-text', 'id': 'trigger-text-' + counter }));
-        container.append(row);
+        block.append(row);
+        container.append(block);
 
-        row = $('<div>', { 'class': 'form-group' });
-        row.append($('<label>', { 'for': 'trigger-script-' + counter }).text("Code"));
-        row.append($('<textarea>', { 'type': 'text', 'class': 'form-control trigger-script code-input', 'id': 'trigger-text-' + counter })
+        block = $('<div>', { 'class': 'form-block' });
+        block.append($('<label>').text("Parameters"));
+        var paramPlaceholder = $('<div>');
+        block.append(paramPlaceholder);
+        block.append($('<button>', { 'type': 'button', 'class': 'btn btn-default placeholder' }).text("Add parameter").on('click', function() {
+            addParam(paramPlaceholder);
+        }));
+        container.append(block);
+
+        block = $('<div>', { 'class': 'form-block' });
+        block.append($('<label>').text("Generates"));
+        var generatesPlaceholder = $('<div>');
+        block.append(generatesPlaceholder);
+        block.append($('<button>', { 'type': 'button', 'class': 'btn btn-default placeholder' }).text("Add generated value").on('click', function() {
+            addGenerates(generatesPlaceholder);
+        }));
+        container.append(block);
+
+        block = $('<div>', { 'class': 'form-block' });
+        block.append($('<label>').text("Trigger specific event sources"));
+        var esPlaceholder = $('<div>');
+        block.append(esPlaceholder);
+        block.append($('<button>', { 'type': 'button', 'class': 'btn btn-default placeholder' }).text("Add event source").on('click', function() {
+            addEventSource(esPlaceholder);
+        }));
+        container.append(block);
+
+        block = $('<div>', { 'class': 'form-block' });
+        block.append($('<label>', { 'for': 'trigger-script-' + counter }).text("Code"));
+        block.append($('<textarea>', { 'type': 'text', 'class': 'form-control trigger-script code-input', 'id': 'trigger-text-' + counter })
             .val("function trigger(params, events, context) {\n" +
                  "   // @params contains the parameters to your event\n" +
                  "   // @events contains the event data from the shared and private event sources\n" +
@@ -100,7 +237,7 @@
                  "   // return true if the trigger fires\n" +
                  "   return true;\n" +
                  "}"));
-        container.append(row);
+        container.append(block);
 
         row = $('<div>', { 'class': 'form-group' });
         var button = $('<button>', { 'class': 'btn btn-default' }).text("Remove").on('click', function() {
@@ -113,28 +250,39 @@
     }
 
     function addAction() {
-        var container = $('<div>', { 'class': 'action well' });
-        var row;
+        var container = $('<div>', { 'class': 'action well form-inline' });
+        var block, row;
 
         counter++;
+        block = $('<div>', { 'class': 'form-block' });
         row = $('<div>', { 'class': 'form-group' });
         row.append($('<label>', { 'for': 'action-id-' + counter }).text("Id"));
         row.append($('<input>', { 'type': 'text', 'class': 'form-control action-id', 'id': 'action-id-' + counter }));
-        container.append(row);
+        block.append(row);
 
         row = $('<div>', { 'class': 'form-group' });
         row.append($('<label>', { 'for': 'action-description-' + counter }).text("Description"));
         row.append($('<input>', { 'type': 'text', 'class': 'form-control action-description', 'id': 'action-description-' + counter }));
-        container.append(row);
+        block.append(row);
 
         row = $('<div>', { 'class': 'form-group' });
         row.append($('<label>', { 'for': 'action-text-' + counter }).text("Text"));
         row.append($('<input>', { 'type': 'text', 'class': 'form-control action-text', 'id': 'action-text-' + counter }));
-        container.append(row);
+        block.append(row);
+        container.append(block);
 
-        row = $('<div>', { 'class': 'form-group' });
-        row.append($('<label>', { 'for': 'action-script-' + counter }).text("Code"));
-        row.append($('<textarea>', { 'type': 'text', 'class': 'form-control action-script code-input', 'id': 'action-text-' + counter })
+        block = $('<div>', { 'class': 'form-block' });
+        block.append($('<label>').text("Parameters"));
+        var placeholder = $('<div>');
+        block.append(placeholder);
+        block.append($('<button>', { 'type': 'button', 'class': 'btn btn-default placeholder' }).text("Add parameter").on('click', function() {
+            addParam(placeholder);
+        }));
+        container.append(block);
+
+        block = $('<div>', { 'class': 'form-block' });
+        block.append($('<label>', { 'for': 'action-script-' + counter }).text("Code"));
+        block.append($('<textarea>', { 'type': 'text', 'class': 'form-control action-script code-input', 'id': 'action-text-' + counter })
             .val("function action(params) {\n" +
                  "   // @params contains the parameters to your action\n" +
                  "   // use this to store data across executions of the action\n" +
@@ -146,12 +294,12 @@
                  "   // (method is optional and defaults to get, data is optional and defaults to empty)\n" +
                  "   // for Intent actions, return an object of the form\n" +
                  "   //     { type: 'intent', action: 'com.example.myapp.AYB', \n" +
-                 "   //       category: 'android.category.DEFAULT', package: 'com.example.myapp', \n" +
-                 "   //       activity: false }\n" +
-                 "   // (category, package and activity are optional, activity defaults to false)\n" +
+                 "   //       categories: ['android.category.DEFAULT'], package: 'com.example.myapp', \n" +
+                 "   //       activity: false, extras: {} }\n" +
+                 "   // (category, package, activity, extras are optional, activity defaults to false)\n" +
                  "   return {};\n" +
                  "}"));
-        container.append(row);
+        container.append(block);
 
         row = $('<div>', { 'class': 'form-group' });
         var button = $('<button>', { 'class': 'btn btn-default' }).text("Remove").on('click', function() {
@@ -163,6 +311,36 @@
         $('#placeholder-actions').append(container);
     }
 
+    function parseEventSource(domSource) {
+        var source = {
+            id: $('.event-source-id', domSource).val(),
+            type: $('.event-source-type', domSource).val()
+        };
+        $('.event-source-param input', domSource).each(function(index) {
+            var param = $(this);
+            var name = param.data('param-name');
+            var value = param.val();
+
+            var paramspec = EventSource[source.type][name];
+            if (!paramspec.optional || value)
+                source[name] = value;
+        });
+        return source;
+    }
+
+    function parseParam(domParam) {
+        var param = ({
+            id: $('.param-id', domParam).val(),
+            type: $('.param-type', domParam).val(),
+            text: $('.param-text', domParam).val(),
+            description: $('.param-description', domParam).val(),
+        });
+        var optionaljq = $('.param-optional', domParam);
+        if (optionaljq.length > 0)
+            param.optional = !!optionaljq.prop('checked');
+        return param;
+    }
+
     function createChannel() {
         return {
             id: $('#channel-id').val(),
@@ -171,37 +349,35 @@
             urlRegex: $('#channel-urlRegex').val(),
             description: $('#channel-name').val(),
             'event-sources': $('#placeholder-shared-event-sources > .event-source').map(function(index, domSource) {
-                var source = {
-                    id: $('.event-source-id', domSource).val(),
-                    type: $('.event-source-type', domSource).val()
-                };
-                $('.event-source-param input', domSource).each(function(index) {
-                    var param = $(this);
-                    var name = param.data('param-name');
-                    var value = param.val();
-                    source[name] = value;
-                });
-                return source;
+                return parseEventSource(domSource);
             }).get(),
             triggers: $('#placeholder-triggers > .trigger').map(function(index, domTrigger) {
-                var trigger = {
+                return ({
                     id: $('.trigger-id', domTrigger).val(),
                     description: $('.trigger-description', domTrigger).val(),
                     text: $('.trigger-text', domTrigger).val(),
-                    script: $('.trigger-script', domTrigger).val()
-                };
-                // FIXME parameters, generates and event sources
-                return trigger;
+                    script: $('.trigger-script', domTrigger).val(),
+                    'event-sources': $('.event-source', domTrigger).map(function(index, domSource) {
+                        return parseEventSource(domSource);
+                    }).get(),
+                    generates: $('.generates', domTrigger).map(function(index, domParam) {
+                        return parseParam(domParam);
+                    }).get(),
+                    params: $('.param', domTrigger).map(function(index, domParam) {
+                        return parseParam(domParam);
+                    }).get()
+                });
             }).get(),
             actions: $('#placeholder-actions > .action').map(function(index, domAction) {
-                var action = {
+                return ({
                     id: $('.action-id', domAction).val(),
                     description: $('.action-description', domAction).val(),
                     text: $('.action-text', domAction).val(),
+                    params: $('.param', domAction).map(function(index, domParam) {
+                        return parseParam(domParam);
+                    }).get(),
                     script: $('.action-script', domAction).val()
-                };
-                // FIXME parameters, generates and event sources
-                return action;
+                });
             }).get(),
         };
     }
@@ -220,7 +396,10 @@
         });
 
         $('#create-channel').on('click', function() {
-            console.log(createChannel());
+            var channel = createChannel();
+            console.log(channel);
+            $('#channel-json').text(JSON.stringify(channel));
+            $('#channel-created-dialog').modal();
         })
     });
 })()

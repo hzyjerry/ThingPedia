@@ -16,7 +16,7 @@
       "event-sources": [{
       "id": "poll",
       "type": "polling",
-      "polling-interval": "interval"
+      "polling-interval": "{{interval}}"
       }],
       "generates":[{
           "id": "current-time",
@@ -172,7 +172,7 @@
  },{"id":"omdb",
   "objectId":"https://rulepedia.stanford.edu/oid/placeholder/channel/omdb",
   "urlPrefix": "http://www.omdbapi.com/?r=json&v=1&i=",
-  "urlRegex": "http://www.omdbapi.com/\\?r=json&v=1&i=[a-z0-9]+$",
+  "urlRegex": "http://www\\.omdbapi\\.com/\\?r=json&v=1&i=[a-z0-9]+$",
   "auth": "none",
   "description":"Movies",
   "methods": [],
