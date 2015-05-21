@@ -3,9 +3,9 @@
 
     var EventSource = {
         'polling':
-            { 'polling-interval': { description: "Polling interval (ms)", type: 'number', default: '30000' } },
+            { 'polling-interval': { description: "Polling interval (ms)", type: 'integer', default: '30000' } },
         'polling-http':
-            { 'polling-interval': { description: "Polling interval (ms)", 'type': 'number', default: '30000' },
+            { 'polling-interval': { description: "Polling interval (ms)", 'type': 'integer', default: '30000' },
               'url': { description: "URL", type: 'text', default: '{{url}}' } },
         'sse': { 'url': { description: "URL", type: 'text', default: '{{url}}' } },
         'broadcast-receiver':
@@ -322,6 +322,11 @@
             var value = param.val();
 
             var paramspec = EventSource[source.type][name];
+            if (paramspec.type == 'integer') {
+                value = parseInt(value);
+                if (isNaN(value))
+                    value = 0;
+            }
             if (!paramspec.optional || value)
                 source[name] = value;
         });
