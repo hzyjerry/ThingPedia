@@ -16,14 +16,17 @@ function displayRule(rule, index, array) {
   });
 
   var ruleIcon = $('<i/>', {
-    class: 'fa fa-cloud list-group-item-image',
+    class: 'fa fa-connectdevelop list-group-item-image',
   });
 
   var span = $('<span/>', {
     class: 'list-group-item-text',
   });
 
-  var table = $('<table/>');
+  var table = $('<table/>', {
+    class: 'rule-table',
+  });
+
 
   var tr = $('<tr/>');
 
@@ -32,6 +35,26 @@ function displayRule(rule, index, array) {
   });
 
   tdIcon.append(ruleIcon);
+
+  var removalButton = $('<button/>', {
+    class: 'btn btn-danger',
+    text: "Delete",
+    type: "button",
+  });
+
+  removalButton.on('click', function(event) {
+    //alert('aaa');
+    removeRule(rule.id);
+    //event.preventDefault();
+    event.stopPropagation();
+    return false;
+  });
+
+  var tdRemovalButton = $('<td/>', {
+    class: 'td-removal-button'
+  });
+
+  tdRemovalButton.append(removalButton);
 
   var tdContent = $('<td/>', {
   });
@@ -42,10 +65,30 @@ function displayRule(rule, index, array) {
 
   table.append(tdIcon);
   table.append(tdContent);
+  table.append(tdRemovalButton);
   table.append(tr);
   ruleLink.append(table);
 
   $('#rule-list').append(ruleLink);
+}
+
+function removeRule(ruleID)
+{
+ $.ajax({
+    type: "POST",
+    dataType: "text",
+    url: 'remove',
+    data: {"id" : ruleID},
+    success: function (data) {
+      alert('Rule removed!');
+      pollRules(false);
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      console.log(textStatus, errorThrown);
+      alert('Rule cannot be removed!');
+      pollRules(false);
+    }
+  });
 }
 
 function updateRuleList(rules)
@@ -68,12 +111,12 @@ function pollRules(continuePolling){
         console.log(e);
       }
       finally {
-        if(continuePolling) setTimeout(function() { pollRules(continuePolling) }, 30000);
+        if(continuePolling) setTimeout(function() { pollRules(continuePolling) }, 5000);
       }
     },
     error: function(jqXHR, textStatus, errorThrown) {
       console.log(textStatus, errorThrown);
-      if(continuePolling) setTimeout(function() { pollRules(continuePolling) }, 30000);
+      if(continuePolling) setTimeout(function() { pollRules(continuePolling) }, 5000);
     }
   });
 }

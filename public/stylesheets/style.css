@@ -140,3 +140,14 @@ a {
 .param.well, .generates.well, .event-source.well {
   line-height: 2.75em;
 }
+
+.td-removal-button {
+  text-align: right;
+  vertical-align:middle;
+}
+
+.rule-table
+{
+  width:100%;
+}
+
