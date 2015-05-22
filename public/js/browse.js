@@ -48,20 +48,35 @@ function displayRule(rule, index, array) {
   $('#rule-list').append(ruleLink);
 }
 
-$.ajax({
-  dataType: "text",
-  url: '/db/rules.json',
-  data: null,
-  success: function (data) {
-    try{
-      var rules = JSON.parse(data);
-      rules.forEach(displayRule);
-      installFromBrowse();
-    } catch (e) {
-      console.log(e);
+function updateRuleList(rules)
+{
+  $('#rule-list').empty();
+  rules.forEach(displayRule);
+  installFromBrowse();
+}
+
+function pollRules(continuePolling){
+  $.ajax({
+    dataType: "text",
+    url: '/db/rules.json',
+    data: null,
+    success: function (data) {
+      try{
+        var rules = JSON.parse(data);
+        updateRuleList(rules);
+      } catch (e) {
+        console.log(e);
+      }
+      finally {
+        if(continuePolling) setTimeout(pollRules(continuePolling), 3000);
+      }
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      console.log(textStatus, errorThrown);
+      if(continuePolling) setTimeout(pollRules(continuePolling), 3000);
     }
-  }
-});
+  });
+}
 
 function installFromBrowse() {
   var rules = document.getElementsByClassName("list-group-item");
@@ -71,13 +86,10 @@ function installFromBrowse() {
       url = rule.href;
       rule.removeAttribute("href");
       rule.onclick = function() {
-        // $('#install-rule-url').text("Click here");
-        // $('#install-rule-url').onclick = function() {
-          // console.log("Hello world");
         Android.installRule(JSON.stringify(Rulepedia.Util.getBackRule(url)));
-        // }
-        // $('#install-rule-dialog').modal();
       };
     }
   }
 };
+
+pollRules(true);
