@@ -68,12 +68,12 @@ function pollRules(continuePolling){
         console.log(e);
       }
       finally {
-        if(continuePolling) setTimeout(pollRules(continuePolling), 3000);
+        if(continuePolling) setTimeout(pollRules(continuePolling), 30000);
       }
     },
     error: function(jqXHR, textStatus, errorThrown) {
       console.log(textStatus, errorThrown);
-      if(continuePolling) setTimeout(pollRules(continuePolling), 3000);
+      if(continuePolling) setTimeout(pollRules(continuePolling), 30000);
     }
   });
 }
