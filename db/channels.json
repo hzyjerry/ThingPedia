@@ -196,61 +196,6 @@
       "script": "function(params, events, context) { var object = JSON.parse(events.poll); context.title = object.Title; return (new Date(object.Released)).getTime() >= (new Date).getTime(); }"
   }]
  },{
-     "id": "sms",
-     "objectId":"https://rulepedia.stanford.edu/oid/predefined/channel/sms",
-     "description": "Text messages",
-     "methods": [{
-   	   "id": "send-message",
-   	   "description": "Send a message",
-   	   "text": "Send a text message",
-   	   "generates": [
-   	       { "id": "message-content",
-   	         "type": "text",
-   	         "description": "the message text",
-   	         "text": "the message" }],
-   	   "params": [
-   	       { "id": "content",
-   		 "type": "textarea",
-   		 "description": "containing the text",
-   		 "text": "containing"
-   	       },
-   	       { "id": "destination",
-   		 "type": "message-destination",
-   		 "text": "to"
-   	       }
-   	   ]
-       }],
-     "events": [{
-         "id": "message-received",
-         "description": "When I receive a text",
-         "text": "I receive a text",
-         "params": [{
-             "id": "content-contains",
-             "type": "textarea",
-             "optional": true,
-             "description": "containing this text",
-             "text":"containing"
-         },{
-             "id": "sender-matches",
-             "type": "contact",
-             "subType": "facebook",
-             "optional": true,
-             "description": "from",
-             "text": "from"
-         }],
-         "generates": [{
-             "id": "message",
-             "type": "text",
-             "text": "the received message",
-             "description": "the received message"
-         },{
-             "id": "sender",
-             "type": "contact",
-             "text": "the sender of the message",
-             "description": "the sender of the message"
-         }]
-     }]
- },{
        "id": "weather",
        "objectId":"https://rulepedia.stanford.edu/oid/predefined/channel/weather",
        "description": "Weather",
