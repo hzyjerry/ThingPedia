@@ -22,29 +22,30 @@ window.Rulepedia = {
     URL_PREFIX: 'https://vast-hamlet-6003.herokuapp.com/rule/',
 
     Util: {
-        getShortenedURL: function(url) {
+        getShortenedURL: function(url, callback) {
           var xhr = new XMLHttpRequest();
           xhr.onreadystatechange = function() {
               if (this.readyState == 4 && this.status == 200) {
                   var results = JSON.parse(this.responseText);
-                  result = results["id"];
+                  callback(results["id"]);
               }
           }
-          xhr.open('POST', 'https://www.googleapis.com/urlshortener/v1/url?key=AIzaSyBS7QN9vpHN1738eubc8Ic-lZGHs_JSsQA', false);
+          xhr.open('POST', 'https://www.googleapis.com/urlshortener/v1/url?key=AIzaSyBS7QN9vpHN1738eubc8Ic-lZGHs_JSsQA', true);
           xhr.setRequestHeader('Content-type','application/json');
           xhr.send(JSON.stringify({ "longUrl": url } ));
-          return result;
         },
 
         computeRuleURI: function(rule) {
-            var zstream = ZLIB.deflateInit();
-            return Rulepedia.URL_PREFIX + Base64.encodeURI(zstream.deflate(JSON.stringify(rule)));
+            //var zstream = ZLIB.deflateInit();
+            //return Rulepedia.URL_PREFIX + Base64.encodeURI(zstream.deflate(JSON.stringify(rule)));
+            return Rulepedia.URL_PREFIX + Base64.encodeURI(JSON.stringify(rule));
         },
 
         getBackRule: function(url) {
           url = url.substring(url.lastIndexOf("/") + 1);
-          var zstream = ZLIB.inflateInit();
-          return JSON.parse(zstream.inflate(Base64.decode(url)));
+          //var zstream = ZLIB.inflateInit();
+          //return JSON.parse(zstream.inflate(Base64.decode(url)));
+          return JSON.parse(Base64.decode(url));
         },
 
         makeModalDialog: function(id, title) {
