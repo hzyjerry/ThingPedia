@@ -19,7 +19,7 @@ window.onload = function() {
 };
 
 window.Rulepedia = {
-    URL_PREFIX: 'http://localhost:3000/rule/',
+    URL_PREFIX: 'https://vast-hamlet-6003.herokuapp.com/rule/',
 
     Util: {
         getShortenedURL: function(url) {
