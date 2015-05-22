@@ -37,12 +37,14 @@ window.Rulepedia = {
         },
 
         computeRuleURI: function(rule) {
-            return Rulepedia.URL_PREFIX + Base64.encodeURI(RawDeflate.deflate(JSON.stringify(rule)));
+            var zstream = ZLIB.deflateInit();
+            return Rulepedia.URL_PREFIX + Base64.encodeURI(zstream.deflate(JSON.stringify(rule)));
         },
 
         getBackRule: function(url) {
           url = url.substring(url.lastIndexOf("/") + 1);
-          return JSON.parse(RawDeflate.inflate(Base64.decode(url)));
+          var zstream = ZLIB.inflateInit();
+          return JSON.parse(zstream.inflate(Base64.decode(url)));
         },
 
         makeModalDialog: function(id, title) {
