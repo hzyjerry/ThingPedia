@@ -427,19 +427,25 @@ window.Rulepedia = {
         },
 
         'picture': {
-            create: null,
-            placeholder: "You will be able to choose a picture when you install this rule",
-            text: "a picture of my choice",
+            create: function(paramspec, prefix, currentValue) {
+                if (currentValue === undefined)
+                    currentValue = '';
+
+                return $('<input>', { 'type': 'url',
+                                      'value': currentValue,
+                                      'id': prefix + '-' + paramspec.id });
+            },
 
             normalize: function(paramspec, input) {
-                return 'https://rulepedia.stanford.edu/oid/placeholder/picture/' + (paramspec.subType || 'any');
+                return input.val();
             },
 
             validate: function(paramspec, input) {
-                return true;
+                return input.val().length > 0;
             },
 
             reset: function(paramspec, input) {
+                input.val('');
             },
         },
 

@@ -16,7 +16,7 @@
       "event-sources": [{
       "id": "poll",
       "type": "polling",
-      "polling-interval": "interval"
+      "polling-interval": "{{interval}}"
       }],
       "generates":[{
           "id": "current-time",
@@ -33,7 +33,7 @@
   "methods":[{
    	   "id": "send-message",
    	   "description": "Send a message",
-   	   "text": "Send a message",
+   	   "text": "Send a message on Omlet",
    	   "generates": [
    	       { "id": "message-content",
    	         "type": "text",
@@ -172,7 +172,7 @@
  },{"id":"omdb",
   "objectId":"https://rulepedia.stanford.edu/oid/placeholder/channel/omdb",
   "urlPrefix": "http://www.omdbapi.com/?r=json&v=1&i=",
-  "urlRegex": "http://www.omdbapi.com/\\?r=json&v=1&i=[a-z0-9]+$",
+  "urlRegex": "http://www\\.omdbapi\\.com/\\?r=json&v=1&i=[a-z0-9]+$",
   "auth": "none",
   "description":"Movies",
   "methods": [],
@@ -202,7 +202,7 @@
      "methods": [{
    	   "id": "send-message",
    	   "description": "Send a message",
-   	   "text": "Send a message",
+   	   "text": "Send a text message",
    	   "generates": [
    	       { "id": "message-content",
    	         "type": "text",
@@ -307,7 +307,7 @@
      "methods": [{
    	   "id": "send-message",
    	   "description": "Send a message",
-   	   "text": "Send a message",
+   	   "text": "Send a Facebook message",
    	   "generates": [
    	       { "id": "message-content",
    	         "type": "text",
@@ -327,7 +327,7 @@
        },{
    	   "id": "post-own-status",
    	   "description": "Update your status",
-   	   "text": "Post a status update",
+   	   "text": "Post a Facebook status update",
    	   "generates": [
    	       { "id": "status-update-content",
    	         "type": "text",
@@ -343,7 +343,7 @@
        },{
    	   "id": "upload-picture",
    	   "description": "Upload a photo",
-           "text": "Upload",
+           "text": "Upload to Facebook",
            "generates":[],
    	   "params": [
    	       { "id": "picture",
@@ -359,7 +359,7 @@
        "methods": [{
    	   "id": "upload-picture",
    	   "description": "Upload a photo",
-           "text": "Upload",
+           "text": "Upload to Instagram",
            "generates":[],
    	   "params": [
    	       { "id": "picture",
@@ -374,18 +374,17 @@
        "events": [],
        "methods": [{
    	   "id": "post-own-status",
-   	   "description": "Update your status",
-   	   "text": "Post a status update",
+   	   "description": "Tweet",
+   	   "text": "Post a tweet",
    	   "generates": [
    	       { "id": "status-update-content",
    	         "type": "text",
-   	         "description": "the status update text",
-   	         "text": "the status update" }],
+   	         "description": "the tweet",
+   	         "text": "the tweet" }],
    	   "params": [
    	       { "id": "content",
    		 "type": "textarea",
-   		 "description": "with the text",
-   		 "text": "with"
+   		 "text": "saying"
    	       }
    	   ]
        }]
