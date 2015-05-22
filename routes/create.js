@@ -33,7 +33,7 @@ router.post('/', function(req, res) {
     res.status(200);
     res.end(rule.id);
   } catch (e) {
-    console.log('ASDASDASDASDASDASDASDASD');
+    console.log('Error saving rule');
     res.status(500);
     res.end();
   }
