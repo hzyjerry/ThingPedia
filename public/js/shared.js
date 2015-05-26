@@ -90,6 +90,7 @@ window.Rulepedia = {
                                     prefix,
                                     currentValue);
                 input.addClass('form-control');
+                input.addClass('param-form-control');
                 element = input;
             } else if (impl.placeholder) {
                 element = $('<small>', {'class': 'block placeholder'});

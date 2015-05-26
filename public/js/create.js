@@ -217,7 +217,7 @@
         triggers.push(obj);
 
         var row = $('<li>', { 'class': 'trigger-item row' });
-        var combinatorColumn = $('<span>', { 'class': 'col-sm-1' });
+        var combinatorColumn = $('<span>', { 'class': 'col-sm-2' });
         if (!first) {
             var select = $('<select class="form-control center"><option value="and">and</option>' +
                            '<option value="or">or</option></select>');
@@ -232,7 +232,7 @@
         }
         row.append(combinatorColumn);
 
-        var textColumn = $('<span>', { 'class': 'col-sm-6 trigger-item-text' });
+        var textColumn = $('<span>', { 'class': 'col-sm-3 trigger-item-text' });
         textColumn.append(description);
         row.append(textColumn);
 

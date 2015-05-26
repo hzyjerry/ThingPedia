@@ -27,46 +27,6 @@
       "script": "function(params, events, context) { context['current-time'] = (new Date()).toLocaleString(); return events.poll; }"
   }]
  },{
-  "id":"omlet",
-  "objectId":"https://rulepedia.stanford.edu/oid/predefined/channel/omlet",
-  "description":"Omlet Chat",
-  "methods":[{
-   	   "id": "send-message",
-   	   "description": "Send a message",
-   	   "text": "Send a message on Omlet",
-   	   "generates": [
-   	       { "id": "message-content",
-   	         "type": "text",
-   	         "description": "the message text",
-   	         "text": "the message" }],
-   	   "params": [
-   	       { "id": "content",
-   		 "type": "textarea",
-   		 "description": "containing the text",
-   		 "text": "containing"
-   	       },
-   	       { "id": "destination",
-   		 "type": "message-destination",
-   		 "text": "to"
-   	       }
-   	   ]
-       },{
-   	   "id": "share-picture",
-   	   "description": "Send a photo",
-   	   "text": "Send",
-   	   "generates": [],
-   	   "params": [
-   	       { "id": "content",
-   		 "type": "picture"
-   	       },
-   	       { "id": "destination",
-   		 "type": "message-destination",
-   		 "text": "to"
-   	       }
-   	   ]
-       }],
-  "events": []
- },{
   "id":"google-fit",
   "objectId":"https://rulepedia.stanford.edu/oid/predefined/channel/google-fit",
   "description":"Fitness",
@@ -150,7 +110,7 @@
   }]
  },{"id":"notifications",
     "objectId":"https://rulepedia.stanford.edu/oid/predefined/channel/notifications",
-    "description":"System notifications",
+    "description":"Notifications",
     "events":[],
     "methods": [{
         "id":"post-notification",
@@ -169,33 +129,7 @@
             "text": "and saying"
         }]
     }]
- },{"id":"omdb",
-  "objectId":"https://rulepedia.stanford.edu/oid/placeholder/channel/omdb",
-  "urlPrefix": "http://www.omdbapi.com/?r=json&v=1&i=",
-  "urlRegex": "http://www\\.omdbapi\\.com/\\?r=json&v=1&i=[a-z0-9]+$",
-  "auth": "none",
-  "description":"Movies",
-  "methods": [],
-  "event-sources": [{
-      "id": "poll",
-      "type": "polling-http",
-      "polling-interval": 86400
-  }],
-  "events": [{
-      "id": "movie-released",
-      "description": "When a movie is released",
-      "text": "A specific movie is released",
-      "params": [],
-      "generates": [{
-          "id": "title",
-          "type": "text",
-          "text": "the movie title",
-          "description": "the movie title"
-      }],
-      "event-sources": ["global-poll"],
-      "script": "function(params, events, context) { var object = JSON.parse(events.poll); context.title = object.Title; return (new Date(object.Released)).getTime() >= (new Date).getTime(); }"
-  }]
- },{
+ }, {
        "id": "weather",
        "objectId":"https://rulepedia.stanford.edu/oid/predefined/channel/weather",
        "description": "Weather",
