@@ -34,9 +34,8 @@
                     Android.installRule(JSON.stringify(rule));
                 } else {
                     var url = Rulepedia.Util.computeRuleURI(rule);
-                    url = Rulepedia.Util.getShortenedURL(url);
-
-                    setTimeout(function() {
+                    console.log(url);
+                    Rulepedia.Util.getShortenedURL(url, function(url) {
                         $('#install-rule-url').attr('href', url).text(url);
                         $('#install-rule-dialog').modal();
 
@@ -51,7 +50,7 @@
                         $("#qr-code").empty();
                         var qrcode = new QRCode("qr-code");
                         qrcode.makeCode(url);
-                    }, 200);
+                    });
                 }
             } catch(e) {
                 showErrorDialog(e.message);
