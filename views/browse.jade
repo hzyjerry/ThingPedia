@@ -15,19 +15,19 @@ block content
           i(class='fa fa-umbrella')
           | 
           i(class='fa fa-twitter')
-          |    Tweet a picture if it rains
+          |    If rain => tweet
 
         button(type='button', class='btn btn-default rule-button')
           i(class='fa fa-moon-o')
           | 
           i(class='fa fa-lightbulb-o')
-          |    Turn on lights at dusk
+          |    If dusk => turn on lights
 
         button(type='button', class='btn btn-default rule-button')
           i(class='fa fa-bolt')
           | 
           i(class='fa fa-taxi')
-          |    Get a ride if a storm is coming
+          |    If storm => call taxi
 
     
     div(class='panel panel-warning')
@@ -35,16 +35,16 @@ block content
         | Finance
       div.panel-body
         button(type='button', class='btn btn-default rule-button')
-          i(class='fa fa-bank')
+          i(class='fa fa-line-chart')
           | 
           i(class='fa fa-comment-o')
-          |    Send notification if bank account is low
+          |    If stock is up => notify me
 
         button(type='button', class='btn btn-default rule-button')
           i(class='fa fa-credit-card')
           | 
           i(class='fa fa-comment-o')
-          |    Send notification when credit card is charged
+          |    If card charged => notify me
 
     div(class='panel panel-info')
       div.panel-heading
@@ -53,30 +53,14 @@ block content
           button(type='button', class='btn btn-default rule-button')
             i(class='fa fa-heartbeat')
             | 
-            i(class='fa fa-exclamation-triangle')
-            |    Send a warning when heartbeat is irregular 
+            i(class='fa fa-share')
+            |    If exercise => share results
 
           button(type='button', class='btn btn-default rule-button')
             i(class='fa fa-paw')
             | 
             i(class='fa fa-phone')
-            |    Call if Fido is lost 
-
-    div(class='panel panel-danger')
-      div.panel-heading
-        | Device
-      div.panel-body
-          button(type='button', class='btn btn-default rule-button')
-            i(class='fa fa-cubes')
-            | 
-            i(class='fa fa-user')
-            |    Greet me when I am near
-
-          button(type='button', class='btn btn-default rule-button')
-            i(class='fa fa-cubes')
-            | 
-            i(class='fa fa-camera-retro')
-            |    Take pictures along patrol route
+            |    If Fido lost => call me
 
   hr
 
