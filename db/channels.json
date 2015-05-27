@@ -196,15 +196,10 @@
             ],
             "params": [
               {
-                "id": "warriors",
-                "text": "The Champions will be the",
-                "description": "Who wins the NBA championship?",
-                "params": [{
-                   "id": "teams",
-                   "type": "select",
-                   "options": { "warriors_team": "Warriors", "cavs_team": "Cavs" },
-                   "defaultOption": "warriors_team"
-                }]
+                "id": "teams",
+                "type": "select",
+                "options": { "warriors_team": "Warriors", "cavs": "Cavs"},
+                "defaultOption": "warriors_team"
               }
             ]
           }
