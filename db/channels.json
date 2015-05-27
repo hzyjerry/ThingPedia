@@ -160,4 +160,90 @@
            }],
            "generates": []
        }]
-   }]
+   },{
+        "id": "deal-test",
+        "objectId": "https://deal-me.herokuapp.com/nba",
+        "urlPrefix": "",
+        "urlRegex": "",
+        "description": "Deal Test",
+        "event-sources": [
+          {
+            "id": "deal-poll",
+            "type": "polling-http",
+            "polling-interval": 30000,
+            "url": "{{url}}"
+          }
+        ],
+        "events": [
+          {
+            "id": "game",
+            "description": "The NBA Champion will be the",
+            "text": "",
+            "script": "function trigger(params, events, context) {var obj = JSON.parse(events.deal-poll); context['player_won'] = obj.winning_team == \"warriors\"; context['winning_team'] = obj.winning_team; context['player_team'] = \"warriors\"; return obj.game_over}",
+            "generates": [
+              {
+                "id": "player_won",
+                "type": "number",
+                "text": "win",
+                "description": "win"
+              },
+              {
+                "id": "winning_team",
+                "type": "text",
+                "text": "win_team",
+                "description": "win_team"
+              }
+            ],
+            "params": [
+              {
+                "id": "teams",
+                "type": "select",
+                "description": "",
+                "text": "The NBA Champions will be the ",
+                "options": { "Warriors": "Warriors", "Cavs": "Cavs"},
+                "defaultOption": "Warriors"
+              }
+            ]
+          }
+        ],
+        "methods": [
+
+        ]
+      }, {
+      "id":"ping",
+      "objectId":"http://deal-me.herokuapp.com/ping",
+      "urlPrefix":"",
+      "urlRegex":"",
+      "description":"Deal Ping",
+      "event-sources":[
+
+      ],
+      "events":[
+
+      ],
+      "methods":[
+          {
+              "id":"ping-action",
+              "description":"Ping this URL",
+              "text":"Will ping this URL",
+              "generates": [],
+              "params":[
+                  {
+                      "id":"url",
+                      "type":"text",
+                      "text":"url",
+                      "description":"URL",
+                      "optional":false
+                  },
+                  {
+                      "id":"data",
+                      "type":"text",
+                      "text":"data",
+                      "description":"Data",
+                      "optional":false
+                  }
+              ],
+              "script":"function action(params) {\n return {type: 'http', url: params.url, method: 'get', data: params.data};\n}"
+          }
+      ]
+      }]
