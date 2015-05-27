@@ -198,8 +198,8 @@
               {
                 "id": "teams",
                 "type": "select",
-                "description": "The NBA Champions will be the ",
-                "text": "",
+                "description": "",
+                "text": "The NBA Champions will be the ",
                 "options": { "Warriors": "Warriors", "Cavs": "Cavs"},
                 "defaultOption": "Warriors"
               }
