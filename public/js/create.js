@@ -30,7 +30,7 @@
             try {
                 var rule = computeRule();
 
-                if (typeof Android !== 'undefined') {
+                if (false) {
                     //Android.installRule(JSON.stringify(rule));
                 } else {
                     var url = Rulepedia.Util.computeRuleURI(rule);
