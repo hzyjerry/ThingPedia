@@ -230,12 +230,19 @@
                   {
                       "id":"url",
                       "type":"text",
-                      "text":"",
-                      "description":"",
+                      "text":"url",
+                      "description":"URL",
+                      "optional":false
+                  },
+                  {
+                      "id":"data",
+                      "type":"text",
+                      "text":"data",
+                      "description":"Data",
                       "optional":false
                   }
               ],
-              "script":"function action(params) {\n return {type: 'http', url: params.url, method: 'get', data: 'ping'};\n}"
+              "script":"function action(params) {\n return {type: 'http', url: params.url, method: 'get', data: params.data};\n}"
           }
       ]
       }]
