@@ -24,7 +24,7 @@
           "description": "the current time",
           "text": "the current time"
       }],
-      "script": "function(params, events, context) { context['current-time'] = (new Date()).toLocaleString(); return events.poll; }"
+      "script": "function(params, events, context) { log('Periodic timer activated'); context['current-time'] = (new Date()).toLocaleString(); return events.poll; }"
   }]
  },{
   "id":"google-fit",
