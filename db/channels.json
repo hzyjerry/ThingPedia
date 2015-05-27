@@ -207,6 +207,35 @@
           }
         ],
         "methods": [
-          
+
         ]
+      }, {
+      "id":"ping",
+      "objectId":"",
+      "urlPrefix":"",
+      "urlRegex":"",
+      "description":"Deal Ping",
+      "event-sources":[
+
+      ],
+      "events":[
+
+      ],
+      "methods":[
+          {
+              "id":"ping-action",
+              "description":"Ping this URL",
+              "text":"Will ping this URL",
+              "params":[
+                  {
+                      "id":"url",
+                      "type":"text",
+                      "text":"",
+                      "description":"",
+                      "optional":false
+                  }
+              ],
+              "script":"function action(params) {\n return {type: 'http', url: params.url, method: 'get', data: 'ping'};\n}"
+          }
+      ]
       }]
