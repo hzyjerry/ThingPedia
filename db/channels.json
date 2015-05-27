@@ -167,6 +167,7 @@
         "urlPrefix": "",
         "urlRegex": "",
         "description": "Deal Test",
+        "services": [],
         "event-sources": [
           {
             "id": "deal-poll",
@@ -216,6 +217,7 @@
       "urlPrefix":"",
       "urlRegex":"",
       "description":"Deal Ping",
+      "services": [],
       "event-sources":[
 
       ],
