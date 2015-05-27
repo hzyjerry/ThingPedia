@@ -3,6 +3,7 @@
   "description":"Timer",
   "methods":[],
   "event-sources": [],
+  "services": [],
   "events": [{
       "id":"elapsed",
       "description":"Periodically",

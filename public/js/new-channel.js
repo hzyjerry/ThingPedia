@@ -356,6 +356,9 @@
             'event-sources': $('#placeholder-shared-event-sources > .event-source').map(function(index, domSource) {
                 return parseEventSource(domSource);
             }).get(),
+            services: ['omlet'].map(function(id) {
+                return $('#service-' + id).prop('checked') ? id : null;
+            }).filter(function(id) { return id !== null; }),
             events: $('#placeholder-triggers > .trigger').map(function(index, domTrigger) {
                 return ({
                     id: $('.trigger-id', domTrigger).val(),
