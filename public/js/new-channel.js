@@ -356,7 +356,7 @@
             'event-sources': $('#placeholder-shared-event-sources > .event-source').map(function(index, domSource) {
                 return parseEventSource(domSource);
             }).get(),
-            triggers: $('#placeholder-triggers > .trigger').map(function(index, domTrigger) {
+            events: $('#placeholder-triggers > .trigger').map(function(index, domTrigger) {
                 return ({
                     id: $('.trigger-id', domTrigger).val(),
                     description: $('.trigger-description', domTrigger).val(),
@@ -373,7 +373,7 @@
                     }).get()
                 });
             }).get(),
-            actions: $('#placeholder-actions > .action').map(function(index, domAction) {
+            methods: $('#placeholder-actions > .action').map(function(index, domAction) {
                 return ({
                     id: $('.action-id', domAction).val(),
                     description: $('.action-description', domAction).val(),
