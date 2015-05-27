@@ -177,8 +177,8 @@
         "events": [
           {
             "id": "game",
-            "description": "nba game",
-            "text": "did win game",
+            "description": "The NBA Champion will be the",
+            "text": "",
             "script": "function trigger(params, events, context) {var obj = JSON.parse(events.deal-poll); context['player_won'] = obj.winning_team == \"warriors\"; context['winning_team'] = obj.winning_team; context['player_team'] = \"warriors\"; return obj.game_over}",
             "event-sources": [
               
@@ -200,9 +200,14 @@
             "params": [
               {
                 "id": "warriors",
-                "type": "select",
-                "text": "warriors win",
-                "description": "Do the wariors win?",
+                "text": "The Champions will be the",
+                "description": "Who wins the NBA championship?",
+                "params": [{
+                   "id": "teams",
+                   "type": "select",
+                   "options": { "warriors": "Warriors", "cavs": "Cavs" },
+                   "defaultOption": "warriors"
+                }]
                 "optional": false
               }
             ]
