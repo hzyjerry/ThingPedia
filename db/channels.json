@@ -160,4 +160,55 @@
            }],
            "generates": []
        }]
-   }]
+   },{
+        "id": "deal-test",
+        "objectId": "https://deal-me.herokuapp.com/nba",
+        "urlPrefix": "",
+        "urlRegex": "",
+        "description": "Deal Test",
+        "event-sources": [
+          {
+            "id": "deal-poll",
+            "type": "polling-http",
+            "polling-interval": 30000,
+            "url": "{{url}}"
+          }
+        ],
+        "events": [
+          {
+            "id": "game",
+            "description": "nba game",
+            "text": "did win game",
+            "script": "function trigger(params, events, context) {var obj = JSON.parse(events.deal-poll); context['player_won'] = obj.winning_team == \"warriors\"; context['winning_team'] = obj.winning_team; context['player_team'] = \"warriors\"; return obj.game_over}",
+            "event-sources": [
+              
+            ],
+            "generates": [
+              {
+                "id": "player_won",
+                "type": "number",
+                "text": "win",
+                "description": "win"
+              },
+              {
+                "id": "winning_team",
+                "type": "text",
+                "text": "win_team",
+                "description": "win_team"
+              }
+            ],
+            "params": [
+              {
+                "id": "warriors",
+                "type": "select",
+                "text": "warriors win",
+                "description": "Do the wariors win?",
+                "optional": false
+              }
+            ]
+          }
+        ],
+        "methods": [
+          
+        ]
+      }]
