@@ -226,6 +226,7 @@
               "id":"ping-action",
               "description":"Ping this URL",
               "text":"Will ping this URL",
+              "generates": [],
               "params":[
                   {
                       "id":"url",
