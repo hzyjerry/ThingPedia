@@ -180,9 +180,6 @@
             "description": "The NBA Champion will be the",
             "text": "",
             "script": "function trigger(params, events, context) {var obj = JSON.parse(events.deal-poll); context['player_won'] = obj.winning_team == \"warriors\"; context['winning_team'] = obj.winning_team; context['player_team'] = \"warriors\"; return obj.game_over}",
-            "event-sources": [
-              
-            ],
             "generates": [
               {
                 "id": "player_won",
@@ -205,8 +202,8 @@
                 "params": [{
                    "id": "teams",
                    "type": "select",
-                   "options": { "warriors": "Warriors", "cavs": "Cavs" },
-                   "defaultOption": "warriors"
+                   "options": { "warriors_team": "Warriors", "cavs_team": "Cavs" },
+                   "defaultOption": "warriors_team"
                 }]
               }
             ]
