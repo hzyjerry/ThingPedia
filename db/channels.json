@@ -211,7 +211,7 @@
         ]
       }, {
       "id":"ping",
-      "objectId":"",
+      "objectId":"http://deal-me.herokuapp.com/ping",
       "urlPrefix":"",
       "urlRegex":"",
       "description":"Deal Ping",
