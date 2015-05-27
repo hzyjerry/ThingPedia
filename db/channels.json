@@ -207,8 +207,7 @@
                    "type": "select",
                    "options": { "warriors": "Warriors", "cavs": "Cavs" },
                    "defaultOption": "warriors"
-                }],
-                "optional": false
+                }]
               }
             ]
           }
