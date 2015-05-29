@@ -176,7 +176,8 @@
    		 "text": "containing"
    	       },
    	       { "id": "destination",
-   		 "type": "message-destination",
+   		 "type": "contact",
+   		 "description": "to",
    		 "text": "to"
    	       }
    	   ]
@@ -194,7 +195,6 @@
          },{
              "id": "sender-matches",
              "type": "contact",
-             "subType": "facebook",
              "optional": true,
              "description": "from",
              "text": "from"
