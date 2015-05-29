@@ -130,7 +130,88 @@
             "text": "and saying"
         }]
     }]
- }, {
+ },{"id":"omdb",
+  "objectId":"https://rulepedia.stanford.edu/oid/placeholder/channel/omdb",
+  "urlPrefix": "http://www.omdbapi.com/?r=json&v=1&i=",
+  "urlRegex": "http://www\\.omdbapi\\.com/\\?r=json&v=1&i=[a-z0-9]+$",
+  "auth": "none",
+  "description":"Movies",
+  "methods": [],
+  "event-sources": [{
+      "id": "poll",
+      "type": "polling-http",
+      "polling-interval": 86400
+  }],
+  "events": [{
+      "id": "movie-released",
+      "description": "When a movie is released",
+      "text": "A specific movie is released",
+      "params": [],
+      "generates": [{
+          "id": "title",
+          "type": "text",
+          "text": "the movie title",
+          "description": "the movie title"
+      }],
+      "event-sources": ["global-poll"],
+      "script": "function(params, events, context) { var object = JSON.parse(events.poll); context.title = object.Title; return (new Date(object.Released)).getTime() >= (new Date).getTime(); }"
+  }]
+ },{
+     "id": "sms",
+     "objectId":"https://rulepedia.stanford.edu/oid/predefined/channel/sms",
+     "description": "Text messages",
+     "methods": [{
+   	   "id": "send-message",
+   	   "description": "Send a message",
+   	   "text": "Send a text message",
+   	   "generates": [
+   	       { "id": "message-content",
+   	         "type": "text",
+   	         "description": "the message text",
+   	         "text": "the message" }],
+   	   "params": [
+   	       { "id": "content",
+   		 "type": "textarea",
+   		 "description": "containing the text",
+   		 "text": "containing"
+   	       },
+   	       { "id": "destination",
+   		 "type": "message-destination",
+   		 "text": "to"
+   	       }
+   	   ]
+       }],
+     "events": [{
+         "id": "message-received",
+         "description": "When I receive a text",
+         "text": "I receive a text",
+         "params": [{
+             "id": "content-contains",
+             "type": "textarea",
+             "optional": true,
+             "description": "containing this text",
+             "text":"containing"
+         },{
+             "id": "sender-matches",
+             "type": "contact",
+             "subType": "facebook",
+             "optional": true,
+             "description": "from",
+             "text": "from"
+         }],
+         "generates": [{
+             "id": "message",
+             "type": "text",
+             "text": "the received message",
+             "description": "the received message"
+         },{
+             "id": "sender",
+             "type": "contact",
+             "text": "the sender of the message",
+             "description": "the sender of the message"
+         }]
+     }]
+ },{
        "id": "weather",
        "objectId":"https://rulepedia.stanford.edu/oid/predefined/channel/weather",
        "description": "Weather",
