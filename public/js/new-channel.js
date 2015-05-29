@@ -296,6 +296,9 @@
                  "   //     { type: 'intent', action: 'com.example.myapp.AYB', \n" +
                  "   //       categories: ['android.category.DEFAULT'], package: 'com.example.myapp', \n" +
                  "   //       activity: false, extras: {} }\n" +
+                 "   // for email actions, return an object of the form\n" +
+                 "   //     { type: 'email', to: 'foo@example.com', \n" +
+                 "   //       subject: 'Nigerian Scam', body: 'WIN BIG MONEY NOW'}\n" +
                  "   // (category, package, activity, extras are optional, activity defaults to false)\n" +
                  "   return {};\n" +
                  "}"));
