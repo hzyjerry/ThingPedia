@@ -175,6 +175,7 @@
    	       },
    	       { "id": "destination",
    		 "type": "contact",
+   		 "subType": "email",
    		 "description": "to",
    		 "text": "to"
    	       }
@@ -222,6 +223,7 @@
    	       },
    	       { "id": "destination",
    		 "type": "contact",
+   		 "subType": "tel",
    		 "description": "to",
    		 "text": "to"
    	       }

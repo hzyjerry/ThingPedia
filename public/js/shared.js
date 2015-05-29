@@ -455,16 +455,23 @@ window.Rulepedia = {
 
         'contact': {
             create: function(paramspec, prefix, currentValue) {
-                if (currentValue === undefined)
-                    currentValue = 'tel:555-555-5555';
+                if (currentValue === undefined) {
+                    if (paramspec.subType == 'tel')
+                        currentValue = 'tel:555-555-5555'
+                    else
+                        currentValue = '';
+                }
 
-                return $('<input>', { 'type': 'text',
+                return $('<input>', { 'type': paramspec.subType == 'email' ? 'email' : 'text',
                                       'value': currentValue,
                                       'id': prefix + '-' + paramspec.id });
             },
 
             normalize: function(paramspec, input) {
-                return input.val();
+                if (paramspec.subType == 'email')
+                    return 'mailto:' + input.val().trim();
+                else
+                    return input.val().trim();
             },
 
             validate: function(paramspec, input) {
@@ -472,7 +479,10 @@ window.Rulepedia = {
             },
 
             reset: function(paramspec, input) {
-                input.val('tel:555-555-5555');
+                if (paramspec.subType == 'tel')
+                    input.val('tel:555-555-5555');
+                else
+                    input.val('');
             },
         },
 
