@@ -7,7 +7,7 @@ router.get('/install', function(req, res, next) {
     res.render('webhook-install', { title: 'Sabrina - Install to Omlet' });
 });
 
-router.get('/*', function(req, res, next) {
+router.get('/hook/*', function(req, res, next) {
     res.render('webhook-redirect', { title: 'Sabrina - Install to Omlet' });
 });
 

@@ -1,5 +1,5 @@
 (function() {
-    $(function() {
+    Omlet.ready(function() {
       var req = {
         Type: "Text",
         PublisherName : "Sabrina",
@@ -12,7 +12,7 @@
       }
 
       ddx.send("GetSubscriptionPublishURL", req, function(resp) {
-        var url = "https://vast-hamlet-6003.herokuapp.com/webhook/" + Base64.encodeURI(resp.HookURL);
+        var url = "https://vast-hamlet-6003.herokuapp.com/webhook/hook/" + Base64.encodeURI(resp.HookURL);
         $('#retry').prop('href', url);
         document.location.href = url;
       }, function(){});
