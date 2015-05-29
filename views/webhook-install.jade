@@ -1,0 +1,13 @@
+extends layout
+
+block scripts
+  script(src='/js/webhook-install.js')
+
+block content
+  h1.center Installing Sabrina...
+
+  p If this message does not go away, please retry and make sure you give
+    | permission to Sabrina to access Omlet, as well as choosing Sabrina
+    | to handle the redirect.
+
+  a#retry(href='#').btn.btn-primary Retry

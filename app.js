@@ -13,6 +13,7 @@ var about = require('./routes/about');
 var rule = require('./routes/rule');
 var channels = require('./routes/channels');
 var remove = require('./routes/remove');
+var webhook = require('./routes/webhook');
 
 var app = express();
 
@@ -36,6 +37,7 @@ app.use('/about', about);
 app.use('/rule/*', rule);
 app.use('/channels', channels);
 app.use('/remove', remove);
+app.use('/webhook', webhook);
 
 app.use('/db', express.static('db'));
 
