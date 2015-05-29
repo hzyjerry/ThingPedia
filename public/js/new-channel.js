@@ -11,7 +11,7 @@
         'broadcast-receiver':
             { 'intent-action': { description: "Action", type: 'text', default: '' },
               'intent-category': { description: "Category", type: 'text', default: '', optional: true } },
-        'omlet': { 'chat-token': { description: "Chat token", type: 'text', default: '' } }
+        'omlet': { }
     };
 
     var ParamTypes = {
