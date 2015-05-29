@@ -454,36 +454,48 @@ window.Rulepedia = {
         },
 
         'contact': {
-            create: null,
-            placeholder: "You will be able to choose a contact when you install this rule",
-            text: "a contact of my choice",
+            create: function(paramspec, prefix, currentValue) {
+                if (currentValue === undefined)
+                    currentValue = 'tel:555-555-5555';
+
+                return $('<input>', { 'type': 'text',
+                                      'value': currentValue,
+                                      'id': prefix + '-' + paramspec.id });
+            },
 
             normalize: function(paramspec, input) {
-                return 'https://rulepedia.stanford.edu/placeholder/contact/' + (paramspec.subType || 'any');
+                return input.val();
             },
 
             validate: function(paramspec, input) {
-                return true;
+                return input.val().length > 0;
             },
 
             reset: function(paramspec, input) {
+                input.val('tel:555-555-5555');
             },
         },
 
         'message-destination': {
-            create: null,
-            placeholder: "You will be able to choose a contact or group when you install this rule",
-            text: "a contact or group of my choice",
+            create: function(paramspec, prefix, currentValue) {
+                if (currentValue === undefined)
+                    currentValue = 'tel:555-555-5555';
+
+                return $('<input>', { 'type': 'text',
+                                      'value': currentValue,
+                                      'id': prefix + '-' + paramspec.id });
+            },
 
             normalize: function(paramspec, input) {
-                return 'https://rulepedia.stanford.edu/placeholder/message-destination/' + (paramspec.subType || 'any');
+                return input.val();
             },
 
             validate: function(paramspec, input) {
-                return true;
+                return input.val().length > 0;
             },
 
             reset: function(paramspec, input) {
+                input.val('tel:555-555-5555');
             },
         },
 
