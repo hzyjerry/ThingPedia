@@ -157,6 +157,33 @@
       "script": "function(params, events, context) { var object = JSON.parse(events.poll); context.title = object.Title; return (new Date(object.Released)).getTime() >= (new Date).getTime(); }"
   }]
  },{
+     "id": "email",
+     "objectId":"https://rulepedia.stanford.edu/oid/predefined/channel/email",
+     "description": "Email",
+     "methods": [{
+   	   "id": "send-message",
+   	   "description": "Send an email",
+   	   "text": "Send an email",
+   	   "generates": [
+   	       { "id": "message-content",
+   	         "type": "text",
+   	         "description": "the email text",
+   	         "text": "the email" }],
+   	   "params": [
+   	       { "id": "content",
+   		 "type": "textarea",
+   		 "description": "containing the text",
+   		 "text": "containing"
+   	       },
+   	       { "id": "destination",
+   		 "type": "contact",
+   		 "description": "to",
+   		 "text": "to"
+   	       }
+   	   ]
+       }],
+     "events": []
+ },{
      "id": "sms",
      "objectId":"https://rulepedia.stanford.edu/oid/predefined/channel/sms",
      "description": "Text messages",
