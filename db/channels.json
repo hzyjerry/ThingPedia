@@ -160,15 +160,13 @@
      "id": "email",
      "objectId":"https://rulepedia.stanford.edu/oid/predefined/channel/email",
      "description": "Email",
+     "event-sources": [],
      "methods": [{
    	   "id": "send-message",
    	   "description": "Send an email",
    	   "text": "Send an email",
-   	   "generates": [
-   	       { "id": "message-content",
-   	         "type": "text",
-   	         "description": "the email text",
-   	         "text": "the email" }],
+   	   "script": "function(params) { return ({ type: 'email', to: params.destination.substr('mailto:'.length), subject: 'Message from Sabrina', body: params.content }); }",
+   	   "generates": [],
    	   "params": [
    	       { "id": "content",
    		 "type": "textarea",
@@ -179,6 +177,26 @@
    		 "type": "contact",
    		 "description": "to",
    		 "text": "to"
+   	       }
+   	   ]
+       }],
+     "events": []
+ },{
+     "id": "corktastic",
+     "objectId":"https://rulepedia.stanford.edu/oid/predefined/channel/corktastic",
+     "description": "Corktastic",
+     "event-sources": [],
+     "methods": [{
+   	   "id": "send-corktastic",
+   	   "description": "Post to Corktastic",
+   	   "text": "Post a message to Corktastic",
+   	   "script": "function(params) { return ({ type: 'email', to: 'corktastic1000@gmail.com', subject: params.content, body: '' }); }",
+   	   "generates": [],
+   	   "params": [
+   	       { "id": "content",
+   		 "type": "textarea",
+   		 "description": "containing the text",
+   		 "text": "containing"
    	       }
    	   ]
        }],
