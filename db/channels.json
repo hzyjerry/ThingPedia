@@ -198,6 +198,12 @@
    		 "type": "textarea",
    		 "description": "containing the text",
    		 "text": "containing"
+   	       },{
+   	         "id": "device",
+   	         "type": "device",
+   	         "subType": "ibeacon/corktastic",
+   	         "description": "",
+   	         "text": ""
    	       }
    	   ]
        },{
@@ -211,6 +217,12 @@
    		 "type": "picture",
    		 "description": "from the URL",
    		 "text": "from"
+   	       },{
+   	         "id": "device",
+   	         "type": "device",
+   	         "subType": "ibeacon/corktastic",
+   	         "description": "",
+   	         "text": ""
    	       }
    	   ]
        }],

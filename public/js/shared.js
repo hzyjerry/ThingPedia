@@ -453,6 +453,23 @@ window.Rulepedia = {
             },
         },
 
+        'device': {
+            create: null,
+            placeholder: "Sabrina will choose a device when she learns this spell",
+            text: "the closest device",
+
+            normalize: function(paramspec, input) {
+                return 'https://rulepedia.stanford.edu/placeholder/device/' + (paramspec.subType || 'any');
+            },
+
+            validate: function(paramspec, input) {
+                return true;
+            },
+
+            reset: function(paramspec, input) {
+            },
+        },
+
         'contact': {
             create: function(paramspec, prefix, currentValue) {
                 if (currentValue === undefined) {
