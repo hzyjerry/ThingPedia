@@ -14,6 +14,7 @@ var rule = require('./routes/rule');
 var channels = require('./routes/channels');
 var remove = require('./routes/remove');
 var webhook = require('./routes/webhook');
+var query = require('./routes/query');
 
 var app = express();
 
@@ -38,6 +39,7 @@ app.use('/rule/*', rule);
 app.use('/channels', channels);
 app.use('/remove', remove);
 app.use('/webhook', webhook);
+app.use('/query', query);
 
 app.use('/db', express.static('db'));
 

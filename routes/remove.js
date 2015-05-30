@@ -57,7 +57,7 @@ function saveRulesToDB(rules) {
 }
 
 function loadRulesFromDB() {
-  console.log('process.cwd(): ' + process.cwd());
+  //console.log('process.cwd(): ' + process.cwd());
 
   try {
     var data = fs.readFileSync(ruleDBPath);
