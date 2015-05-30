@@ -459,7 +459,7 @@ window.Rulepedia = {
             text: "the closest device",
 
             normalize: function(paramspec, input) {
-                return 'https://rulepedia.stanford.edu/placeholder/device/' + (paramspec.subType || 'any');
+                return 'https://rulepedia.stanford.edu/oid/placeholder/device/' + (paramspec.subType || 'any');
             },
 
             validate: function(paramspec, input) {
