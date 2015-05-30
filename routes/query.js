@@ -22,10 +22,11 @@ router.get('/:term', function(req, res, next) {
 
     //console.log("rule " + rule);
 
-    if(rule.description.toString().indexOf(queryTerm) >= 0)
+    if (rule.description.toString().toLowerCase().indexOf(queryTerm.toLowerCase()) != -1)
     {
       rules.push(rule);
     }
+
   }
 
   res.render('query', { 
