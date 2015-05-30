@@ -159,7 +159,7 @@ window.Rulepedia = {
                 triggerLabel.append(triggerCheckbox);
                 triggerLabel.append("or use ");
                 triggerLabel.append(triggerPlaceholder);
-                triggerLabel.append(" from the condition of the rule");
+                triggerLabel.append(" from the condition of the spell");
                 triggerLabel.hide();
                 column.append(triggerLabel);
 
@@ -258,7 +258,7 @@ window.Rulepedia = {
                         var triggerLink = $('<a>');
                         triggerLink.prop('href', '#');
                         triggerLink.on('click', clickTriggerLink);
-                        triggerLink.text("Add " + producedValues[0].description + " from the condition of the rule");
+                        triggerLink.text("Add " + producedValues[0].description + " from the condition of the spell");
                         triggerContainer.empty();
                         triggerContainer.append(triggerLink);
                         selectedTriggerMeta = producedValues[0];
@@ -288,7 +288,7 @@ window.Rulepedia = {
                         var triggerRight = $('<a>');
                         triggerRight.prop('href', '#');
                         triggerRight.on('click', clickTriggerLink);
-                        triggerRight.text(" from the condition of the rule");
+                        triggerRight.text(" from the condition of the spell");
                         triggerContainer.empty();
                         triggerContainer.append(triggerLeft);
                         triggerContainer.append(triggerSelector);

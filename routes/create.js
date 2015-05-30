@@ -7,7 +7,7 @@ var ruleDBPath = './db/rules.json';
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    res.render('create', { title: 'Rulepedia - Create a new rule' });
+    res.render('create', { title: 'Sabrina\'s Magic Shop - Create a new spell' });
 });
 
 router.post('/', function(req, res) {

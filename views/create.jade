@@ -5,22 +5,22 @@ block scripts
   script(src='/js/create.js')
 
 block content
-  h1.center Create a rule
+  h1.center Create a magic spell
 
-  p In Rulepedia, you can define simple actions that your phone will execute when specific events occur.
+  p Your magic assistant Sabrina can learn simple actions that she will execute when specific events occur.
     | This model is called WTDT - <i>When this, do that</i>.
     // lol
-  p To start, click on
+  p To teach her, click on
     i  Add new condition
-    |  to choose when your rule will be activated. You can use multiple conditions if you need it.
+    |  to choose when your spell will be activated. You can use multiple conditions if you need it.
     | Then, click on
     i  Add new action
-    |  to choose what your phone will do when the condition happens.
+    |  to choose what Sabrina will do when the condition happens.
     | When you're done, click on
-    i  Install
-    |  to show the QR code. Scan this code with your phone to install the rule.
+    i  Learn Spell
+    |  to show the QR code. Scan this code with your phone and Sabrina will start using your spell!.
   p You can also choose a name that will be shown in the app for you to rememeber, and for your friends
-    | to find in our collection of rules!
+    | to find in our magic shop!
 
   form.form-horizontal.container-fluid.well
     div.form-group
@@ -55,7 +55,7 @@ block content
         div.modal-header
           button.close(type='button', data-dismiss='modal', aria-label='Close')
             span(aria-hidden='true') ×
-          h4.modal-title#trigger-channel-select-title Select a channel
+          h4.modal-title#trigger-channel-select-title Select a magic wand
 
         div.modal-body
           div.container-fluid#trigger-channel-select-container
@@ -68,7 +68,7 @@ block content
         div.modal-header
           button.close(type='button', data-dismiss='modal', aria-label='Close')
             span(aria-hidden='true') ×
-          h4.modal-title#action-channel-select-title Select a channel
+          h4.modal-title#action-channel-select-title Select a magic wand
 
         div.modal-body
           div.container-fluid#action-channel-select-container
@@ -81,10 +81,10 @@ block content
         div.modal-header
           button.close(type='button', data-dismiss='modal', aria-label='Close')
             span(aria-hidden='true') ×
-          h4.modal-title#install-rule-dialog-title Install rule
+          h4.modal-title#install-rule-dialog-title Learn spell
 
         div.modal-body
-          p To install the rule, scan the QR code or copy-paste the URL to your mobile device and open it.
+          p To have Sabrina learn this spell, scan the QR code or copy-paste the URL to your mobile device and open it.
 
           div#qr-code
 
