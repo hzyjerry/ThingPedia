@@ -189,7 +189,7 @@
      "event-sources": [],
      "methods": [{
    	   "id": "send-corktastic",
-   	   "description": "Post to Corktastic",
+   	   "description": "Post a message",
    	   "text": "Post a message to Corktastic",
    	   "script": "function(params) { return ({ type: 'email', to: 'corktastic1000@gmail.com', subject: params.content, body: '' }); }",
    	   "generates": [],
@@ -198,6 +198,19 @@
    		 "type": "textarea",
    		 "description": "containing the text",
    		 "text": "containing"
+   	       }
+   	   ]
+       },{
+   	   "id": "send-picture",
+   	   "description": "Post a picture",
+   	   "text": "Post a picture to Corktastic",
+   	   "script": "function(params) { return ({ type: 'email', to: 'corktastic1000@gmail.com', subject: params.content, body: '' }); }",
+   	   "generates": [],
+   	   "params": [
+   	       { "id": "content",
+   		 "type": "picture",
+   		 "description": "from the URL",
+   		 "text": "from"
    	       }
    	   ]
        }],
