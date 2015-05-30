@@ -44,7 +44,7 @@
                                             processData: false,
                                             dataType: 'text',
                                             method: 'POST' }).error(function(xhr, status) {
-                            showErrorDialog("Sorry, failed to share the rule: " + status);
+                            showErrorDialog("Sorry, failed to share the magic spell: " + status);
                         });
 
                         $("#qr-code").empty();
@@ -69,7 +69,7 @@
 
         var name = $('#rule-name').val();
         if (name.length == 0)
-            throw new Error("You must choose a name for your rule");
+            throw new Error("You must choose a name for your spell");
         if (computedTrigger == null)
             throw new Error("You must choose at least one condition");
         if (computedActions.length == 0)
