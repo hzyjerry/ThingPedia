@@ -1,0 +1,14 @@
+extends layout
+
+block scripts
+  script(src='/js/query.js')
+  script(type='text/javascript').
+    $(function() {
+      updateRuleList(!{JSON.stringify(rules)})
+    });
+
+block content
+  div
+    h2 Recommended spells
+    a(name='rules')
+    #rule-list.list-group

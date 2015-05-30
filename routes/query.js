@@ -27,10 +27,15 @@ router.get('/:term', function(req, res, next) {
       rules.push(rule);
     }
   }
-  res.setHeader('Content-Type', 'application/json');
-  res.send(JSON.stringify(rules));
 
-  res.end();
+  res.render('query', { 
+    title: 'Recommended rules',
+    rules: rules
+  });
+
+  //res.setHeader('Content-Type', 'application/json');
+  //res.send(JSON.stringify(rules));
+  //res.end();
 });
 
 
