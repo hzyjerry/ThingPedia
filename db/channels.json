@@ -284,6 +284,27 @@
          }]
      }]
  },{
+       "id":"games",
+       "objectId":"https://rulepedia.stanford.edu/oid/predefined/omlet-games",
+       "description":"Omlet Games",
+       "event-sources": [{
+              "id":"score_intent",
+              "type":"broadcast-receiver",
+              "intent-action":"edu.stanford.braincat.rulepedia.GAME_HIGH_SCORE"
+              }],
+       "services":[],
+       "events":[{
+              "id":"high-score",
+              "description":"When I obtain a new high score",
+              "text":"I obtain a new high score",
+              "script":"function trigger(params, events, context) {\n if (!events.score_intent) return false;\n if (params.package_name !== undefined && params.package_name !==\n events.score_intent.extras['edu.stanford.braincat.rulepedia.EXTRA_PACKAGE_NAME']) {\n log('wrong package name');\n return false;\n }\n\n context.package_name = events.score_intent.extras['edu.stanford.braincat.rulepedia.EXTRA_PACKAGE_NAME'];\n context.score = events.score_intent.extras['edu.stanford.braincat.rulepedia.EXTRA_SCORE'];\n return true;\n}",
+              "event-sources":[],
+              "generates":[{"id":"package_name","type":"text","text":"the game","description":"the game"},
+                           {"id":"score","type":"number","text":"my score","description":"the score"}],
+              "params":[{"id":"package_name","type":"text","text":"in","description":"in this game","optional":true}]
+              }],
+       "methods":[]
+ },{
        "id": "weather",
        "objectId":"https://rulepedia.stanford.edu/oid/predefined/channel/weather",
        "description": "Weather",
