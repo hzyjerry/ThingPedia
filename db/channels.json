@@ -300,7 +300,7 @@
               "script":"function trigger(params, events, context) {\n if (!events.score_intent) return false;\n if (params.package_name !== undefined && params.package_name !==\n events.score_intent.extras['edu.stanford.braincat.rulepedia.EXTRA_PACKAGE_NAME']) {\n log('wrong package name');\n return false;\n }\n\n context.package_name = events.score_intent.extras['edu.stanford.braincat.rulepedia.EXTRA_PACKAGE_NAME'];\n context.score = events.score_intent.extras['edu.stanford.braincat.rulepedia.EXTRA_SCORE'];\n return true;\n}",
               "event-sources":[],
               "generates":[{"id":"package_name","type":"text","text":"the game","description":"the game"},
-                           {"id":"score","type":"number","text":"my score","description":"the score"}],
+                           {"id":"score","type":"text","text":"my score","description":"the score"}],
               "params":[{"id":"package_name","type":"text","text":"in","description":"in this game","optional":true}]
               }],
        "methods":[]
