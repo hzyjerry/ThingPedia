@@ -338,8 +338,6 @@
    },{
         "id": "deal-test",
         "objectId": "https://deal-me.herokuapp.com/nba",
-        "urlPrefix": "",
-        "urlRegex": "",
         "description": "Deal Test",
         "services": [],
         "event-sources": [
@@ -388,16 +386,10 @@
       }, {
       "id":"ping",
       "objectId":"http://deal-me.herokuapp.com/ping",
-      "urlPrefix":"",
-      "urlRegex":"",
       "description":"Deal Ping",
-      "services": [],
-      "event-sources":[
-
-      ],
-      "events":[
-
-      ],
+      "services": ["omlet"],
+      "event-sources":[],
+      "events":[],
       "methods":[
           {
               "id":"ping-action",
@@ -420,7 +412,7 @@
                       "optional":false
                   }
               ],
-              "script":"function action(params) {\n return {type: 'http', url: params.url, method: 'get', data: params.data};\n}"
+              "script":"function action(params) {\n return {type: 'http', url: params.url, method: 'post', data: self.omlet_id + ': ' + params.data};\n}"
           }
       ]
       }]
