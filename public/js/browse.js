@@ -1,22 +1,22 @@
 function displayRule(rule, index, array) {
   var url = Rulepedia.Util.computeRuleURI(rule);
   var ruleLink = $('<a/>', {
-    class: 'list-group-item',
+    class: 'rule-link list-group-item',
     href: url.substring(url.indexOf("/rule")),
   });
 
-  var ruleHeading = $('<h4/>', {
-    class: 'list-group-item-heading',
+  var ruleHeading = $('<p/>', {
+    class: 'rule-name',
     text: rule.name,
   });
 
   var ruleDescription = $('<p/>', {
-    class: 'list-group-item-text',
+    class: 'rule-description',
     text: rule.description,
   });
 
   var ruleIcon = $('<i/>', {
-    class: 'fa fa-connectdevelop list-group-item-image',
+    class: 'fa fa-connectdevelop',
   });
 
   var span = $('<span/>', {
@@ -31,7 +31,7 @@ function displayRule(rule, index, array) {
   var tr = $('<tr/>');
 
   var tdIcon = $('<td/>', {
-    class: 'td-align-middle td-icon-size'
+    class: 'td-rule-icon'
   });
 
   tdIcon.append(ruleIcon);
@@ -51,12 +51,13 @@ function displayRule(rule, index, array) {
   });
 
   var tdRemovalButton = $('<td/>', {
-    class: 'td-removal-button'
+    class: 'td-rule-removal-button'
   });
 
   tdRemovalButton.append(removalButton);
 
   var tdContent = $('<td/>', {
+    class: 'td-rule-content'
   });
 
   tdContent.append(ruleHeading);
@@ -80,12 +81,12 @@ function removeRule(ruleID)
     url: 'remove',
     data: {"id" : ruleID},
     success: function (data) {
-      alert('Rule removed!');
+      alert('Spell removed!');
       pollRules(false);
     },
     error: function(jqXHR, textStatus, errorThrown) {
       console.log(textStatus, errorThrown);
-      alert('Rule cannot be removed!');
+      alert('Spell cannot be removed!');
       pollRules(false);
     }
   });
@@ -135,4 +136,8 @@ function installFromBrowse() {
   }
 };
 
-pollRules(true);
+
+$(function() {
+  pollRules(true);
+});
+
