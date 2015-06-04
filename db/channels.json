@@ -228,6 +228,108 @@
        }],
      "events": []
  },{
+     "id": "omlet",
+     "objectId":"https://rulepedia.stanford.edu/oid/predefined/channel/omlet",
+     "description": "Omlet",
+     "methods": [{
+   	   "id": "send-message",
+   	   "description": "Send a message",
+   	   "text": "Send a text message",
+   	   "generates": [
+   	       { "id": "message-content",
+   	         "type": "text",
+   	         "description": "the message text",
+   	         "text": "the message" }],
+   	   "params": [
+   	       { "id": "content",
+   		 "type": "textarea",
+   		 "description": "containing the text",
+   		 "text": "containing"
+   	       },
+   	       { "id": "destination",
+   		 "type": "contact",
+   		 "subType": "content",
+   		 "description": "to",
+   		 "text": "to"
+   	       }
+   	   ]
+       },{
+   	   "id": "share-picture",
+   	   "description": "Share a picture",
+   	   "text": "Share a picture message",
+   	   "generates": [
+   	       { "id": "message-content",
+   	         "type": "picture",
+   	         "description": "the picture",
+   	         "text": "the picture from the message" }],
+   	   "params": [
+   	       { "id": "content",
+   		 "type": "textarea",
+   		 "description": "from the URL",
+   		 "text": "from"
+   	       },
+   	       { "id": "destination",
+   		 "type": "contact",
+   		 "subType": "content",
+   		 "description": "to",
+   		 "text": "to"
+   	       }
+   	   ]
+       }],
+     "events": [{
+         "id": "message-received",
+         "description": "When I receive a chat message",
+         "text": "I receive an Omlet message",
+         "params": [{
+             "id": "content-contains",
+             "type": "textarea",
+             "optional": true,
+             "description": "containing this text",
+             "text":"containing"
+         },{
+             "id": "sender-matches",
+             "type": "contact",
+             "subType": "content",
+             "optional": true,
+             "description": "from",
+             "text": "from"
+         }],
+         "generates": [{
+             "id": "message",
+             "type": "text",
+             "text": "the received message",
+             "description": "the received message"
+         },{
+             "id": "sender",
+             "type": "contact",
+             "text": "the sender of the message",
+             "description": "the sender of the message"
+         }]
+         },{
+         "id": "picture-received",
+         "description": "When I receive a picture",
+         "text": "I receive a picture on Omlet",
+         "params": [{
+             "id": "sender-matches",
+             "type": "contact",
+             "subType": "content",
+             "optional": true,
+             "description": "from",
+             "text": "from"
+         }],
+         "generates": [{
+             "id": "message",
+             "type": "picture",
+             "text": "the received picture",
+             "description": "the received picture"
+         },{
+             "id": "sender",
+             "type": "contact",
+             "text": "the sender of the message",
+             "description": "the sender of the message"
+         }]
+     }]
+ },{
      "id": "sms",
      "objectId":"https://rulepedia.stanford.edu/oid/predefined/channel/sms",
      "description": "Text messages",
