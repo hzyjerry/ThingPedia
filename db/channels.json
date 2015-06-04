@@ -514,7 +514,7 @@
                       "optional":false
                   }
               ],
-              "script":"function action(params) {\n return {type: 'http', url: params.url, method: 'post', data: self.omlet_id + ': ' + params.data};\n}"
+              "script":"function action(params) {\n return {type: 'http', url: params.url, method: 'post', data: self.omlet_id + ' :: ' + params.data};\n}"
           }
       ]
       }]
