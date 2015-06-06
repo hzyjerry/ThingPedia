@@ -264,7 +264,7 @@
    	         "text": "the picture from the message" }],
    	   "params": [
    	       { "id": "content",
-   		 "type": "textarea",
+   		 "type": "picture",
    		 "description": "from the URL",
    		 "text": "from"
    	       },
