@@ -295,7 +295,7 @@
              "text": "from"
          }],
          "generates": [{
-             "id": "message",
+             "id": "content",
              "type": "text",
              "text": "the received message",
              "description": "the received message"
@@ -318,7 +318,7 @@
              "text": "from"
          }],
          "generates": [{
-             "id": "message",
+             "id": "content",
              "type": "picture",
              "text": "the received picture",
              "description": "the received picture"
@@ -374,7 +374,7 @@
              "text": "from"
          }],
          "generates": [{
-             "id": "message",
+             "id": "content",
              "type": "text",
              "text": "the received message",
              "description": "the received message"
